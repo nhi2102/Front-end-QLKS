@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách phòng - Khách sạn Thanh Trà</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="khachhang/css/style.css">
+    <link rel="stylesheet" href="khachhang/css/header.css">
+    <link rel="stylesheet" href="khachhang/css/footer.css">
+    <link rel="stylesheet" href="khachhang/css/rooms.css">
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="rooms-container">
+        <!-- Booking Widget -->
+        <section class="booking-section" style="padding: 40px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container">
+                <div class="booking-widget" id="booking-search">
+                    <div class="input-group">
+                        <label for="date-range-picker">Ngày nhận - trả phòng</label>
+                        <div class="input-field">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <input type="text" id="date-range-picker" placeholder="Chọn ngày của bạn" readonly>
+                        </div>
+                    </div>
+
+                    <div class="input-group custom-dropdown-container">
+                        <label>Số phòng</label>
+                        <div class="input-field dropdown-trigger" id="room-trigger">
+                            <i class="fa-solid fa-bed"></i>
+                            <span id="room-display">1 phòng</span>
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="custom-dropdown-menu hidden" id="room-menu">
+                            <div class="dropdown-item" data-value="1">1 phòng</div>
+                            <div class="dropdown-item" data-value="2">2 phòng</div>
+                            <div class="dropdown-item" data-value="3">3 phòng</div>
+                            <div class="dropdown-item" data-value="4">4 phòng</div>
+                            <div class="dropdown-item" data-value="5">5 phòng</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group custom-dropdown-container">
+                        <label>Số người</label>
+                        <div class="input-field dropdown-trigger" id="guest-trigger">
+                            <i class="fa-solid fa-user-group"></i>
+                            <span id="guest-display">2 người</span>
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <div class="custom-dropdown-menu hidden" id="guest-menu">
+                            <div class="dropdown-item" data-value="1">1 người</div>
+                            <div class="dropdown-item" data-value="2">2 người</div>
+                            <div class="dropdown-item" data-value="3">3 người</div>
+                            <div class="dropdown-item" data-value="4">4 người</div>
+                            <div class="dropdown-item" data-value="5">5 người</div>
+                            <div class="dropdown-item" data-value="6">6 người</div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="search-button" id="btn-search">Tìm kiếm</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Results Header -->
+        <div class="search-header">
+            <div class="container">
+                <h1 id="search-title"></h1>
+                <div class="search-info">
+                    <span id="search-dates">02/10/2025 - 03/10/2025</span>
+                    <span class="separator">•</span>
+                    <span id="search-duration">2 ngày 1 đêm</span>
+                    <span class="separator">•</span>
+                    <span id="search-guests">2 người</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="rooms-layout">
+                <!-- Room List -->
+                <div class="rooms-list" id="roomsList">
+                    <!-- Room Item 1 -->
+                    <div class="room-item">
+                        <div class="room-images" data-room="deluxe-king">
+                            <div class="image-gallery">
+                                <div class="gallery-container">
+                                    <img src="assets/img/room1.jpg" alt="Phòng Deluxe King - Hình 1" class="room-image active">
+                                    <img src="assets/img/room6.jpg" alt="Phòng Deluxe King - Hình 2" class="room-image">
+                                    <img src="assets/img/room8.jpg" alt="Phòng Deluxe King - Hình 3" class="room-image">
+                                </div>
+                                <div class="room-nav">
+                                    <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                                    <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="image-indicators">
+                                    <span class="indicator active"></span>
+                                    <span class="indicator"></span>
+                                    <span class="indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="room-details">
+                            <h3 class="room-title"></h3>
+                            <div class="room-info">
+                                <div class="room-feature">
+                                    <i class="fas fa-bed"></i>
+                                    <span></span>
+                                </div>
+                                <div class="room-feature">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="room-amenities">
+                                <i class="fas fa-wifi" title="Wifi miễn phí"></i>
+                                <i class="fas fa-tv" title="TV"></i>
+                                <i class="fas fa-ban-smoking" title="Không hút thuốc"></i>
+                                <a href="#" class="view-amenities" data-room-type="deluxe-king"></a>
+                                <a href="#" class="view-details" data-room-type="deluxe-king"></a>
+                            </div>
+                            <div class="room-pricing">
+                                <div class="price-section">
+                                    <div class="price"> <span class="price-unit"></span></div>
+                                </div>
+                                <button class="choose-room-btn" data-room-type="deluxe-king" data-price="3300000">Chọn Phòng</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Item 2 -->
+                    <div class="room-item">
+                        <div class="room-images" data-room="deluxe-twin">
+                            <div class="image-gallery">
+                                <div class="gallery-container">
+                                    <img src="../assets/img/room2.jpg" alt="Phòng Deluxe Twin - Hình 1" class="room-image active">
+                                    <img src="../assets/img/room7.jpg" alt="Phòng Deluxe Twin - Hình 2" class="room-image">
+                                    <img src="../assets/img/room4.jpg" alt="Phòng Deluxe Twin - Hình 3" class="room-image">
+                                </div>
+                                <div class="room-nav">
+                                    <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                                    <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="image-indicators">
+                                    <span class="indicator active"></span>
+                                    <span class="indicator"></span>
+                                    <span class="indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="room-details">
+                            <h3 class="room-title">Phòng Deluxe Twin hướng thành phố</h3>
+                            <div class="room-info">
+                                <div class="room-feature">
+                                    <i class="fas fa-bed"></i>
+                                    <span>2 giường đơn</span>
+                                </div>
+                                <div class="room-feature">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                    <span>30 m²</span>
+                                </div>
+                            </div>
+                            <div class="room-amenities">
+                                <i class="fas fa-wifi" title="Wifi miễn phí"></i>
+                                <i class="fas fa-tv" title="TV"></i>
+                                <i class="fas fa-ban-smoking" title="Không hút thuốc"></i>
+                                <a href="#" class="view-amenities" data-room-type="deluxe-twin">Xem tất cả tiện nghi</a>
+                                <a href="#" class="view-details" data-room-type="deluxe-twin">Xem chi tiết</a>
+                            </div>
+                            <div class="room-pricing">
+                                <div class="price-section">
+                                    <div class="price">3,300,000 VNĐ <span class="price-unit">/ đêm</span></div>
+                                </div>
+                                <button class="choose-room-btn" data-room-type="deluxe-twin" data-price="3300000">Chọn Phòng</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Room Item 3 -->
+                    <div class="room-item">
+                        <div class="room-images" data-room="superior">
+                            <div class="image-gallery">
+                                <div class="gallery-container">
+                                    <img src="../assets/img/room3.jpg" alt="Phòng Superior - Hình 1" class="room-image active">
+                                    <img src="../assets/img/room4.jpg" alt="Phòng Superior - Hình 2" class="room-image">
+                                    <img src="../assets/img/room7.jpg" alt="Phòng Superior - Hình 3" class="room-image">
+                                </div>
+                                <div class="room-nav">
+                                    <button class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i></button>
+                                    <button class="nav-btn next-btn"><i class="fas fa-chevron-right"></i></button>
+                                </div>
+                                <div class="image-indicators">
+                                    <span class="indicator active"></span>
+                                    <span class="indicator"></span>
+                                    <span class="indicator"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="room-details">
+                            <h3 class="room-title">Phòng Superior hướng vườn</h3>
+                            <div class="room-info">
+                                <div class="room-feature">
+                                    <i class="fas fa-bed"></i>
+                                    <span>1 giường king size</span>
+                                </div>
+                                <div class="room-feature">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                    <span>25 m²</span>
+                                </div>
+                            </div>
+                            <div class="room-amenities">
+                                <i class="fas fa-wifi" title="Wifi miễn phí"></i>
+                                <i class="fas fa-tv" title="TV"></i>
+                                <i class="fas fa-ban-smoking" title="Không hút thuốc"></i>
+                                <a href="#" class="view-amenities" data-room-type="superior">Xem tất cả tiện nghi</a>
+                                <a href="#" class="view-details" data-room-type="superior">Xem chi tiết</a>
+                            </div>
+                            <div class="room-pricing">
+                                <div class="price-section">
+                                    <div class="price">2,800,000 VNĐ <span class="price-unit">/ đêm</span></div>
+                                </div>
+                                <button class="choose-room-btn" data-room-type="superior" data-price="2800000">Chọn Phòng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shopping Cart Sidebar -->
+                <div class="booking-sidebar">
+                    <div class="booking-summary">
+                        <h3>Thông tin đặt phòng</h3>
+                        <div class="hotel-info">
+                            <h4>Thanh Trà Hotel</h4>
+                            <div class="booking-dates">
+                                <span id="sidebar-dates"></span>
+                                <span id="sidebar-duration"></span>
+                            </div>
+                        </div>
+
+                        <div class="search-info-summary">
+                            <h5>Thông tin tìm kiếm</h5>
+                            <div class="summary-row">
+                                <span>Ngày nhận phòng:</span>
+                                <span id="sidebar-checkin"></span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Số người:</span>
+                                <span id="sidebar-guests">2 người</span>
+                            </div>
+                        </div>
+
+                        <!-- Cart Items -->
+                        <div class="cart-section">
+                            <div class="cart-header">
+                                <h5>Phòng đã chọn</h5>
+                                <button class="collapse-btn" id="cart-collapse">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                            <div class="cart-items" id="cart-items">
+                                <div class="empty-cart" id="empty-cart">
+                                    <p>Chưa có phòng nào được chọn</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="price-summary">
+                            <div class="subtotal-row">
+                                <span>Tổng phòng:</span>
+                                <span id="room-count-total">0 phòng</span>
+                            </div>
+                            <!-- <div class="subtotal-row">
+                                <span>Số đêm:</span>
+                                <span id="nights-total">1 đêm</span>
+                            </div> -->
+                            <div class="total-price">
+                                <span>Tổng cộng</span>
+                                <span class="total-amount" id="total-amount">0 VNĐ</span>
+                            </div>
+                        </div>
+
+                        <button onclick="location.href='../khachhang/cus_info_booking.html'" class="book-now-btn" id="book-now-btn" disabled>ĐẶT NGAY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Amenities Modal -->
+    <div id="amenitiesModal" class="modal">
+        <div class="modal-content">
+            <div class="amenities-modal-header">
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-gallery">
+                    <div class="modal-image-container">
+                        <img id="modalMainImage" src="" alt="Room Image" class="modal-image">
+                        <div class="modal-nav">
+                            <button class="modal-nav-btn" id="modalPrevBtn"><i class="fas fa-chevron-left"></i></button>
+                            <button class="modal-nav-btn" id="modalNextBtn"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-info">
+                    <h2 id="modalRoomTitle">Phòng Deluxe King hướng thành phố</h2>
+                    <p id="modalRoomSize">30 m²</p>
+                    <p id="modalRoomDescription">Căn phòng này có máy sấy, khu vực tiếp khách và máy lạnh.</p>
+
+                    <div class="amenities-section">
+                        <h3>Tiện ích trong phòng:</h3>
+                        <div class="amenities-grid">
+                            <div class="amenities-column">
+                                <div class="amenity-item">
+                                    <i class="fas fa-tshirt"></i>
+                                    <span>Tủ quần áo</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-ban-smoking"></i>
+                                    <span>Phòng không hút thuốc</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-concierge-bell"></i>
+                                    <span>Dịch vụ giặt ủi</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-bath"></i>
+                                    <span>Phòng có bồn tắm</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-wifi"></i>
+                                    <span>Wifi</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-desktop"></i>
+                                    <span>Đèn bàn</span>
+                                </div>
+                            </div>
+                            <div class="amenities-column">
+                                <div class="amenity-item">
+                                    <i class="fas fa-bed"></i>
+                                    <span>Ga trải giường, gối</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-shower"></i>
+                                    <span>Vòi sen</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-wind"></i>
+                                    <span>Máy sấy tóc</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Két sắt an toàn</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-soap"></i>
+                                    <span>Đồ phòng tắm</span>
+                                </div>
+                                <div class="amenity-item">
+                                    <i class="fas fa-phone"></i>
+                                    <span>Điện thoại</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Room Details/Policy Modal -->
+    <div id="policyModal" class="modal">
+        <div class="modal-content policy-modal-content">
+            <button class="modal-close" id="policyModalClose">&times;</button>
+            <div class="modal-body policy-modal-body">
+                <div class="policy-section">
+                    <h3>Thời gian nhận và trả phòng</h3>
+                    <div class="check-times">
+                        <div class="check-time">
+                            <strong>Nhận phòng:</strong> <span>15:00</span>
+                        </div>
+                        <div class="check-time">
+                            <strong>Trả phòng:</strong> <span>12:00</span>
+                        </div>
+                    </div>
+                    <h3>Quy định khách sạn</h3>
+                    <ul class="policy-list">
+                        <li>Không được hút thuốc trong phòng</li>
+                        <li>Không được mang thú cưng</li>
+                        <li>Giữ gìn trật tự và không gây ồn ào sau 22:00</li>
+                        <li>Xuất trình CMND/CCCD khi làm thủ tục nhận phòng</li>
+                        <li>Thanh toán phí dịch vụ phát sinh (nếu có) khi trả phòng</li>
+                    </ul>
+                    <h3>Quy định thanh toán</h3>
+                    <ul class="policy-list">
+                        <li>Thanh toán toàn bộ giá trị tiền đặt phòng ngay khi đặt phòng.</li>
+                        <li>Không hoàn tiền nếu hủy phòng hoặc không đến.</li>
+                        <li>Giá phòng đã bao gồm thuế và phí dịch vụ.</li>
+                    </ul>
+                </div>
+                <div class="policy-section services-section">
+                    <h3>Chọn dịch vụ thêm cho phòng này</h3>
+                    <p class="service-note">Các dịch vụ dưới đây sẽ được cộng thêm vào giá phòng</p>
+                    <div id="services-list" class="services-list">
+                        <div class="loading-services">Đang tải dịch vụ...</div>
+                    </div>
+                    <button onclick="window.saveServicesForCurrentRoom()" class="save-services-btn" style="margin-top: 20px; width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                        <i class="fas fa-check"></i> Lưu dịch vụ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+
+    <a href="#header" id="backToTopBtn" class="back-to-top-btn">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <script src="../khachhang/js/script.js"></script>
+    <script src="../khachhang/js/rooms.js"></script>
+    <script src="../khachhang/api/room.js"></script>
+</body>
+
+</html>

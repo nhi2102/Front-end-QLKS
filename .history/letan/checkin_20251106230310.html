@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-in - Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/checkin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item active">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="booking_list.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Danh Sách Đặt Phòng</span>
+            </a>
+
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Check-in Khách</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile" id="userProfileBtn" style="cursor: pointer;">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Lễ Tân</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Check-in Content -->
+        <div class="checkin-content">
+            <!-- Tìm kiếm booking -->
+            <div class="card search-card">
+                <h3><i class="fas fa-search"></i> Tìm Kiếm Booking</h3>
+                <div class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mã Đặt Phòng</label>
+                            <input type="text" id="searchBookingCode" placeholder="Nhập mã đặt phòng">
+                        </div>
+                        <div class="form-group">
+                            <label>Số Điện Thoại</label>
+                            <input type="text" id="searchPhone" placeholder="Nhập số điện thoại">
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-search" onclick="searchBooking()">
+                                <i class="fas fa-search"></i> Tìm Kiếm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Danh sách booking chờ check-in -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-calendar-check"></i> Danh Sách Chờ Check-in Hôm Nay</h3>
+                    <button class="btn btn-refresh" onclick="loadPendingCheckIns()">
+                        <i class="fas fa-sync-alt"></i> Làm Mới
+                    </button>
+                </div>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Đặt</th>
+                                <th>Tên Khách</th>
+                                <th>Số ĐT</th>
+                                <th>Phòng</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>Trạng Thái</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingCheckInsList">
+                            <tr>
+                                <td colspan="8" class="no-data">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Check-in -->
+    <div id="checkInModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-calendar-check"></i> Thông Tin Check-in</h2>
+                <button class="modal-close" onclick="closeCheckInModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="booking-info">
+                    <h3>Thông Tin Booking</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Mã Đặt Phòng:</label>
+                            <span id="modalBookingCode">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Tên Khách Hàng:</label>
+                            <span id="modalCustomerName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Điện Thoại:</label>
+                            <span id="modalPhone">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>CMND/CCCD:</label>
+                            <span id="modalIdCard">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Phòng:</label>
+                            <span id="modalRoomNumber" class="highlight">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Loại Phòng:</label>
+                            <span id="modalRoomType">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Ngày Nhận:</label>
+                            <span id="modalCheckInDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Ngày Trả:</label>
+                            <span id="modalCheckOutDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Đêm:</label>
+                            <span id="modalNights">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="checkin-form">
+                    <h3>Thông Tin Check-in</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="checkInTime">Giờ Check-in:</label>
+                            <input type="time" id="checkInTime" required>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="actualGuests">Số người thực tế:</label>
+                            <input type="number" id="actualGuests" min="1" max="10" value="1">
+                        </div> -->
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="specialRequests">Yêu cầu đặc biệt:</label>
+                            <textarea id="specialRequests" rows="2" placeholder="Nhập yêu cầu đặc biệt nếu có..."></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCheckInModal()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button class="btn btn-primary" onclick="confirmCheckIn()">
+                    <i class="fas fa-check"></i> Xác Nhận Check-in
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thông Tin Cá Nhân -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-circle"></i> Thông Tin Cá Nhân</h2>
+                <button class="modal-close" onclick="closeProfileModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="info-section">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-user"></i> Thông Tin Cá Nhân</h3>
+                    <div class="profile-info-container">
+                        <div class="profile-info-row">
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-id-badge"></i> Họ tên:</label>
+                                <span id="profile_name">-</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-envelope"></i> Email:</label>
+                                <span id="profile_email">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-phone"></i> Số điện thoại:</label>
+                                <span id="profile_phone">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-key"></i> Đổi Mật Khẩu</h3>
+                    <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                        <input type="hidden" id="emailorsdt_input">
+                        <div class="form-group">
+                            <label>Mật khẩu hiện tại:</label>
+                            <input type="password" id="current_password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu mới:</label>
+                            <input type="password" id="new_password" class="form-control" required minlength="8">
+                            <small class="form-text">Tối thiểu 8 ký tự, bắt đầu bằng chữ hoa, có chữ thường, số và ký tự đặc biệt</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Xác nhận mật khẩu mới:</label>
+                            <input type="password" id="confirm_password" class="form-control" required minlength="8">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                            <i class="fas fa-check"></i> Đổi Mật Khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeProfileModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api/checkin.api.js"></script>
+    <script src="js/checkin.ui.js"></script>
+
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

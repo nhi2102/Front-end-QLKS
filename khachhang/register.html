@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Khách sạn Thanh Trà</title>
+    <link rel="stylesheet" href="../khachhang/css/account.css">
+    <style>
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .success-message {
+            color: #00C851;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glass-container">
+        <h2>Đăng ký tài khoản</h2>
+        <form id="registerForm">
+            <div class="input-group">
+                <input type="text" id="tenkhachhang" required>
+                <label>Họ và tên</label>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <input type="email" id="email" required>
+                    <label>Email</label>
+                </div>
+                <div class="input-group">
+                    <input type="tel" id="sodienthoai" required>
+                    <label>Số điện thoại</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="cccd" required>
+                <label>Số CCCD/CMND</label>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="diachi" required>
+                <label>Địa chỉ</label>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <input type="password" id="matkhau" required>
+                    <label>Mật khẩu</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="confirmPassword" required>
+                    <label>Xác nhận mật khẩu</label>
+                </div>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <button type="submit" class="login-btn" id="registerBtn">Đăng ký</button>
+            <br><br>
+            <div class="register-link">
+                Đã có tài khoản? <a href="../khachhang/login.html">Đăng nhập</a>
+            </div>
+        </form>
+    </div>
+    <script src="../khachhang/api/register.js"></script>
+</body>
+
+</html>

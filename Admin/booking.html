@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Đặt phòng & Hóa đơn</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/booking.css">
+</head>
+<body>
+    <div class="page-container">
+        <aside id="sidebar-placeholder" class="sidebar"></aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2 id="content-title">Quản lý Đặt phòng & Hóa đơn</h2>
+                <div class="user-info">
+                    <p>Xin chào, <strong id="user-display-name">Admin</strong></p>
+                    <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=A" alt="Avatar" class="avatar" id="user-avatar">
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Tabs -->
+                <div class="tab-container">
+                    <button class="tab-btn active" data-tab="booking-content">
+                        <i class="bi bi-calendar-check"></i> Đặt phòng
+                    </button>
+                    <button class="tab-btn" data-tab="invoice-content">
+                        <i class="bi bi-receipt"></i> Hóa đơn
+                    </button>
+                </div>
+
+                <!-- Panels -->
+                <div id="booking-panels">
+                    <!-- Đặt phòng -->
+                    <div id="booking-content" class="tab-panel active">
+                        <div class="card">
+                            <div class="card-header-action">
+                                <h3>Danh sách đặt phòng</h3>
+                                <button id="export-excel-btn" class="btn-excel">
+                                    <i class="bi bi-file-earmark-excel"></i> Xuất Excel
+                                </button>
+                            </div>
+
+                            <div class="booking-search-row">
+                                <div class="booking-search-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    <input type="date" id="date-search">
+                                </div>
+                                <div class="booking-search-text">
+                                    <i class="bi bi-search"></i>
+                                    <input type="text" id="text-search" placeholder="Tìm mã đặt phòng, tên khách...">
+                                </div>
+                                <button id="search-btn" class="btn btn-primary">
+                                    <i class="bi bi-search"></i> Tìm kiếm
+                                </button>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Mã ĐP</th>
+                                            <th>Khách hàng</th>
+                                            <th>Số phòng</th>
+                                            <th>Nhận</th>
+                                            <th>Trả</th>
+                                            <th>Ngày đặt</th>
+                                            <th>Trạng thái</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="booking-table-body">
+                                        <tr id="booking-loading-row">
+                                            <td colspan="8" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hóa đơn -->
+                    <div id="invoice-content" class="tab-panel">
+                        <div class="card">
+                            <div class="card-header-action">
+                                <h3>Danh sách hóa đơn</h3>
+                            </div>
+
+                            <div class="booking-search-row">
+                                <div class="booking-search-text">
+                                    <i class="bi bi-search"></i>
+                                    <input type="text" id="invoice-search" placeholder="Tìm mã hóa đơn, mã đặt phòng...">
+                                </div>
+                                <button id="invoice-search-btn" class="btn btn-primary">
+                                    <i class="bi bi-search"></i> Tìm kiếm
+                                </button>
+                            </div>
+
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Mã HĐ</th>
+                                            <th>Mã ĐP</th>
+                                            <th>Khách hàng</th>
+                                            <th>Ngày lập</th>
+                                            <th>Tổng tiền</th>
+                                            <th>Thanh toán</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoice-table-body">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Chi tiết</h3>
+                <button id="modal-close-btn" class="modal-close-btn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module"></script>
+    <script src="api/booking.api.js" type="module"></script>
+    <script src="js/booking.js" type="module"></script>
+</body>
+</html>

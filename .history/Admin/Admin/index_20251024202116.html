@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng điều khiển - Quản trị</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
+    <script type="module">
+        import { createIcons, icons } from 'https://cdn.jsdelivr.net/npm/lucide@0.447.0/dist/esm/lucide.js';
+        window.createLucideIcons = createIcons;
+        window.lucideIcons = icons;
+        console.log('Lucide loaded with icons');
+    </script>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <!-- Thêm link CSS dashboard -->
+    <link rel="stylesheet" href="css/dashboard.css">
+    <!-- Thêm thư viện Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Xóa thẻ <style> cũ ở đây -->
+</head>
+<body>
+
+    <div class="page-container">
+        <!-- Sidebar Placeholder -->
+        <aside id="sidebar-placeholder" class="sidebar"></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h2 id="content-title">Bảng điều khiển</h2>
+                <div class="user-info">
+                    <p>Xin chào, <strong>Admin</strong></p>
+                    <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=A" alt="Avatar" class="avatar">
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="dashboard-grid">
+                        <div class="card dashboard-card">
+                            <h3>Check-in hôm nay</h3>
+                            <p id="daily-checkin" class="stat-number text-blue">15</p>
+                        </div>
+                        <div class="card dashboard-card">
+                            <h3>Check-out hôm nay</h3>
+                             <p id="daily-checkout" class="stat-number text-green">25</p>
+                        </div>
+                        <div class="card dashboard-card">
+                            <h3>Phòng đang sử dụng</h3>
+                            <p id="daily-occupancy" class="stat-number text-yellow">48 / 60</p>
+                        </div>
+                         <div class="card dashboard-card">
+                            <h3>Đặt phòng mới hôm nay</h3>
+                             <p id="daily-new-bookings" class="stat-number text-red">12</p>
+                        </div>
+                    </div>
+
+                     <!-- Chart Grid -->
+                     <div class="chart-grid">
+                         <div class="card">
+                             <h3 class="card-header">Thống kê trạng thái phòng</h3>
+                             <div class="chart-container">
+                                 <canvas id="roomStatusChart"></canvas>
+                             </div>
+                         </div>
+                         <div class="card">
+                             <h3 class="card-header">Doanh thu 7 ngày gần nhất (VND)</h3>
+                              <div class="chart-container">
+                                 <canvas id="revenueChart"></canvas>
+                             </div>
+                         </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay">
+        <div id="modal-content" class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button id="modal-close-btn" class="modal-close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Modal content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module" defer></script>
+    <!-- Thêm script cho dashboard -->
+    <script src="js/dashboard.js" type="module" defer></script>
+</body>
+</html>
+

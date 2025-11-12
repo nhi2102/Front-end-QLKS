@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng Của Tôi - Lịch Sử Đặt Phòng | Khách sạn Thanh Trà</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Stylesheets của dự án -->
+    <!-- Cần đảm bảo các file style.css, header.css, footer.css được liên kết ở đây -->
+    <link rel="stylesheet" href="khachhang/css/style.css">
+    <link rel="stylesheet" href="khachhang/css/header.css">
+    <link rel="stylesheet" href="khachhang/css/footer.css">
+
+    <!-- Stylesheets dành riêng cho trang này -->
+    <link rel="stylesheet" href="khachhang/my_room.css">
+</head>
+
+<body>
+
+    <!-- Placeholder cho Header (Sẽ được load bằng script.js) -->
+    <div id="header-placeholder"></div>
+
+    <main class="my-rooms-main">
+        <div class="container my-rooms-container">
+            <h1 class="page-title">ĐẶT PHÒNG CỦA TÔI</h1>
+
+            <!-- Tab Navigation (Sắp tới, Hoàn tất, Đã hủy) -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="upcoming">
+                    <i class="fas fa-clock"></i> SẮP TỚI
+                </button>
+                <button class="tab-btn" data-tab="in-progress">
+                    <i class="fas fa-bed"></i> ĐANG Ở
+                </button>
+                <button class="tab-btn" data-tab="completed">
+                    <i class="fas fa-check-circle"></i> HOÀN TẤT
+                </button>
+                <button class="tab-btn" data-tab="cancelled">
+                    <i class="fas fa-times-circle"></i> ĐÃ HỦY
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tabs-content">
+
+                <div id="in-progress" class="tab-pane">
+                    <div id="in-progress-bookings-container" class="bookings-list">
+                        <p class="empty-list-message">Bạn chưa có đơn đặt phòng nào đang sử dụng.</p>
+                    </div>
+                </div>
+
+                <!-- 1. Nội dung Tab Sắp tới -->
+                <div id="upcoming" class="tab-pane active">
+                    <div id="upcoming-bookings-container" class="bookings-list">
+                        <p class="loading-text">Đang tải danh sách phòng sắp tới...</p>
+                    </div>
+                </div>
+
+                <!-- 2. Nội dung Tab Hoàn tất -->
+                <div id="completed" class="tab-pane">
+                    <div id="completed-bookings-container" class="bookings-list">
+                        <p class="empty-list-message">Bạn chưa có phòng đã hoàn tất nào.</p>
+                    </div>
+                </div>
+
+                <!-- 3. Nội dung Tab Đã hủy -->
+                <div id="cancelled" class="tab-pane">
+                    <div id="cancelled-bookings-container" class="bookings-list">
+                        <p class="empty-list-message">Bạn chưa có phòng đã hủy nào.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="custom-modal-overlay hidden" id="actionConfirmationModal">
+        <div class="custom-modal-content">
+            <div class="modal-header">
+                <i class="fas fa-exclamation-triangle modal-icon"></i>
+                <h2 id="modalActionTitle">Xác nhận Hành động</h2>
+            </div>
+            <div class="modal-body">
+                <p id="modalActionRoomType" class="modal-item-title"></p>
+                <p id="modalCheckinDate" class="modal-item-info"></p>
+                <p class="modal-penalty-text">
+                    <strong id="modalPenaltyLabel">Phí phạt:</strong>
+                    <span id="modalPenaltyValue" class="text-warning">0 VNĐ</span>
+                </p>
+                <p id="modalActionMessage" class="text-gray-500 mt-2"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn btn-cancel" id="actionCancelBtn">Hủy</button>
+                <button class="modal-btn btn-confirm" id="actionConfirmBtn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+    <!-- Placeholder cho Footer (Sẽ được load bằng script.js) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts của dự án -->
+    <script src="khachhang/js/script.js"></script>
+
+    <!-- API functions -->
+    <script src="khachhang/api/my_bookings.js"></script>
+
+    <!-- Script giao diện trang này -->
+    <script src="khachhang/js/my_room_ui.js"></script>
+</body>
+
+</html>

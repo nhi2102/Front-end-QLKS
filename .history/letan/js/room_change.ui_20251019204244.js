@@ -1,0 +1,254 @@
+// Biến toàn cục dùng để lưu thông tin hiện tại
+let currentBooking = null; // Đơn đặt phòng hiện tại đang được chọn
+let selectedNewRoom = null; // Phòng mới mà người dùng chọn để đổi
+let availableRooms = []; // Danh sách phòng trống có thể đổi
+let allRoomTypes = []; // Danh sách loại phòng
+// ============================================
+//Khởi tạo
+document.addEventListener('DOMContentLoaded', async() => {
+    initializeEventListeners();
+    checkUserLogin();
+    await loadRoomTypes();
+});
+
+function initializeEventListeners() {
+    document.getElementById('searchBookingBtn').addEventListener('click', searchBookings);
+    document.getElementById('searchValue').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchBookings();
+    });
+    document.getElementById('filterRoomsBtn').addEventListener('click', filterRooms);
+    document.getElementById('cancelChangeBtn').addEventListener('click', resetForm);
+    document.getElementById('confirmChangeBtn').addEventListener('click', confirmRoomChange);
+}
+//kiểm tra đăng nhập
+function checkUserLogin() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user && user.hoten) {
+        document.getElementById('userName').textContent = user.hoten;
+    }
+}
+
+// ============================================
+// LOAD ROOM TYPES
+// ============================================
+
+async function loadRoomTypes() {
+    try {
+        allRoomTypes = await RoomChangeAPI.getRoomTypesAPI();
+        const select = document.getElementById('filterRoomType');
+        select.innerHTML = '<option value="">Tất cả loại phòng</option>';
+        allRoomTypes.forEach(type => {
+            const opt = document.createElement('option');
+            opt.value = type.maloaiphong;
+            opt.textContent = `${type.tenloaiphong} - ${formatCurrency(type.giacoban)}`;
+            select.appendChild(opt);
+        });
+    } catch (err) {
+        console.error('Lỗi load loại phòng:', err);
+    }
+}
+
+// ============================================
+// SEARCH BOOKINGS
+// ============================================
+
+async function searchBookings() {
+    const searchType = document.getElementById('searchType').value;
+    const keyword = document.getElementById('searchValue').value.trim();
+    if (!keyword) return alert('Nhập từ khóa tìm kiếm');
+
+    showLoading(true);
+    try {
+        const allBookings = await RoomChangeAPI.getAllBookingsAPI();
+        let bookings = allBookings.filter(b => b.trangthai === 'Đã nhận phòng');
+        let filtered = [];
+
+        switch (searchType) {
+            case 'booking':
+                filtered = bookings.filter(b => b.madatphong.toString().includes(keyword));
+                break;
+            case 'customer':
+                filtered = bookings.filter(b => (b.tenkhachhang || '').toLowerCase().includes(keyword.toLowerCase()));
+                break;
+            case 'phone':
+                for (const b of bookings) {
+                    const customer = await RoomChangeAPI.getCustomerByIdAPI(b.makh);
+                    if (customer && customer.sdt && customer.sdt.includes(keyword)) filtered.push(b);
+                }
+                break;
+        }
+
+        displaySearchResults(filtered);
+    } catch (e) {
+        alert('Lỗi tìm kiếm: ' + e.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+function displaySearchResults(bookings) {
+    const list = document.getElementById('bookingsList');
+    list.innerHTML = '';
+
+    if (bookings.length === 0) {
+        list.innerHTML = '<p class="text-center">Không tìm thấy kết quả</p>';
+        return;
+    }
+
+    bookings.forEach(b => {
+        const card = document.createElement('div');
+        card.className = 'booking-card';
+        card.innerHTML = `
+            <div class="booking-card-header">
+                <span>Mã ĐP: ${b.madatphong}</span>
+                <span class="booking-status checked-in">${b.trangthai}</span>
+            </div>
+            <div class="booking-card-body">
+                <div><i class="fas fa-user"></i> ${b.tenkhachhang}</div>
+                <div><i class="fas fa-calendar"></i> ${formatDate(b.ngaynhanphong)} - ${formatDate(b.ngaytraphong)}</div>
+            </div>`;
+        card.addEventListener('click', () => selectBooking(b));
+        list.appendChild(card);
+    });
+}
+
+// ============================================
+// SELECT BOOKING
+// ============================================
+
+async function selectBooking(booking) {
+    currentBooking = booking;
+    showLoading(true);
+    try {
+        const roomDetails = await RoomChangeAPI.getRoomDetailsByBookingIdAPI(booking.madatphong);
+        const customer = await RoomChangeAPI.getCustomerByIdAPI(booking.makh);
+
+        displayCurrentBookingInfo(booking, roomDetails, customer);
+        await loadAvailableRooms(booking);
+        document.getElementById('roomChangeFormSection').style.display = 'block';
+    } finally {
+        showLoading(false);
+    }
+}
+
+function displayCurrentBookingInfo(booking, details, customer) {
+    const info = document.getElementById('currentBookingInfo');
+    const room = details[0] ? details[0].phong : null;
+    info.innerHTML = `
+        <p><b>Khách:</b> ${customer.hoten}</p>
+        <p><b>Phòng hiện tại:</b> ${room?.sophong || 'N/A'}</p>
+        <p><b>Loại:</b> ${room?.loaiPhong?.tenloaiphong || 'N/A'}</p>
+        <p><b>Giá:</b> ${formatCurrency(room?.loaiPhong?.giacoban)}</p>`;
+    currentBooking.currentRoomPrice = room.loaiPhong.giacoban;
+    currentBooking.currentRoomId = room.maphong;
+}
+
+// ============================================
+// LOAD AVAILABLE ROOMS
+// ============================================
+
+async function loadAvailableRooms(booking) {
+    const checkIn = booking.ngaynhanphong.split('T')[0];
+    const checkOut = booking.ngaytraphong.split('T')[0];
+    const availIds = await RoomChangeAPI.getAvailableRoomsAPI(checkIn, checkOut);
+
+    availableRooms = [];
+    for (const r of availIds) {
+        const room = await RoomChangeAPI.getRoomByIdAPI(r.maphong);
+        if (room.maphong !== booking.currentRoomId) availableRooms.push(room);
+    }
+
+    displayAvailableRooms(availableRooms);
+}
+
+function displayAvailableRooms(rooms) {
+    const list = document.getElementById('availableRoomsList');
+    list.innerHTML = '';
+
+    rooms.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'room-card';
+        div.innerHTML = `
+            <div class="room-card-header">
+                Phòng ${r.sophong} - ${r.loaiPhong.tenloaiphong}
+            </div>
+            <div class="room-card-body">
+                <span>${formatCurrency(r.loaiPhong.giacoban)}</span>
+                <button onclick="selectNewRoom(${r.maphong})">Chọn</button>
+            </div>`;
+        list.appendChild(div);
+    });
+}
+
+// ============================================
+// SELECT NEW ROOM
+// ============================================
+
+window.selectNewRoom = function(id) {
+    selectedNewRoom = availableRooms.find(r => r.maphong === id);
+    calculatePriceAdjustment();
+    document.getElementById('confirmChangeBtn').disabled = false;
+};
+
+// ============================================
+// PRICE CALCULATION
+// ============================================
+
+function calculatePriceAdjustment() {
+    const oldP = currentBooking.currentRoomPrice;
+    const newP = selectedNewRoom.loaiPhong.giacoban;
+    const diff = newP - oldP;
+    document.getElementById('priceDifference').textContent = formatCurrency(diff);
+}
+
+// ============================================
+// CONFIRM ROOM CHANGE
+// ============================================
+
+async function confirmRoomChange() {
+    if (!currentBooking || !selectedNewRoom) return alert('Chưa chọn phòng');
+    const reason = document.getElementById('changeReason').value || 'Không rõ lý do';
+
+    showLoading(true);
+    try {
+        const details = await RoomChangeAPI.getRoomDetailsByBookingIdAPI(currentBooking.madatphong);
+        const detail = details[0];
+
+        const update = {
+            machitiet: detail.machitiet,
+            madatphong: currentBooking.madatphong,
+            maphong: selectedNewRoom.maphong,
+            tongcong: selectedNewRoom.loaiPhong.giacoban,
+            ghichu: `Đổi phòng: ${reason}`
+        };
+        await RoomChangeAPI.updateRoomDetailAPI(detail.machitiet, update);
+
+        showSuccessModal();
+    } catch (err) {
+        alert('Lỗi đổi phòng: ' + err.message);
+    } finally {
+        showLoading(false);
+    }
+}
+
+// ============================================
+// UTILS
+// ============================================
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+}
+
+function formatDate(dateString) {
+    return dateString ? new Date(dateString).toLocaleDateString('vi-VN') : 'N/A';
+}
+
+function showLoading(show) {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) overlay.style.display = show ? 'flex' : 'none';
+}
+
+function showSuccessModal() {
+    alert('Đổi phòng thành công!');
+    resetForm();
+}

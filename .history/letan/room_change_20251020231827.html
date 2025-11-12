@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đổi Phòng - Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/room_change.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item active">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Đổi Phòng</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Nhân Viên</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Room Change Content -->
+        <div class="room-change-content">
+            <!-- Search Booking Section -->
+            <div class="card search-booking-section">
+                <h3><i class="fas fa-search"></i> Tìm Kiếm Đơn Đặt Phòng</h3>
+                <div class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="searchType">Tìm Theo</label>
+                            <select id="searchType">
+                                <option value="booking">Mã Đặt Phòng</option>
+                                <option value="customer">Tên Khách Hàng</option>
+                                <option value="phone">Số Điện Thoại</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="searchValue">Từ Khóa Tìm Kiếm</label>
+                            <input type="text" id="searchValue" placeholder="Nhập từ khóa...">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="searchBookingBtn" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Tìm Kiếm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div id="searchResults" class="search-results" style="display: none;">
+                    <h4>Kết Quả Tìm Kiếm (<span id="resultCount">0</span>)</h4>
+                    <div id="bookingsList" class="bookings-list">
+                        <!-- Booking results will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Current Booking Info -->
+            <div class="card current-booking-section" id="currentBookingSection" style="display: none;">
+                <h3><i class="fas fa-info-circle"></i> Thông Tin Đặt Phòng Hiện Tại</h3>
+                <div id="currentBookingInfo" class="booking-info">
+                    <!-- Current booking details will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Room Change Form -->
+            <div class="card room-change-form-section" id="roomChangeFormSection" style="display: none;">
+                <h3><i class="fas fa-exchange-alt"></i> Thông Tin Đổi Phòng</h3>
+
+                <!-- Current Room Info -->
+                <div class="current-room-info">
+                    <h4><i class="fas fa-door-open"></i> Phòng Hiện Tại</h4>
+                    <div id="currentRoomDetails" class="room-details">
+                        <!-- Current room details -->
+                    </div>
+                </div>
+                <!-- Change Type -->
+                <div class="change-type-section">
+                    <h4><i class="fas fa-toggle-on"></i> Chọn loại đổi</h4>
+                    <div class="form-row">
+                        <label>
+      <input type="radio" name="changeType" value="changeRoom">
+      Đổi phòng trong cùng ngày
+    </label>
+                        <label style="margin-left: 20px;">
+      <input type="radio" name="changeType" value="changeDate">
+      Đổi ngày đặt phòng
+    </label>
+                    </div>
+                </div>
+
+                <!-- New Date Section (ẩn mặc định) -->
+                <div class="new-date-section" style="display:none;">
+                    <h4><i class="fas fa-calendar-alt"></i> Đổi Ngày (Tùy Chọn)</h4>
+                    <p class="note">Nếu khách muốn đổi sang ngày khác, nhập ngày mới để hệ thống tìm phòng trống tương ứng.</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCheckIn">Ngày nhận mới</label>
+                            <input type="date" id="newCheckIn">
+                        </div>
+                        <div class="form-group">
+                            <label for="newCheckOut">Ngày trả mới</label>
+                            <input type="date" id="newCheckOut">
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="btnFindByNewDate" class="btn btn-info" onclick="findRoomsByNewDate()">
+  <i class="fas fa-search"></i> Tìm Phòng Theo Ngày Mới
+</button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Rooms Section (ẩn mặc định) -->
+                <div class="available-rooms-section" style="display:none;">
+                    <h4><i class="fas fa-bed"></i> Phòng Trống Khả Dụng</h4>
+                    <div id="availableRoomsList" class="rooms-grid"></div>
+                </div>
+
+
+                <!-- Change Reason -->
+                <div class="change-reason-section ">
+                    <h4><i class="fas fa-comment-alt "></i> Lý Do Đổi Phòng</h4>
+                    <div class="form-group ">
+                        <label for="changeReason">Lý Do <span class="required">*</span></label>
+                        <select id="changeReason" required>
+                            <option value=" ">-- Chọn lý do --</option>
+                            <option value="Yêu cầu khách hàng ">Yêu cầu khách hàng</option>
+                            <option value="Nâng cấp phòng ">Nâng cấp phòng</option>
+                            <option value="Hạ cấp phòng ">Hạ cấp phòng</option>
+                            <option value="Sự cố kỹ thuật ">Sự cố kỹ thuật</option>
+                            <option value="Bảo trì phòng ">Bảo trì phòng</option>
+                            <option value="Khác ">Khác</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Price Adjustment -->
+                <div class="price-adjustment-section ">
+                    <h4><i class="fas fa-calculator "></i> Điều Chỉnh Giá</h4>
+                    <div class="price-comparison ">
+                        <div class="price-item ">
+                            <span class="label ">Giá phòng cũ/đêm:</span>
+                            <span id="oldRoomPrice" class="value">0 ₫</span>
+                        </div>
+                        <div class="price-item ">
+                            <span class="label ">Giá phòng mới/đêm:</span>
+                            <span id="newRoomPrice" class="value">0 ₫</span>
+                        </div>
+                        <div class="price-item highlight ">
+                            <span class="label">Chênh lệch giá:</span>
+                            <span id="priceDifference" class="value">0 ₫</span>
+                        </div>
+                        <div class="price-item ">
+                            <span class="label">Số đêm còn lại:</span>
+                            <span id="remainingNights" class="value">0</span>
+                        </div>
+                        <div class="price-item total">
+                            <span class="label "><strong>Tổng điều chỉnh:</strong></span>
+                            <span id="totalAdjustment" class="value"><strong>0 ₫</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-action ">
+                    <button type="button " id="cancelChangeBtn" class="btn btn-secondary ">
+                        <i class="fas fa-times "></i> Hủy Bỏ
+                    </button>
+                    <button type="button " id="confirmChangeBtn" class="btn btn-primary " disabled>
+                        <i class="fas fa-check "></i> Xác Nhận Đổi Phòng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal " id="successModal ">
+        <div class="modal-content ">
+            <div class="modal-header success ">
+                <h3><i class="fas fa-check-circle "></i> Đổi Phòng Thành Công!</h3>
+            </div>
+            <div class="modal-body ">
+                <div class="success-info ">
+                    <p><strong>Mã đặt phòng:</strong> <span id="successBookingCode "></span></p>
+                    <p><strong>Khách hàng:</strong> <span id="successCustomerName "></span></p>
+                    <p><strong>Phòng cũ:</strong> <span id="successOldRoom "></span></p>
+                    <p><strong>Phòng mới:</strong> <span id="successNewRoom "></span></p>
+                    <p><strong>Điều chỉnh giá:</strong> <span id="successPriceAdjustment "></span></p>
+                </div>
+            </div>
+            <div class="modal-footer ">
+                <button class="btn btn-secondary " onclick="closeSuccessModal() ">
+                    <i class="fas fa-times "></i> Đóng
+                </button>
+                <button class="btn btn-primary " onclick="printChangeReceipt() ">
+                    <i class="fas fa-print "></i> In Phiếu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay " id="loadingOverlay " style="display: none; ">
+        <div class="spinner "></div>
+        <p>Đang xử lý...</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="api/room_change.api.js "></script>
+    <script src="js/room_change.ui.js "></script>
+    <script src="api/navigation-preloader.js "></script>
+</body>
+
+</html>

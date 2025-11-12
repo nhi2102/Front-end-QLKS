@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Phòng - Hệ Thống Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/rooms_management.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item active">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Danh Sách Đặt Phòng</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="../login.html" class="nav-item logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản Lý Phòng</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Lễ Tân</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="rooms-content">
+
+            <!-- Statistics Cards -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card stat-available">
+                        <div class="stat-icon">
+                            <i class="fas fa-door-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="availableRooms">0</h3>
+                            <p>Phòng Trống</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-occupied">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="occupiedRooms">0</h3>
+                            <p>Đang Sử Dụng</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-cleaning">
+                        <div class="stat-icon">
+                            <i class="fas fa-broom"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="cleaningRooms">0</h3>
+                            <p>Đang Dọn Dẹp</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-maintenance">
+                        <div class="stat-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="maintenanceRooms">0</h3>
+                            <p>Bảo Trì</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rooms Grid -->
+            <section class="rooms-section">
+                <div class="rooms-card">
+                    <div class="rooms-header">
+                        <h2><i class="fas fa-th-large"></i> Sơ Đồ Phòng</h2>
+                        <div class="view-toggle">
+                            <button class="toggle-btn active" onclick="setView('grid')" id="gridViewBtn">
+                                <i class="fas fa-th-large"></i> Lưới
+                            </button>
+                            <button class="toggle-btn" onclick="setView('list')" id="listViewBtn">
+                                <i class="fas fa-list"></i> Danh Sách
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Grid View -->
+                    <div class="rooms-grid" id="roomsGridView">
+                        <div class="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                        </div>
+                    </div>
+
+                    <!-- List View -->
+                    <div class="rooms-list" id="roomsListView" style="display: none;">
+                        <table class="rooms-table">
+                            <thead>
+                                <tr>
+                                    <th>Số Phòng</th>
+                                    <th>Loại Phòng</th>
+                                    <th>Giá</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Khách Hàng</th>
+                                    <th>Ngày nhận </th>
+                                    <th>Ngày trả</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roomsListBody">
+                                <tr>
+                                    <td colspan="8" class="loading">
+                                        <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            </main>
+        </div>
+
+        <!-- Room Detail Modal -->
+        <div id="roomDetailModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-door-open"></i> Chi Tiết Phòng</h2>
+                    <button class="modal-close" onclick="closeRoomDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                </div>
+
+                <div class="modal-body">
+                    <!-- Room Information -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-info-circle"></i> Thông Tin Phòng</h3>
+                        <div class="room-info-grid">
+                            <div class="info-item">
+                                <label>Số Phòng:</label>
+                                <span id="modalRoomNumber" class="room-number-highlight">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Loại Phòng:</label>
+                                <span id="modalRoomType">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Giá Phòng:</label>
+                                <span id="modalPrice">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Trạng Thái:</label>
+                                <span id="modalStatus">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current Guest Info (if occupied) -->
+                    <div class="info-section" id="guestInfoSection" style="display: none;">
+                        <h3><i class="fas fa-user"></i> Thông Tin Khách Hàng</h3>
+                        <div class="room-info-grid">
+                            <div class="info-item">
+                                <label>Tên Khách:</label>
+                                <span id="modalGuestName">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Số Điện Thoại:</label>
+                                <span id="modalGuestPhone">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Check-in:</label>
+                                <span id="modalCheckIn">-</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Check-out:</label>
+                                <span id="modalCheckOut">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Change Room Status -->
+                    <div class="info-section">
+                        <h3><i class="fas fa-edit"></i> Thay Đổi Trạng Thái</h3>
+                        <form class="status-form">
+                            <div class="form-group">
+                                <label for="newStatus">
+                                <i class="fas fa-toggle-on"></i> Trạng Thái Mới
+                            </label>
+                                <select id="newStatus">
+                                <option value="Trống">Trống - Sẵn sàng cho thuê</option>
+                                <option value="Đang dọn dẹp">Đang dọn dẹp - Đang vệ sinh</option>
+                                <option value="Bảo trì">Bảo trì - Đang sửa chữa</option>
+                                <option value="Đang sử dụng">Đang sử dụng - Có khách</option>
+                            </select>
+                        </form>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="closeRoomDetailModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+                        <button type="button" class="btn btn-primary" onclick="updateRoomStatus()">
+                    <i class="fas fa-save"></i> Cập Nhật
+                </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api/rooms_management.js"></script>
+    <script src="js/rooms_management.ui.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

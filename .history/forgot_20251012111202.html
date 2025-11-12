@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quên Mật Khẩu</title>
+    <link rel="stylesheet" href="account.css">
+</head>
+
+<body>
+    <div class="glass-container">
+        <h2>QUÊN MẬT KHẨU</h2>
+        <form id="forgotForm">
+            <div class="input-group">
+                <input type="email" id="email" required>
+                <label>Email</label>
+            </div>
+            <button type="submit" id="resetBtn" class="login-btn">Gửi mật khẩu mới</button>
+            <p id="successMessage" style="display:none; color:#4CAF50; margin-top:10px;"></p>
+            <p id="errorMessage" style="display:none; color:#f44336; margin-top:10px;"></p>
+            <br>
+            <div class="register-link">
+                Nhớ mật khẩu? <a href="login.html">Quay lại đăng nhập</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = "https://localhost:7076/api";
+
+        document.getElementById("forgotForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById("email").value.trim();
+            const btn = document.getElementById("resetBtn");
+            const successMsg = document.getElementById("successMessage");
+            const errorMsg = document.getElementById("errorMessage");
+
+            successMsg.style.display = "none";
+            errorMsg.style.display = "none";
+
+            // Kiểm tra email hợp lệ
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email) {
+                showError("Vui lòng nhập email của bạn!");
+                return;
+            }
+            if (!emailRegex.test(email)) {
+                showError("Email không hợp lệ!");
+                return;
+            }
+
+            btn.textContent = "Đang gửi...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/Taikhoans/QuenMatKhau?email=${encodeURIComponent(email)}`, {
+                    method: "POST"
+                });
+
+                // Xử lý response dựa trên Content-Type
+                let data;
+                const contentType = res.headers.get("content-type");
+
+                if (contentType && contentType.includes("application/json")) {
+                    data = await res.json();
+                } else {
+                    // Nếu không phải JSON, lấy text
+                    const textResult = await res.text();
+                    console.log("📡 Response text:", textResult);
+
+                    // Cố gắng parse JSON, nếu không được thì tạo object lỗi
+                    try {
+                        data = JSON.parse(textResult);
+                    } catch {
+                        if (textResult.includes("Microsoft.") || textResult.includes("Exception")) {
+                            const errorLines = textResult.split('\n');
+                            const mainError = errorLines[0] || textResult;
+                            data = {
+                                success: false,
+                                message: `Lỗi hệ thống: ${mainError}\n\nVui lòng liên hệ admin để được hỗ trợ reset mật khẩu.`
+                            };
+                        } else {
+                            data = {
+                                success: false,
+                                message: textResult || "Lỗi server không xác định"
+                            };
+                        }
+                    }
+                }
+
+                console.log("📡 Kết quả API quên mật khẩu:", data);
+
+                if (!res.ok) {
+                    throw new Error(data.message || "Không thể gửi mật khẩu mới!");
+                }
+
+                showSuccess("✅ " + (data.message || "Mật khẩu mới đã được gửi qua email của bạn!"));
+
+                // Tự động quay về trang đăng nhập sau 3 giây
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 3000);
+
+            } catch (err) {
+                console.error("Lỗi quên mật khẩu:", err);
+
+                let errorMessage = err.message || "Lỗi kết nối tới server. Vui lòng thử lại!";
+
+                // Xử lý các loại lỗi phổ biến
+                if (errorMessage.includes('Microsoft.') || errorMessage.includes('Exception')) {
+                    errorMessage = '❌ Lỗi hệ thống khi reset mật khẩu\n\n' +
+                        '🔧 Vui lòng:\n' +
+                        '- Kiểm tra email có đúng không\n' +
+                        '- Liên hệ admin để được hỗ trợ\n\n' +
+                        '📧 Email hỗ trợ: support@hotel.com';
+                } else if (errorMessage.includes('không tồn tại') || errorMessage.includes('not found')) {
+                    errorMessage = '⚠️ Email này chưa được đăng ký trong hệ thống\n\n' +
+                        'Vui lòng:\n' +
+                        '- Kiểm tra lại email\n' +
+                        '- Hoặc đăng ký tài khoản mới';
+                } else if (errorMessage.includes('NetworkError') || errorMessage.includes('fetch')) {
+                    errorMessage = '🌐 Không thể kết nối đến server\n\n' +
+                        'Vui lòng kiểm tra kết nối internet và thử lại!';
+                } else if (errorMessage.includes('JSON')) {
+                    errorMessage = '🔧 Lỗi hệ thống phản hồi\n\n' +
+                        'Vui lòng thử lại sau hoặc liên hệ admin!';
+                }
+
+                showError(errorMessage);
+            } finally {
+                btn.textContent = "Gửi mật khẩu mới";
+                btn.disabled = false;
+            }
+
+            function showError(msg) {
+                errorMsg.textContent = msg;
+                errorMsg.style.display = "block";
+                successMsg.style.display = "none";
+            }
+
+            function showSuccess(msg) {
+                successMsg.textContent = msg;
+                successMsg.style.display = "block";
+                errorMsg.style.display = "none";
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="account.css" />
+</head>
+
+<body>
+    <div class="glass-container">
+        <h2>ĐĂNG NHẬP</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" required />
+                <label>Tên đăng nhập (Email hoặc SĐT)</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" required />
+                <label>Mật khẩu</label>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox" /> Ghi nhớ tôi</label>
+                <a href="forgot.html">Quên mật khẩu?</a>
+            </div>
+            <button type="submit" class="login-btn">Đăng nhập</button>
+            <br /><br />
+            <div class="register-link">
+                Chưa có tài khoản? <a href="register.html">Đăng ký</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="api/login.js"></script>
+</body>
+
+</html>

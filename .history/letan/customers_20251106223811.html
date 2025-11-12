@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Khách Hàng - Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/customers.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="customers.html" class="nav-item active">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="booking_list.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Danh Sách Đặt Phòng</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản Lý Khách Hàng</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Nhân Viên</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Customer Management Content -->
+        <div class="customer-content">
+            <!-- Statistics Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #2563eb">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalCustomers">0</h3>
+                        <p>Tổng Khách Hàng</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #f59e0b;">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="activeCustomers">0</h3>
+                        <p>Khách Đang Lưu Trú</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="card search-filter-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-search"></i> Tìm Kiếm & Lọc</h3>
+                </div>
+                <div class="search-filter-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="searchKeyword">Từ Khóa</label>
+                            <input type="text" id="searchKeyword" placeholder="Tên, SĐT, Email, CCCD...">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterStatus">Trạng Thái</label>
+                            <select id="filterStatus">
+                                <option value="">Tất cả</option>
+                                <option value="active">Đang lưu trú</option>
+                                <option value="inactive">Không lưu trú</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="sortBy">Sắp Xếp</label>
+                            <select id="sortBy">
+                                <option value="newest">Mới nhất</option>
+                                <option value="oldest">Cũ nhất</option>
+                                <option value="name-asc">Tên A-Z</option>
+                                <option value="name-desc">Tên Z-A</option>
+                                <option value="visits">Lượt lưu trú</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="searchBtn" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Tìm Kiếm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customers List Section -->
+            <div class="card customers-list-section">
+                <div class="section-header">
+                    <h3><i class="fas fa-list"></i> Danh Sách Khách Hàng (<span id="customerCount">0</span>)</h3>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="grid" title="Xem dạng lưới">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" data-view="list" title="Xem dạng danh sách">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Grid View -->
+                <div id="customersGrid" class="customers-grid">
+                    <!-- Customer cards will be loaded here -->
+                </div>
+
+                <!-- List View -->
+                <div id="customersList" class="customers-list" style="display: none;">
+                    <table class="customers-table">
+                        <thead>
+                            <tr>
+                                <th>Mã KH</th>
+                                <th>Họ Tên</th>
+                                <th>CCCD/CMND</th>
+                                <th>Số Điện Thoại</th>
+                                <th>Email</th>
+                                <th>Lượt Lưu Trú</th>
+                                <th>Trạng Thái</th>
+                                <th>Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customersTableBody">
+                            <!-- Table rows will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Detail Modal -->
+    <div class="modal" id="customerDetailModal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h3><i class="fas fa-user"></i> Thông Tin Khách Hàng</h3>
+                <button class="close-btn" onclick="closeCustomerDetailModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="customer-detail-tabs">
+                    <button class="tab-btn active" data-tab="info">
+                        <i class="fas fa-info-circle"></i> Thông Tin
+                    </button>
+                    <button class="tab-btn" data-tab="history">
+                        <i class="fas fa-history"></i> Lịch Sử Lưu Trú
+                    </button>
+                    <button class="tab-btn" data-tab="stats">
+                        <i class="fas fa-chart-bar"></i> Thống Kê
+                    </button>
+                </div>
+
+                <!-- Info Tab -->
+                <div class="tab-content active" id="infoTab">
+                    <div class="customer-info-grid" id="customerInfoGrid">
+                        <!-- Customer info will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- History Tab -->
+                <div class="tab-content" id="historyTab">
+                    <div class="booking-history" id="bookingHistory">
+                        <!-- Booking history will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Stats Tab -->
+                <div class="tab-content" id="statsTab">
+                    <div class="customer-stats" id="customerStats">
+                        <!-- Customer statistics will be loaded here -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeCustomerDetailModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Customer Modal -->
+    <div class="modal" id="editCustomerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> <span id="editModalTitle">Chỉnh Sửa Thông Tin</span></h3>
+                <button class="close-btn" onclick="closeEditCustomerModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editCustomerForm">
+                    <input type="hidden" id="editCustomerId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editHoten">Họ Tên <span class="required">*</span></label>
+                            <input type="text" id="editHoten" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCccd">CCCD/CMND <span class="required">*</span></label>
+                            <input type="text" id="editCccd" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editSdt">Số Điện Thoại <span class="required">*</span></label>
+                            <input type="tel" id="editSdt" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmail">Email</label>
+                            <input type="email" id="editEmail" readonly style="background-color: #f5f5f5; color: #777;">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editNgaysinh">Ngày Sinh</label>
+                            <input type="date" id="editNgaysinh">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label for="editDiachi">Địa Chỉ</label>
+                            <input type="text" id="editDiachi">
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEditCustomerModal()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button class="btn btn-primary" id="saveCustomerBtn">
+                    <i class="fas fa-save"></i> Lưu
+                </button>
+                <button class="btn btn-warning" id="resetPasswordBtn">
+        <i class="fas fa-key"></i> Gửi link Reset Mật khẩu
+    </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Đang tải dữ liệu...</p>
+    </div>
+    <!-- Modal Thông Tin Cá Nhân -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-circle"></i> Thông Tin Cá Nhân</h2>
+                <button class="modal-close" onclick="closeProfileModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="info-section">
+                    <h3 style="margin-bottom: 15px;"><i class="fas fa-user"></i> Thông Tin Cá Nhân</h3>
+                    <div class="profile-info-container">
+                        <div class="profile-info-row">
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-id-badge"></i> Họ tên:</label>
+                                <span id="profile_name">-</span>
+                            </div>
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-envelope"></i> Email:</label>
+                                <span id="profile_email">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-item">
+                                <label><i class="fas fa-phone"></i> Số điện thoại:</label>
+                                <span id="profile_phone">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-key"></i> Đổi Mật Khẩu</h3>
+                    <form id="changePasswordForm" onsubmit="handleChangePassword(event)">
+                        <input type="hidden" id="emailorsdt_input">
+                        <div class="form-group">
+                            <label>Mật khẩu hiện tại:</label>
+                            <input type="password" id="current_password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mật khẩu mới:</label>
+                            <input type="password" id="new_password" class="form-control" required minlength="8">
+                            <small class="form-text">Tối thiểu 8 ký tự, bắt đầu bằng chữ hoa, có chữ thường, số và ký tự đặc biệt</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Xác nhận mật khẩu mới:</label>
+                            <input type="password" id="confirm_password" class="form-control" required minlength="8">
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                            <i class="fas fa-check"></i> Đổi Mật Khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeProfileModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="api/customers.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

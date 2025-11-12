@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check-out - Hệ Thống Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item active">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="booking_list.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Danh Sách Đặt Phòng</span>
+            </a>
+
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Check-out Khách</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Nhân Viên A</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Container -->
+        <div class="checkout-content">
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="search-card">
+                    <h3><i class="fas fa-search"></i> Tìm Kiếm Booking</h3>
+                    <form class="search-form" onsubmit="event.preventDefault(); searchBooking();">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="searchBookingCode">
+                                 Mã Booking
+                                </label>
+                                <input type="text" id="searchBookingCode" placeholder="Nhập mã booking">
+                            </div>
+                            <div class="form-group">
+                                <label for="searchRoomNumber">
+                                     Số Phòng
+                                </label>
+                                <input type="text" id="searchRoomNumber" placeholder="Nhập số phòng">
+                            </div>
+                            <div class="form-group">
+                                <label for="searchName">
+                                     Tên Khách Hàng
+                                </label>
+                                <input type="text" id="searchName" placeholder="Nhập tên khách hàng">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-search" onclick="searchBooking()">
+                                <i class="fas fa-search"></i> Tìm Kiếm
+                            </button>
+                                <button type="button" class="btn btn-refresh" onclick="loadCurrentGuests()">
+                                <i class="fas fa-sync-alt"></i> Làm Mới
+                            </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+
+            <!-- Current Guests List -->
+            <section class="data-section">
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> Danh Sách Khách Đang Ở</h2>
+                        <div class="card-actions">
+                            <span class="badge badge-info" id="guestCount">0 khách</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Booking</th>
+                                    <th>Tên Khách</th>
+                                    <th>Số ĐT</th>
+                                    <th>Phòng</th>
+                                    <th>Ngày Check-in</th>
+                                    <th>Ngày Check-out</th>
+
+                                    <th>Trạng Thái</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="currentGuestsList">
+                                <tr>
+                                    <td colspan="10" class="loading">
+                                        <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Check-out Modal -->
+    <div id="checkOutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-sign-out-alt"></i> Xác Nhận Check-out</h2>
+                <button class="modal-close" onclick="closeCheckOutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <!-- Booking Information -->
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Thông Tin Booking</h3>
+                    <div class="booking-info-grid">
+                        <div class="info-item">
+                            <label>Mã Booking:</label>
+                            <span id="modalBookingCode">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Tên Khách:</label>
+                            <span id="modalCustomerName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Điện Thoại:</label>
+                            <span id="modalPhoneNumber">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>CMND/CCCD:</label>
+                            <span id="modalCCCD">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Phòng:</label>
+                            <span id="modalRoomNumber" class="room-highlight">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Loại Phòng:</label>
+                            <span id="modalRoomType">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Ngày Check-in:</label>
+                            <span id="modalCheckInDate">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Ngày Check-out:</label>
+                            <span id="modalCheckOutDate">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="info-section">
+                    <h3><i class="fas fa-money-bill-wave"></i> Thông Tin Thanh Toán</h3>
+                    <div class="payment-info">
+                        <div class="payment-row">
+                            <label>Tiền Phòng:</label>
+                            <span id="roomCharge"> ₫</span>
+                        </div>
+                        <div class="payment-row">
+                            <label>Tiền Dịch Vụ:</label>
+                            <span id="serviceCharge"> ₫</span>
+                        </div>
+                        <div class="payment-row">
+                            <label>Bồi Thường Thiết Bị:</label>
+                            <span id="equipmentCompensation">0 ₫</span>
+
+                        </div>
+
+                        <div class="payment-row total-row">
+                            <label>Tổng Cần Thanh Toán:</label>
+                            <span id="totalAmount" class="total-highlight">0 ₫</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service History -->
+                <div class="info-section">
+                    <h3><i class="fas fa-history"></i> Lịch Sử Dịch Vụ</h3>
+                    <div id="serviceHistoryList" class="service-history-container">
+                        <div class="no-service-history">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Đang tải lịch sử dịch vụ...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Check-out Form -->
+                <div class="info-section">
+                    <h3><i class="fas fa-clipboard-check"></i> Thông Tin Check-out</h3>
+                    <form class="checkout-form">
+                        <!-- Tình trạng thiết bị -->
+                        <div class="form-group">
+                            <label for="equipmentStatus">
+                                <i class="fas fa-tv"></i> Tình Trạng Thiết Bị Khách Sạn
+                            </label>
+                            <select id="equipmentStatus" onchange="handleEquipmentStatusChange()">
+                                <option value="good">Tốt - Không hư hỏng</option>
+                                <option value="damaged">Có hư hỏng - Cần đền bù</option>
+                            </select>
+                        </div>
+
+                        <!-- Danh sách thiết bị (ẩn mặc định) -->
+                        <div class="form-group" id="equipmentCheckGroup" style="display: none;">
+                            <label>
+                                <i class="fas fa-list-check"></i> Chọn Thiết Bị Bị Hư Hỏng
+                            </label>
+                            <div id="equipmentCheckList" class="equipment-list">
+                                <div class="loading"> Đang tải danh sách thiết bị...</div>
+                            </div>
+                            <div class="equipment-note">
+                                <small><i class="fas fa-info-circle"></i> Tiền đền bù sẽ được tự động cộng vào phụ thu</small>
+                            </div>
+                        </div>
+
+                        <style>
+                            .equipment-list {
+                                max-height: 200px;
+                                overflow-y: auto;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                padding: 10px;
+                            }
+                            
+                            .equipment-item {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                padding: 8px 0;
+                                border-bottom: 1px solid #eee;
+                            }
+                            
+                            .equipment-item:last-child {
+                                border-bottom: none;
+                            }
+                            
+                            .equipment-info {
+                                flex: 1;
+                            }
+                            
+                            .equipment-name {
+                                font-weight: 500;
+                            }
+                            
+                            .equipment-price {
+                                color: #666;
+                                font-size: 0.9em;
+                            }
+                            
+                            .damage-controls {
+                                display: flex;
+                                gap: 10px;
+                                align-items: center;
+                            }
+                            
+                            .damage-controls input[type="number"] {
+                                width: 80px;
+                                padding: 4px 8px;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                            }
+                            
+                            .damage-controls input[type="checkbox"] {
+                                margin-right: 5px;
+                            }
+                            /* Readonly input styling */
+                            
+                            input[readonly] {
+                                background-color: #f8f9fa;
+                                border: 1px solid #e9ecef;
+                                cursor: not-allowed;
+                                color: #495057;
+                            }
+                            
+                            .compensation-summary {
+                                background: #f8f9fa;
+                                padding: 15px;
+                                border-radius: 4px;
+                                text-align: center;
+                            }
+                            
+                            .compensation-summary #totalCompensation {
+                                font-size: 1.2em;
+                                font-weight: bold;
+                                color: #dc3545;
+                            }
+                        </style>
+
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="keysReturned" required>
+                                <span>Đã trả chìa khóa/thẻ phòng</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="itemsChecked" required>
+                                <span>Đã kiểm tra đồ đạc trong phòng</span>
+                            </label>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="paymentCompleted" required>
+                                <span>Đã thu tiền / Xác nhận thanh toán</span>
+                            </label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeCheckOutModal()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button type="button" class="btn btn-primary" onclick="handleCheckout()">
+                    <i class="fas fa-check"></i> Xác Nhận Check-out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api/checkout.api.js"></script>
+    <script src="js/checkout.ui.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

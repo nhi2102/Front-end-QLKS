@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Phòng - Quản trị</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script type="module">
+        import { createIcons, icons } from 'https://cdn.jsdelivr.net/npm/lucide@0.447.0/dist/esm/lucide.js'; window.createLucideIcons = createIcons; window.lucideIcons = icons; console.log('Lucide loaded with icons');
+    </script>
+
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <!-- CSS Sidebar riêng -->
+    <link rel="stylesheet" href="css/rooms.css">
+    <!-- CSS riêng cho trang Phòng -->
+</head>
+
+<body>
+
+    <div class="page-container">
+        <!-- Sidebar Placeholder -->
+        <aside id="sidebar-placeholder" class="sidebar"></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h2 id="content-title">Quản lý Phòng</h2>
+                <div class="user-info">
+                    <span id="userName"></span>
+                    <img src="https://placehold.co/40x40/E2E8F0/4A5568?text=A" alt="Avatar" class="avatar">
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Tab Buttons -->
+                <div class="tab-container">
+                    <button class="tab-btn active" data-target="room-type-content"><i data-lucide="layout-list"></i> Loại phòng</button>
+                    <button class="tab-btn" data-target="room-content"><i data-lucide="bed-double"></i> Phòng</button>
+                    <button class="tab-btn" data-target="room-price-content"><i data-lucide="dollar-sign"></i> Giá phòng</button>
+                    <button class="tab-btn" data-target="room-service-content"><i data-lucide="concierge-bell"></i> Dịch vụ </button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div id="room-panels">
+                    <!-- 1. Loại phòng Panel -->
+                    <div id="room-type-content" class="tab-panel active">
+                        <div class="card">
+                            <div class="card-header-action">
+                                <h3>Danh sách loại phòng</h3>
+                                <button id="add-room-type-btn" class="btn btn-primary">
+                                    <i data-lucide="plus"></i><span>Thêm loại phòng</span>
+                                </button>
+                            </div>
+                            <div class="card-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" id="search-room-type-input" placeholder="Tìm kiếm theo tên loại phòng...">
+                            </div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Tên loại phòng</th>
+                                            <th>Giá (VND/đêm)</th>
+                                            <th>Người tối đa</th>
+                                            <th>Trạng thái</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="room-types-table-body">
+                                        <!-- Dữ liệu mẫu - Sẽ bị thay thế bởi JS -->
+                                        <tr>
+                                            <td>Standard Double</td>
+                                            <td>1,200,000</td>
+                                            <td>2</td>
+                                            <td><span class="status-badge status-active">Hoạt động</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                                <button class="action-btn action-btn-toggle" data-action="toggle" title="Ngừng"><i data-lucide="power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Deluxe King</td>
+                                            <td>2,500,000</td>
+                                            <td>3</td>
+                                            <td><span class="status-badge status-inactive">Ngừng</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                                <button class="action-btn action-btn-toggle action-btn-activate" data-action="toggle" title="Kích hoạt"><i data-lucide="power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr id="room-type-loading-row" style="display: none;">
+                                            <td colspan="5" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Phòng Panel -->
+                    <div id="room-content" class="tab-panel">
+                        <div class="card">
+                            <div class="card-header-action">
+                                <h3>Danh sách phòng</h3>
+                                <button id="add-room-btn" class="btn btn-primary">
+                                    <i data-lucide="plus"></i><span>Thêm phòng</span>
+                                </button>
+                            </div>
+                            <div class="card-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" id="search-room-input" placeholder="Tìm kiếm theo số phòng...">
+                            </div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Số phòng</th>
+                                            <th>Loại phòng</th>
+                                            <th>Sức chứa</th>
+                                            <th>Trạng thái</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="rooms-table-body">
+                                        <!-- Dữ liệu mẫu - Sẽ bị thay thế bởi JS -->
+                                        <tr>
+                                            <td>101</td>
+                                            <td>Standard Double</td>
+                                            <td>2</td>
+                                            <td><span class="status-badge status-available">Trống</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                                <!-- Có thể thêm nút đổi trạng thái nhanh -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>205</td>
+                                            <td>Deluxe King</td>
+                                            <td>3</td>
+                                            <td><span class="status-badge status-occupied">Đang sử dụng</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr id="room-loading-row" style="display: none;">
+                                            <td colspan="5" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Giá phòng Panel -->
+                    <div id="room-price-content" class="tab-panel">
+                        <div class="card">
+                            <h3 class="card-header">Bảng giá phòng hiện tại</h3>
+                            <div class="table-wrapper">
+                                <table id="room-price-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Loại phòng</th>
+                                            <th>Giá (VND/đêm)</th>
+                                            <th>Người tối đa</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="room-price-table-body">
+                                        <!-- Dữ liệu sẽ được JS tải từ API loại phòng -->
+                                        <tr id="room-price-loading-row" style="display: none;">
+                                            <td colspan="3" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Dịch vụ KS Panel -->
+                    <div id="room-service-content" class="tab-panel">
+                        <div class="card">
+                            <div class="card-header-action">
+                                <h3>Danh mục dịch vụ khách sạn</h3>
+                                <button id="add-hotel-service-btn" class="btn btn-primary">
+                                    <i data-lucide="plus"></i><span>Thêm dịch vụ</span>
+                                </button>
+                            </div>
+                            <div class="card-search">
+                                <i data-lucide="search"></i>
+                                <input type="text" id="search-hotel-service-input" placeholder="Tìm kiếm theo tên dịch vụ...">
+                            </div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Tên dịch vụ</th>
+                                            <th>Đơn giá (VND)</th>
+                                            <th>Đơn vị tính</th>
+                                            <th>Trạng thái</th>
+                                            <th class="text-center">Hành động</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="hotel-services-table-body">
+                                        <!-- Dữ liệu mẫu - Sẽ bị thay thế bởi JS -->
+                                        <tr>
+                                            <td>Giặt ủi</td>
+                                            <td>50,000</td>
+                                            <td>kg</td>
+                                            <td><span class="status-badge status-active">Cung cấp</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                                <button class="action-btn action-btn-toggle" data-action="toggle" title="Tạm ngừng"><i data-lucide="power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ăn sáng tại phòng</td>
+                                            <td>250,000</td>
+                                            <td>người</td>
+                                            <td><span class="status-badge status-inactive">Tạm ngừng</span></td>
+                                            <td class="text-center">
+                                                <button class="action-btn" data-action="edit" title="Sửa"><i data-lucide="edit"></i></button>
+                                                <button class="action-btn action-btn-toggle action-btn-activate" data-action="toggle" title="Kích hoạt"><i data-lucide="power"></i></button>
+                                            </td>
+                                        </tr>
+                                        <tr id="hotel-service-loading-row" style="display: none;">
+                                            <td colspan="5" class="text-center">Đang tải dữ liệu...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Tab Panels -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay">
+        <div id="modal-content" class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title"></h3>
+                <button id="modal-close-btn" class="modal-close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Modal content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js" type="module" defer></script>
+    <script src="js/rooms.js" type="module" defer></script>
+</body>
+
+</html>

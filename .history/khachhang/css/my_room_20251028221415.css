@@ -1,0 +1,2412 @@
+/* --- Styles cho trang My Rooms (my_room.css) --- */
+
+
+/* Reset và layout cơ bản */
+
+.my-rooms-main {
+    padding: 60px 0;
+    background-color: #f7f9fc;
+    min-height: calc(100vh - 50px);
+}
+
+.my-rooms-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #112173;
+    margin-bottom: 40px;
+    text-align: center;
+    border-bottom: 3px solid #eab018;
+    /* Màu vàng chủ đạo */
+    padding-bottom: 10px;
+    display: block;
+}
+
+
+/* --- Tab Navigation --- */
+
+.tabs-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+}
+
+.tab-btn {
+    padding: 12px 25px;
+    border: none;
+    background-color: transparent;
+    color: #555;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-btn:hover {
+    color: #eab018;
+    background-color: #fff;
+}
+
+.tab-btn.active {
+    color: #eab018;
+    border-bottom: 3px solid #eab018;
+    background-color: #fff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn i {
+    margin-right: 8px;
+}
+
+
+/* Ẩn/Hiện tab content */
+
+.tab-pane {
+    display: none;
+    padding: 20px 0;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.empty-list-message,
+.loading-text {
+    text-align: center;
+    padding: 50px 20px;
+    color: #888;
+    font-size: 18px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+
+/* --- Booking Card Style --- */
+
+.booking-card {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* HEADER: Mã Booking và Trạng thái */
+
+.card-header {
+    background-color: #f7f9fc;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.booking-id {
+    color: #112173;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.booking-id i {
+    color: #eab018;
+}
+
+
+/* Trạng thái đặt phòng */
+
+.booking-status {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-sắp-tới {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-chờ-xác-nhận {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-đã-hủy {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-hoàn-tất {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+
+/* Chính sách hủy */
+
+.cancellation-policy {
+    background: linear-gradient(135deg, #fff8e6 0%, #fffbf0 100%);
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #856404;
+    border-left: 4px solid #ffc107;
+    border-bottom: 1px solid #f0e5d0;
+}
+
+.cancellation-policy i {
+    color: #ffc107;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.cancellation-policy strong {
+    color: #664d03;
+    font-weight: 600;
+}
+
+
+/* Trạng thái thanh toán */
+
+.payment-status {
+    padding: 12px 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    border-left: 4px solid;
+    border-bottom: 1px solid;
+}
+
+
+/* Đã thanh toán */
+
+.payment-status.đã-thanh-toán {
+    background: linear-gradient(135deg, #e6f9f0 0%, #f0fcf7 100%);
+    color: #155724;
+    border-left-color: #28a745;
+    border-bottom-color: #c3e6cb;
+}
+
+.payment-status.đã-thanh-toán i {
+    color: #28a745;
+}
+
+
+/* Đã hoàn tiền */
+
+.payment-status.đã-hoàn-tiền {
+    background: linear-gradient(135deg, #e6f3ff 0%, #f0f8ff 100%);
+    color: #004085;
+    border-left-color: #007bff;
+    border-bottom-color: #b8daff;
+}
+
+.payment-status.đã-hoàn-tiền i {
+    color: #007bff;
+}
+
+
+/* Chưa thanh toán */
+
+.payment-status.chưa-thanh-toán {
+    background: linear-gradient(135deg, #fff3e6 0%, #fffaf5 100%);
+    color: #856404;
+    border-left-color: #ff9800;
+    border-bottom-color: #ffe0b2;
+}
+
+.payment-status.chưa-thanh-toán i {
+    color: #ff9800;
+}
+
+.payment-status i {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.payment-status strong {
+    font-weight: 600;
+}
+
+
+/* PILL TRẠNG THÁI THANH TOÁN (ĐÃ LOẠI BỎ THEO YÊU CẦU) */
+
+
+/* NỘI DUNG CHÍNH (Chỉ còn metadata và ngày tháng) */
+
+.card-content {
+    padding: 25px;
+    display: block;
+    /* Đặt lại thành block để bố cục theo chiều dọc */
+}
+
+
+/* Đã loại bỏ .room-image-wrapper và .room-details */
+
+
+/* THÔNG TIN NGƯỜI ĐẶT & SỐ KHÁCH */
+
+.booking-meta {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 15px;
+}
+
+.meta-item {
+    font-size: 14px;
+    color: #555;
+}
+
+.meta-item i {
+    color: #112173;
+    margin-right: 5px;
+}
+
+.meta-item strong {
+    font-weight: 700;
+    color: #112173;
+}
+
+
+/* KHUNG NGÀY NHẬN TRẢ PHÒNG */
+
+.booking-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f7f9fc;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px 15px;
+    margin: 20px 25px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.date-item {
+    text-align: center;
+    flex-basis: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.date-item i {
+    color: #eab018;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.date-content {
+    text-align: center;
+}
+
+.date-label {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    font-weight: 500;
+    margin: 0 0 5px 0;
+}
+
+.date-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #112173;
+    margin: 0;
+}
+
+.nights-count {
+    flex-basis: 20%;
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    font-weight: 700;
+    position: relative;
+}
+
+.nights-count span {
+    display: block;
+    padding: 8px 12px;
+    border: 1px dashed #ccc;
+    border-radius: 50px;
+    color: #eab018;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* Footer summary với số phòng và nút toggle */
+
+.booking-summary-footer {
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed #eee;
+}
+
+.room-count {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+.room-count i {
+    color: #eab018;
+    margin-right: 8px;
+}
+
+.toggle-details-btn {
+    padding: 8px 16px;
+    background-color: #eab018;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-details-btn:hover {
+    background-color: #d19f16;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(234, 176, 24, 0.3);
+}
+
+.toggle-details-btn i {
+    margin-right: 5px;
+}
+
+
+/* Loại bỏ style cũ */
+
+.check-dates {
+    display: none;
+}
+
+.date-box {
+    display: none;
+}
+
+
+/* --- CẤU TRÚC MỚI: KHU VỰC CHI TIẾT ẨN VÀ PHÒNG RIÊNG LẺ --- */
+
+.room-details-hidden {
+    /* Mặc định ẩn, được JS kích hoạt khi nhấn Xem Chi Tiết */
+    display: none;
+    padding: 15px 25px;
+    border-top: 1px dashed #eee;
+}
+
+.room-item-detail {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background-color: #f7f9fc;
+}
+
+.room-item-detail h4 {
+    color: #112173;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.room-item-detail p {
+    font-size: 13px;
+    color: #555;
+    margin: 3px 0;
+}
+
+.room-item-img {
+    width: 100px;
+    height: 70px;
+    overflow: hidden;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.room-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-item-info {
+    flex-grow: 1;
+}
+
+.room-item-info h4 {
+    color: #112173;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.room-type {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.room-type i {
+    color: #eab018;
+    margin-right: 5px;
+}
+
+
+/* Chi tiết giá phòng */
+
+.room-pricing {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.price-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.price-label {
+    color: #666;
+    font-weight: 500;
+}
+
+.price-value {
+    color: #112173;
+    font-weight: 600;
+}
+
+
+/* Danh sách dịch vụ */
+
+.room-services {
+    margin: 12px 0;
+    padding: 10px;
+    background-color: #f7f9fc;
+    border-radius: 4px;
+}
+
+.room-services h5 {
+    color: #112173;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed #ddd;
+    gap: 12px;
+}
+
+.service-item:last-child {
+    border-bottom: none;
+}
+
+.service-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.service-name {
+    color: #333;
+    font-weight: 500;
+}
+
+.service-desc {
+    color: #777;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.4;
+}
+
+.service-price {
+    color: #eab018;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.services-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 4px 0;
+    margin-top: 6px;
+    border-top: 1px solid #ddd;
+}
+
+.services-total .service-name {
+    color: #112173;
+}
+
+.services-total .service-price {
+    color: #eab018;
+    font-weight: 700;
+}
+
+.service-price {
+    color: #eab018;
+    font-weight: 600;
+}
+
+
+/* Tổng cộng phòng */
+
+.price-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid #eab018;
+    font-size: 15px;
+}
+
+.price-total .total-label {
+    color: #555;
+    font-weight: 600;
+}
+
+.price-total .total-value {
+    color: #dc3545;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.room-item-actions {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.room-item-actions .action-btn {
+    padding: 8px 12px;
+}
+
+
+/* FOOTER: Tổng tiền và Hành động */
+
+.card-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+    padding: 20px 25px;
+    background-color: #fefefe;
+    border-top: 2px solid #f0f0f0;
+}
+
+
+/* Phân tách tiền phòng và dịch vụ */
+
+.footer-total-breakdown {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+}
+
+.breakdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.breakdown-label {
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.breakdown-label i {
+    margin-right: 5px;
+    color: #112173;
+}
+
+.breakdown-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #112173;
+}
+
+
+/* Tổng tiền cuối */
+
+.footer-total {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.total-label {
+    font-size: 16px;
+    color: #555;
+    font-weight: 600;
+}
+
+.total-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #dc3545;
+}
+
+.footer-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+.btn-change-room {
+    background-color: #2196F3;
+    color: #fff;
+}
+
+.btn-change-room:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.btn-cancel-booking {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-cancel-booking:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cancel-booking i {
+    margin-right: 5px;
+}
+
+
+/* Nút Đặt lại (cho đơn đã hủy) */
+
+.btn-rebook {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.btn-rebook:hover {
+    background: linear-gradient(135deg, #218838, #1aa179);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.btn-rebook i {
+    margin-right: 6px;
+}
+
+
+/* Loại bỏ style cũ không dùng */
+
+.footer-top,
+.price-info,
+.card-actions,
+.btn-view-details,
+.final-price {
+    display: none;
+}
+
+
+/* Button Styles (Action) */
+
+.action-btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+}
+
+
+/* HIỆU ỨNG NÚT KHI BỊ VÔ HIỆU HÓA */
+
+.action-btn[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc !important;
+    box-shadow: none !important;
+}
+
+.btn-change {
+    background-color: #112173;
+    /* Xanh đậm */
+    color: #fff;
+}
+
+.btn-change:hover {
+    background-color: #0b1a5a;
+    box-shadow: 0 4px 8px rgba(17, 33, 115, 0.3);
+}
+
+.btn-cancel {
+    background-color: #dc3545;
+    /* Đỏ cho hủy */
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background-color: #c82333;
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-view-details {
+    background-color: #eab018;
+    /* Vàng chủ đạo */
+    color: #fff;
+}
+
+.btn-view-details:hover {
+    background-color: #d19f16;
+}
+
+
+/* --- CUSTOM ACTION MODAL STYLES --- */
+
+
+/* Lớp phủ (Overlay): Căn giữa tuyệt đối */
+
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.custom-modal-overlay.hidden {
+    display: none;
+}
+
+
+/* Nội dung Modal (Căn giữa) */
+
+.custom-modal-content {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    width: 90%;
+    max-width: 450px;
+    overflow: hidden;
+}
+
+
+/* Header (Màu Xanh Đậm theo yêu cầu) */
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #eab018;
+    /* Xanh đậm */
+    color: white;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    color: white;
+    margin: 0;
+    font-weight: 600;
+}
+
+.modal-icon {
+    font-size: 24px;
+    color: white;
+    /* Màu vàng */
+    margin-right: 15px;
+}
+
+
+/* Body */
+
+.modal-body {
+    padding: 25px 30px;
+    text-align: center;
+    color: #333;
+    font-size: 15px;
+}
+
+.modal-item-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #112173;
+    margin-bottom: 5px;
+}
+
+.modal-item-info {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+
+/* Khu vực Phí phạt (Căn giữa và làm nổi bật) */
+
+.modal-penalty-box {
+    padding: 15px 0;
+    margin: 20px 0;
+    /* Loại bỏ border, dùng box-shadow nhẹ để nổi bật */
+    border-radius: 8px;
+    /* background-color: #fcfcfc; */
+}
+
+.modal-penalty-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    line-height: 1.4;
+}
+
+#modalPenaltyValue {
+    display: block;
+    font-size: 28px;
+    font-weight: 800;
+    color: #dc3545;
+    /* Đỏ mạnh */
+    margin-top: 5px;
+}
+
+.text-gray-500 {
+    color: #6c757d;
+    font-size: 13px;
+}
+
+.mt-2 {
+    margin-top: 15px;
+}
+
+
+/* Footer (Buttons) */
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #f7f7f7;
+    border-top: 1px solid #eee;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 14px;
+    width: 48%;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+
+/* Nút Xác nhận (Màu Vàng chủ đạo) */
+
+.btn-confirm {
+    background-color: #eab018;
+    color: #fff;
+}
+
+.btn-confirm:hover {
+    background-color: #d19f16;
+}
+
+
+/* Nút Hủy (Màu Xám nhẹ) */
+
+.btn-action-secondary {
+    background-color: #ccc;
+    color: #333;
+}
+
+.btn-action-secondary:hover {
+    background-color: #bbb;
+}
+
+
+/* --- Responsive Design --- */
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 26px;
+    }
+    .tabs-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .tab-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    .booking-card {
+        margin-bottom: 20px;
+    }
+    .card-header {
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .booking-summary {
+        padding: 15px 10px;
+        margin: 15px;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .date-item {
+        flex-basis: 100%;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+    .nights-count {
+        flex-basis: 100%;
+    }
+    .date-value {
+        font-size: 14px;
+    }
+    .booking-summary-footer {
+        padding: 12px 15px;
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+    .toggle-details-btn {
+        width: 100%;
+    }
+    .card-footer {
+        padding: 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .footer-total {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .total-value {
+        font-size: 20px;
+    }
+    .footer-actions {
+        width: 100%;
+    }
+    .btn-cancel-booking {
+        width: 100%;
+        padding: 12px;
+    }
+    /* Responsive cho chi tiết phòng ẩn */
+    .room-details-hidden {
+        padding: 10px 15px;
+    }
+    .room-item-detail {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px;
+    }
+    .room-item-img {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 10px;
+    }
+    .room-item-actions {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+    .action-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+
+/* ========================================
+   MODAL HỦY PHÒNG
+   ======================================== */
+
+.cancel-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.cancel-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cancel-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cancel-modal-header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+}
+
+.cancel-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cancel-modal-header i.fa-exclamation-triangle {
+    font-size: 24px;
+}
+
+.cancel-modal-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.cancel-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.cancel-modal-body {
+    padding: 25px;
+}
+
+.cancel-booking-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.cancel-booking-info h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #112173;
+}
+
+.cancel-booking-info p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.cancel-policy-box {
+    background: linear-gradient(135deg, #fff8e6 0%, #fffbf0 100%);
+    border-left: 4px solid #ffc107;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.cancel-policy-box h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #856404;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.policy-text {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #664d03;
+    font-weight: 500;
+}
+
+.refund-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.refund-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: white;
+    border-radius: 6px;
+    border: 2px solid #e0e0e0;
+    font-size: 14px;
+    color: #666;
+    transition: all 0.3s;
+}
+
+.refund-item i {
+    font-size: 18px;
+    color: #999;
+}
+
+.refund-item.active {
+    border-color: #28a745;
+    background: #d4edda;
+    color: #155724;
+}
+
+.refund-item.active i {
+    color: #28a745;
+}
+
+.refund-summary {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 2px solid #28a745;
+}
+
+.refund-amount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+}
+
+.refund-amount .amount {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.refund-amount .amount.positive {
+    color: #28a745;
+}
+
+.refund-amount .amount.negative {
+    color: #dc3545;
+}
+
+.cancel-reason {
+    margin-bottom: 20px;
+}
+
+.cancel-reason h3 {
+    margin: 0 0 15px;
+    font-size: 16px;
+    color: #112173;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cancel-reason-select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    transition: border-color 0.3s;
+}
+
+.cancel-reason-select:focus {
+    outline: none;
+    border-color: #112173;
+}
+
+.cancel-note {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+.cancel-note:focus {
+    outline: none;
+    border-color: #112173;
+}
+
+.cancel-warning {
+    background: #f8d7da;
+    border-left: 4px solid #dc3545;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #721c24;
+    font-size: 14px;
+}
+
+.cancel-warning i {
+    font-size: 24px;
+    color: #dc3545;
+    flex-shrink: 0;
+}
+
+.cancel-modal-footer {
+    padding: 20px 25px;
+    background: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    border-radius: 0 0 16px 16px;
+}
+
+.cancel-modal-btn {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.cancel-modal-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-back {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-back:hover:not(:disabled) {
+    background: #5a6268;
+}
+
+.btn-confirm-cancel {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.btn-confirm-cancel:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .cancel-modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+    .cancel-modal-header h2 {
+        font-size: 18px;
+    }
+    .refund-amount {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .cancel-modal-footer {
+        flex-direction: column;
+    }
+}
+
+
+/* ========================================
+   MODAL ĐỔI PHÒNG
+   ======================================== */
+
+.change-room-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+.change-room-modal-overlay.fade-out {
+    animation: fadeOut 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.change-room-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header-icon {
+    text-align: center;
+    padding: 25px 0 5px;
+}
+
+.modal-header-icon i {
+    font-size: 50px;
+    color: #2196F3;
+}
+
+.modal-title {
+    text-align: center;
+    color: #112173;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 20px;
+    padding: 0 20px;
+}
+
+
+/* Warning section - Compact */
+
+.modal-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #fff8e1 100%);
+    padding: 15px 20px;
+    margin: 0 20px 20px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-warning p {
+    flex: 1;
+    margin: 0;
+    color: #5d4037;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.modal-warning strong {
+    color: #d32f2f;
+}
+
+
+/* Contact section - Grid layout */
+
+.change-room-modal .contact-info {
+    background: #f8f9fa;
+    padding: 20px;
+    margin: 0 0 20px;
+}
+
+.change-room-modal .contact-info h3 {
+    margin: 0 0 15px;
+    color: #112173;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.change-room-modal .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.change-room-modal .contact-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px 8px;
+    background: white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.change-room-modal .contact-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+}
+
+.change-room-modal .contact-item i {
+    font-size: 22px;
+    color: #2196F3;
+    margin-bottom: 8px;
+}
+
+.change-room-modal .contact-item div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.change-room-modal .contact-item strong {
+    color: #112173;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.change-room-modal .contact-item span {
+    color: #666;
+    font-size: 12px;
+}
+
+
+/* Modal actions */
+
+.modal-actions {
+    padding: 0 20px 25px;
+    text-align: center;
+}
+
+.btn-close-modal {
+    background: linear-gradient(135deg, #112173 0%, #1976D2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 35px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(17, 33, 115, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-close-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(17, 33, 115, 0.4);
+}
+
+.btn-close-modal i {
+    font-size: 16px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+    .change-room-modal {
+        width: 95%;
+        max-width: 380px;
+    }
+    .modal-title {
+        font-size: 19px;
+    }
+    .modal-header-icon i {
+        font-size: 42px;
+    }
+    .change-room-modal .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .change-room-modal .contact-item {
+        flex-direction: row;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 12px 15px;
+        gap: 12px;
+    }
+    .change-room-modal .contact-item i {
+        margin-bottom: 0;
+    }
+    .change-room-modal .contact-item div {
+        align-items: flex-start;
+    }
+}
+
+
+/* === REVIEW MODAL STYLES === */
+
+.review-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.review-modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.review-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transform: scale(0.8) translateY(50px);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.review-modal-overlay.show .review-modal {
+    transform: scale(1) translateY(0);
+}
+
+
+/* Review Modal Header */
+
+.review-modal-header {
+    background: linear-gradient(135deg, #112173, #1e40af);
+    color: white;
+    padding: 25px 30px;
+    border-radius: 16px 16px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.review-modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.review-modal-header h2 i {
+    color: #eab018;
+    font-size: 28px;
+}
+
+.review-modal-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.review-modal-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+
+/* Review Modal Body */
+
+.review-modal-body {
+    padding: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+
+/* Booking Summary in Review */
+
+.booking-summary-review {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-left: 4px solid #eab018;
+}
+
+.review-booking-info h3 {
+    margin: 0 0 15px 0;
+    color: #112173;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.review-booking-info p {
+    margin: 8px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.rooms-stayed {
+    margin-top: 12px;
+}
+
+.room-tag {
+    display: inline-block;
+    background: #112173;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 8px 8px 0;
+}
+
+
+/* Rating Section */
+
+.rating-section {
+    margin-bottom: 30px;
+}
+
+.rating-item-simple {
+    text-align: center;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 15px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.rating-item-simple:hover {
+    border-color: #eab018;
+    background: #fefbf3;
+}
+
+.rating-item-simple label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.rating-stars-main {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.rating-stars-main .star {
+    font-size: 36px;
+    color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.rating-stars-main .star:hover,
+.rating-stars-main .star.hover {
+    color: #fbbf24;
+    transform: scale(1.2);
+}
+
+.rating-stars-main .star.selected {
+    color: #eab018;
+    text-shadow: 0 2px 8px rgba(234, 176, 24, 0.4);
+}
+
+.rating-text-main {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+.rating-text-main.rating-1 {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.rating-text-main.rating-2 {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.rating-text-main.rating-3 {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.rating-text-main.rating-4 {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.rating-text-main.rating-5 {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+.rating-section h3 {
+    color: #112173;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rating-section h3 i {
+    color: #eab018;
+}
+
+.rating-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.rating-item:hover {
+    border-color: #eab018;
+    background: #fefbf3;
+}
+
+.rating-item label {
+    font-weight: 600;
+    color: #333;
+    min-width: 140px;
+    font-size: 14px;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 8px;
+    margin: 0 15px;
+}
+
+.rating-stars .star {
+    font-size: 28px;
+    color: #ddd;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.rating-stars .star:hover,
+.rating-stars .star.hover {
+    color: #fbbf24;
+    transform: scale(1.1);
+}
+
+.rating-stars .star.selected {
+    color: #eab018;
+    text-shadow: 0 2px 4px rgba(234, 176, 24, 0.3);
+}
+
+.rating-text {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 120px;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+.rating-text.rating-1 {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.rating-text.rating-2 {
+    background: #fef3c7;
+    color: #d97706;
+}
+
+.rating-text.rating-3 {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.rating-text.rating-4 {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.rating-text.rating-5 {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+
+/* Review Text Section */
+
+.review-text-section {
+    margin-bottom: 30px;
+}
+
+.review-text-section h3 {
+    color: #112173;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-text-section h3 i {
+    color: #eab018;
+}
+
+.review-textarea-group {
+    margin-bottom: 20px;
+}
+
+.review-textarea-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.review-textarea-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.review-textarea-group textarea:focus {
+    outline: none;
+    border-color: #eab018;
+    box-shadow: 0 0 0 3px rgba(234, 176, 24, 0.1);
+}
+
+.review-textarea-group textarea[required] {
+    border-left: 4px solid #eab018;
+}
+
+.textarea-hint {
+    display: block;
+    margin-top: 8px;
+    color: #6b7280;
+    font-size: 12px;
+    font-style: italic;
+}
+
+
+/* Existing Reviews Section */
+
+.existing-reviews-section {
+    margin-bottom: 30px;
+    border-top: 2px solid #e5e7eb;
+    padding-top: 25px;
+}
+
+.existing-reviews-section h3 {
+    color: #112173;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.existing-reviews-section h3 i {
+    color: #eab018;
+}
+
+.existing-reviews-container {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.existing-review-item {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.existing-review-item:hover {
+    border-color: #eab018;
+    background: #fefbf3;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reviewer-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.reviewer-name {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.review-stars {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.review-stars .star {
+    font-size: 16px;
+    color: #ddd;
+}
+
+.review-stars .star.filled {
+    color: #eab018;
+}
+
+.review-stars .star.empty {
+    color: #e5e7eb;
+}
+
+.rating-number {
+    margin-left: 8px;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.review-content {
+    margin-top: 8px;
+}
+
+.review-content p {
+    color: #4b5563;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+}
+
+.loading-reviews,
+.no-reviews,
+.error-reviews {
+    text-align: center;
+    padding: 20px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.loading-reviews i {
+    margin-right: 8px;
+    color: #eab018;
+}
+
+.no-reviews {
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+
+.error-reviews {
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 8px;
+    border: 1px solid #fecaca;
+}
+
+.view-more-reviews {
+    text-align: center;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.view-more-reviews p {
+    color: #eab018;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-more-reviews p:hover {
+    color: #d97706;
+}
+
+.view-more-reviews i {
+    margin-right: 5px;
+}
+
+
+/* Recommend Section */
+
+.recommend-section {
+    margin-bottom: 20px;
+}
+
+.recommend-section h3 {
+    color: #112173;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.recommend-section h3 i {
+    color: #eab018;
+}
+
+.recommend-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recommend-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    background: #f8fafc;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.recommend-option:hover {
+    border-color: #eab018;
+    background: #fefbf3;
+}
+
+.recommend-option input[type="radio"] {
+    display: none;
+}
+
+.recommend-option .checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #cbd5e1;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.recommend-option input[type="radio"]:checked+.checkmark {
+    border-color: #eab018;
+    background: #eab018;
+}
+
+.recommend-option input[type="radio"]:checked+.checkmark::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.recommend-text {
+    flex: 1;
+}
+
+.recommend-text strong {
+    display: block;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.recommend-text small {
+    color: #6b7280;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+/* Review Modal Footer */
+
+.review-modal-footer {
+    background: #f8fafc;
+    border-radius: 0 0 16px 16px;
+    padding: 25px 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+}
+
+.review-modal-btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.review-modal-btn.btn-cancel {
+    background: #e5e7eb;
+    color: #6b7280;
+}
+
+.review-modal-btn.btn-cancel:hover {
+    background: #d1d5db;
+    color: #4b5563;
+}
+
+.review-modal-btn.btn-submit {
+    background: linear-gradient(135deg, #eab018, #f59e0b);
+    color: white;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.review-modal-btn.btn-submit:hover {
+    background: linear-gradient(135deg, #d97706, #eab018);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(234, 176, 24, 0.3);
+}
+
+.review-modal-btn.btn-submit:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* Review Completed Status */
+
+.review-completed {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #15803d;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.review-completed i {
+    font-size: 18px;
+    color: #16a34a;
+}
+
+
+/* Responsive Design for Review Modal */
+
+@media (max-width: 768px) {
+    .review-modal {
+        width: 95%;
+        margin: 20px;
+        max-height: 85vh;
+    }
+    .review-modal-header,
+    .review-modal-body,
+    .review-modal-footer {
+        padding: 20px;
+    }
+    .review-modal-header h2 {
+        font-size: 20px;
+    }
+    .rating-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .rating-item label {
+        min-width: auto;
+        margin-bottom: 5px;
+    }
+    .rating-stars {
+        align-self: center;
+        margin: 0;
+    }
+    .rating-text {
+        align-self: center;
+        margin-top: 5px;
+    }
+    .review-modal-footer {
+        flex-direction: column;
+    }
+    .review-modal-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

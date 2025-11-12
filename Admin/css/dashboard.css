@@ -1,0 +1,36 @@
+/* Các kiểu dành riêng cho trang dashboard */
+
+.chart-grid {
+    display: grid;
+    /* Hiển thị 1 cột trên màn hình nhỏ, 2 cột trên màn hình lớn hơn */
+    grid-template-columns: 1fr; /* Mặc định 1 cột */
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+
+.chart-container {
+    position: relative;
+    /* Đặt chiều cao cố định hoặc tỷ lệ khung hình */
+    height: 280px; 
+    /* Hoặc dùng aspect-ratio nếu muốn giữ tỷ lệ khi co giãn */
+    /* aspect-ratio: 16 / 9; */ 
+    width: 100%;
+    max-width: 500px; /* Giới hạn chiều rộng tối đa nếu cần */
+    margin: 0 auto; /* Căn giữa nếu có max-width */
+}
+
+/* Thêm class để báo lỗi nếu cần */
+.text-danger {
+    color: var(--danger-color, #ef4444); /* Dùng biến màu đỏ nếu có */
+}
+.text-center {
+    text-align: center;
+}
+
+/* Áp dụng 2 cột cho màn hình từ 768px trở lên */
+@media (min-width: 768px) {
+    .chart-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 cột bằng nhau */
+    }
+}

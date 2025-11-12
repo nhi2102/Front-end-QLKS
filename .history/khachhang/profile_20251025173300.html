@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa Thông tin cá nhân</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../khachhang/css/style.css">
+    <link rel="stylesheet" href="../khachhang/css/header.css">
+    <link rel="stylesheet" href="../khachhang/css/footer.css">
+    <link rel="stylesheet" href="../khachhang/css/chatbot.css">
+
+    <style>
+        .profile-section {
+            padding: 60px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+        
+        .profile-card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-top: 5px solid #007bff;
+        }
+        
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-avatar .fa-user-circle {
+            font-size: 100px;
+            color: #007bff;
+        }
+        /* * ----- CSS MỚI CHO CÁC Ô INPUT -----
+         */
+        
+        .profile-form {
+            width: 100%;
+        }
+        /* Style cho mỗi nhóm (icon, label, input) */
+        
+        .form-group {
+            position: relative;
+            /* Cần cho việc định vị icon */
+            margin-bottom: 25px;
+        }
+        /* Icon bên trái */
+        
+        .form-group i.fas {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            /* Căn icon với label */
+            font-size: 1.2rem;
+            color: #007bff;
+            width: 25px;
+            text-align: center;
+        }
+        /* Nhãn (Họ tên, Email...) */
+        
+        .form-group label {
+            font-size: 0.9rem;
+            /* Nhãn nhỏ hơn */
+            font-weight: 600;
+            color: #555;
+            display: block;
+            /* Hiển thị trên 1 dòng riêng */
+            margin-bottom: 5px;
+            margin-left: 35px;
+            /* Chừa chỗ cho icon */
+        }
+        /* Ô input */
+        
+        .form-group input {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            color: #333;
+            width: 100%;
+            border: none;
+            background: none;
+            border-bottom: 2px solid #ddd;
+            /* Chỉ giữ gạch chân */
+            padding: 10px 0 10px 35px;
+            /* Thêm padding trái 35px để chữ không đè lên icon */
+            transition: border-color 0.3s ease;
+        }
+        /* Bỏ viền mặc định khi focus */
+        
+        .form-group input:focus {
+            outline: none;
+            border-bottom-color: #007bff;
+            /* Đổi màu gạch chân khi focus */
+        }
+        /* * ----- HẾT CSS MỚI CHO INPUT -----
+         */
+        
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            font-family: 'Poppins', sans-serif;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+        }
+        /* Nút Hủy (màu xám) */
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <section class="profile-section">
+            <div class="container">
+                <h2 class="section-title">Chỉnh Sửa Thông Tin</h2>
+
+                <div class="profile-card">
+
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+
+                    <form class="profile-form">
+
+                        <div class="form-group">
+                            <i class="fas fa-user"></i>
+                            <label for="hoten">Họ và tên</label>
+                            <input type="text" id="hoten" name="hoten" value="Nguyễn Văn A">
+                        </div>
+
+                        <div class="form-group">
+                            <i class="fas fa-envelope"></i>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="nguyenvana@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <i class="fas fa-phone"></i>
+                            <label for="sodienthoai">Số điện thoại</label>
+                            <input type="tel" id="sodienthoai" name="sodienthoai" value="0123456789">
+                        </div>
+
+                        <div class="profile-actions">
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="button" class="btn btn-secondary">Hủy</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="../khachhang/js/script.js"></script>
+</body>
+
+</html>

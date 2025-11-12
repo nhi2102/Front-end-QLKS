@@ -1,0 +1,37 @@
+const API_BASE_URL = 'https://localhost:7076/api';
+
+// Lấy toàn bộ danh sách phòng
+async function getAllRoomsAPI() {
+    const res = await fetch(`${API_BASE_URL}/Phongs/letan-view`);
+    if (!res.ok) throw new Error('Không thể tải danh sách phòng');
+    return await res.json();
+}
+
+
+// Cập nhật trạng thái phòng
+async function updateRoomStatus(maPhong, trangThai) {
+    const response = await fetch(`${API_BASE_URL}/Phongs/cap-nhat-trang-thai?maPhong=${maPhong}&trangThai=${encodeURIComponent(trangThai)}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || 'Lỗi khi cập nhật trạng thái phòng');
+    }
+    
+    // Trả về text hoặc JSON tùy response
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+        return await response.json();
+    }
+    return await response.text();
+}
+
+// Export để dùng bên UI (nếu không dùng module thì gán window)
+window.RoomAPI = {
+    getAllRoomsAPI,
+    updateRoomStatus
+};

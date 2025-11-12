@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả thanh toán - Thanh Trà Hotel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="footer.css">
+    <style>
+        .payment-result-container {
+            max-width: 600px;
+            margin: 100px auto;
+            padding: 40px;
+            text-align: center;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .result-icon.success {
+            color: #28a745;
+        }
+        
+        .result-icon.error {
+            color: #dc3545;
+        }
+        
+        .result-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #112173;
+        }
+        
+        .result-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .result-details {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .detail-value {
+            color: #666;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: #112173;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #0d1a5c;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <div class="payment-result-container">
+        <div id="result-content">
+            <div class="result-icon">⏳</div>
+            <h1 class="result-title">Đang xử lý kết quả thanh toán...</h1>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="script.js"></script>
+    <script>
+        const API_BASE = 'https://localhost:7076/api';
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vnp_ResponseCode = urlParams.get('vnp_ResponseCode');
+            const vnp_TxnRef = urlParams.get('vnp_TxnRef'); // Mã đơn hàng (maHoaDon hoặc maDatPhong)
+            const vnp_OrderInfo = urlParams.get('vnp_OrderInfo');
+            const vnp_Amount = urlParams.get('vnp_Amount');
+            const vnp_TransactionNo = urlParams.get('vnp_TransactionNo');
+            const vnp_PayDate = urlParams.get('vnp_PayDate');
+
+            const resultContent = document.getElementById('result-content');
+
+            // 🔥 CẬP NHẬT DATABASE DỰA TRÊN KẾT QUẢ THANH TOÁN
+            if (vnp_TxnRef) {
+                try {
+                    // Tìm mã đặt phòng từ mã hóa đơn (vnp_TxnRef)
+                    const maDatPhong = await findMaDatPhongFromOrderId(vnp_TxnRef);
+                    
+                    if (maDatPhong) {
+                        if (vnp_ResponseCode === '00') {
+                            // ✅ THANH TOÁN THÀNH CÔNG
+                            await updateBookingStatus(maDatPhong, {
+                                Trangthaithanhtoan: "Đã thanh toán",
+                                Trangthai: "Đã đặt"
+                            });
+                            console.log('✅ Đã cập nhật đặt phòng:', maDatPhong, '- Đã thanh toán');
+                        } else {
+                            // ❌ THANH TOÁN THẤT BẠI
+                            await updateBookingStatus(maDatPhong, {
+                                Trangthaithanhtoan: "Chưa thanh toán",
+                                Trangthai: "Đã hủy",
+                                Ngayhuy: new Date().toISOString().split('T')[0] // yyyy-MM-dd
+                            });
+                            console.log('❌ Đã hủy đặt phòng:', maDatPhong, '- Thanh toán thất bại');
+                        }
+                    } else {
+                        console.warn('⚠️ Không tìm thấy mã đặt phòng từ order ID:', vnp_TxnRef);
+                    }
+                } catch (error) {
+                    console.error('❌ Lỗi cập nhật trạng thái đặt phòng:', error);
+                }
+            }
+
+            // Hiển thị kết quả cho người dùng
+            if (vnp_ResponseCode === '00') {
+                // Thanh toán thành công
+                const amount = vnp_Amount ? (parseInt(vnp_Amount) / 100).toLocaleString('vi-VN') : '0';
+                const payDate = vnp_PayDate ? formatPaymentDate(vnp_PayDate) : 'N/A';
+
+                resultContent.innerHTML = `
+                    <div class="result-icon success">✓</div>
+                    <h1 class="result-title">Thanh toán thành công!</h1>
+                    <p class="result-message">
+                        Cảm ơn bạn đã thanh toán. Đơn đặt phòng của bạn đã được xác nhận.<br>
+                        Chúng tôi đã gửi email xác nhận đến hòm thư của bạn.
+                    </p>
+                    
+                    <div class="result-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Mã giao dịch:</span>
+                            <span class="detail-value">${vnp_TransactionNo || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Mã đơn hàng:</span>
+                            <span class="detail-value">${vnp_TxnRef || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Số tiền:</span>
+                            <span class="detail-value">${amount} VNĐ</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Thời gian:</span>
+                            <span class="detail-value">${payDate}</span>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <a href="my_room.html" class="btn btn-primary">Xem đơn đặt phòng</a>
+                        <a href="home.html" class="btn btn-secondary">Về trang chủ</a>
+                    </div>
+                `;
+            } else {
+                // Thanh toán thất bại
+                const errorMessage = getErrorMessage(vnp_ResponseCode);
+
+                resultContent.innerHTML = `
+                    <div class="result-icon error">✗</div>
+                    <h1 class="result-title">Thanh toán thất bại!</h1>
+                    <p class="result-message">
+                        ${errorMessage}<br>
+                        Vui lòng thử lại hoặc liên hệ với chúng tôi để được hỗ trợ.
+                    </p>
+                    
+                    <div class="result-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Mã lỗi:</span>
+                            <span class="detail-value">${vnp_ResponseCode || 'N/A'}</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Mã đơn hàng:</span>
+                            <span class="detail-value">${vnp_TxnRef || 'N/A'}</span>
+                        </div>
+                    </div>
+
+                    <div class="btn-group">
+                        <a href="cus_info_booking.html" class="btn btn-primary">Thử lại</a>
+                        <a href="home.html" class="btn btn-secondary">Về trang chủ</a>
+                    </div>
+                `;
+            }
+        });
+
+        function formatPaymentDate(dateStr) {
+            // Format: yyyyMMddHHmmss -> dd/MM/yyyy HH:mm:ss
+            if (!dateStr || dateStr.length !== 14) return dateStr;
+
+            const year = dateStr.substring(0, 4);
+            const month = dateStr.substring(4, 6);
+            const day = dateStr.substring(6, 8);
+            const hour = dateStr.substring(8, 10);
+            const minute = dateStr.substring(10, 12);
+            const second = dateStr.substring(12, 14);
+
+            return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+        }
+
+        function getErrorMessage(code) {
+            const errorMessages = {
+                '07': 'Giao dịch bị nghi ngờ gian lận',
+                '09': 'Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng',
+                '10': 'Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần',
+                '11': 'Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch',
+                '12': 'Thẻ/Tài khoản của khách hàng bị khóa',
+                '13': 'Quý khách nhập sai mật khẩu xác thực giao dịch (OTP)',
+                '24': 'Khách hàng hủy giao dịch',
+                '51': 'Tài khoản của quý khách không đủ số dư để thực hiện giao dịch',
+                '65': 'Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày',
+                '75': 'Ngân hàng thanh toán đang bảo trì',
+                '79': 'KH nhập sai mật khẩu thanh toán quá số lần quy định',
+                '99': 'Lỗi không xác định'
+            };
+
+            return errorMessages[code] || 'Đã có lỗi xảy ra trong quá trình thanh toán';
+        }
+
+        /**
+         * Tìm mã đặt phòng từ mã hóa đơn/order ID
+         */
+        async function findMaDatPhongFromOrderId(orderId) {
+            try {
+                // orderId có thể là maHoaDon hoặc maDatPhong
+                const numericId = parseInt(orderId);
+
+                // Thử tìm trong bảng Hoadons trước
+                const hoaDonResponse = await fetch(`${API_BASE}/Hoadons/${numericId}`);
+                if (hoaDonResponse.ok) {
+                    const hoaDon = await hoaDonResponse.json();
+                    const maDatPhong = hoaDon.madatphong || hoaDon.Madatphong;
+                    if (maDatPhong) {
+                        console.log('🔍 Tìm thấy mã đặt phòng từ hóa đơn:', maDatPhong);
+                        return maDatPhong;
+                    }
+                }
+
+                // Nếu không tìm thấy trong Hoadons, có thể orderId chính là maDatPhong
+                const datPhongResponse = await fetch(`${API_BASE}/Datphongs/${numericId}`);
+                if (datPhongResponse.ok) {
+                    console.log('🔍 Order ID chính là mã đặt phòng:', numericId);
+                    return numericId;
+                }
+
+                console.warn('⚠️ Không tìm thấy đặt phòng nào với order ID:', orderId);
+                return null;
+            } catch (error) {
+                console.error('❌ Lỗi khi tìm mã đặt phòng:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Cập nhật trạng thái đặt phòng
+         */
+        async function updateBookingStatus(maDatPhong, updates) {
+            try {
+                // Lấy thông tin đặt phòng hiện tại
+                const getResponse = await fetch(`${API_BASE}/Datphongs/${maDatPhong}`);
+                if (!getResponse.ok) {
+                    throw new Error(`Không tìm thấy đặt phòng ${maDatPhong}`);
+                }
+
+                const currentBooking = await getResponse.json();
+                
+                // Merge với updates
+                const updatedBooking = {
+                    ...currentBooking,
+                    ...updates
+                };
+
+                // Gửi PUT request
+                const updateResponse = await fetch(`${API_BASE}/Datphongs/${maDatPhong}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedBooking)
+                });
+
+                if (!updateResponse.ok) {
+                    const errorText = await updateResponse.text();
+                    throw new Error(`Lỗi cập nhật: ${updateResponse.status} - ${errorText}`);
+                }
+
+                console.log('✅ Đã cập nhật trạng thái đặt phòng:', maDatPhong, updates);
+                return true;
+            } catch (error) {
+                console.error('❌ Lỗi cập nhật đặt phòng:', error);
+                throw error;
+            }
+        }
+    </script>
+</body>
+
+</html>

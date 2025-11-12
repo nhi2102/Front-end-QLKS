@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Dịch Vụ - Lễ Tân</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="css/services.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item active">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="room_change.html" class="nav-item">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Đổi Phòng</span>
+            </a>
+            <a href="customers.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="booking_list.html" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Danh Sách Đặt Phòng</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Quản Lý Dịch Vụ</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Lễ Tân</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Nội Dung Chính -->
+        <div class="services-content">
+            <!-- Tìm Kiếm Khách Hàng -->
+            <section class="search-section">
+                <div class="search-card">
+                    <h2><i class="fas fa-search"></i> Tìm Kiếm Khách Hàng</h2>
+                    <form class="search-form" onsubmit="event.preventDefault(); searchGuest();">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="searchBookingCode">Mã Booking</label>
+                                <input type="text" id="searchBookingCode" placeholder="Nhập mã booking">
+                            </div>
+                            <div class="form-group">
+                                <label for="searchRoomNumber">Số Phòng</label>
+                                <input type="text" id="searchRoomNumber" placeholder="Nhập số phòng">
+                            </div>
+                            <div class="form-group">
+                                <label for="searchCustomerName">Tên Khách Hàng</label>
+                                <input type="text" id="searchCustomerName" placeholder="Nhập tên khách hàng">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Tìm Kiếm
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetSearch()">
+                                <i class="fas fa-refresh"></i> Làm Mới
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Danh Sách Khách Đang Ở -->
+            <section class="data-section">
+                <div class="data-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-users"></i> Khách Đang Ở</h2>
+                        <div class="card-actions">
+                            <span id="guestCount" class="badge badge-info">0 khách</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Booking</th>
+                                    <th>Khách Hàng</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Phòng</th>
+                                    <th>Check-in</th>
+                                    <th>Check-out</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="currentGuestsList">
+                                <tr>
+                                    <td colspan="8" class="no-data">
+                                        <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal Dịch Vụ -->
+    <div id="servicesModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-concierge-bell"></i> Dịch Vụ Khách Hàng</h2>
+                <button class="modal-close" onclick="closeServicesModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Thông Tin Khách Hàng -->
+                <div class="customer-info">
+                    <h3><i class="fas fa-user"></i> Thông Tin Khách Hàng</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Mã Booking:</label>
+                            <span id="modalBookingCode">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Khách Hàng:</label>
+                            <span id="modalCustomerName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Phòng:</label>
+                            <span id="modalRoomNumber">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Điện Thoại:</label>
+                            <span id="modalPhone">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danh Sách Dịch Vụ -->
+                <div class="available-services">
+                    <h3><i class="fas fa-list"></i> Danh Sách Dịch Vụ</h3>
+                    <div class="services-grid" id="servicesGrid">
+                        <!-- Dịch vụ sẽ được tải ở đây -->
+                    </div>
+                </div>
+
+                <!-- Dịch Vụ Đã Chọn -->
+                <div class="selected-services">
+                    <h3><i class="fas fa-shopping-cart"></i> Dịch Vụ Đã Chọn</h3>
+                    <div class="selected-list" id="selectedServicesList">
+                        <p class="no-data">Chưa có dịch vụ nào được chọn</p>
+                    </div>
+                    <div class="total-amount">
+                        <strong>Tổng cộng: <span id="totalServiceAmount">0 VNĐ</span></strong>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeServicesModal()">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
+                <button class="btn btn-primary" onclick="confirmServices()">
+                    <i class="fas fa-check"></i> Xác Nhận Dịch Vụ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Lịch Sử Dịch Vụ -->
+    <div id="serviceHistoryModal" class="modal">
+        <div class="modal-content history-modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-history"></i> Lịch Sử Dịch Vụ</h2>
+                <button class="modal-close" onclick="closeServiceHistoryModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Thông tin khách hàng -->
+                <div class="customer-info">
+                    <h3><i class="fas fa-user"></i> Thông Tin Booking</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Mã Booking:</label>
+                            <span id="historyBookingCode">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Khách Hàng:</label>
+                            <span id="historyCustomerName">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Phòng:</label>
+                            <span id="historyRoomNumber">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BẢNG LỊCH SỬ DỊCH VỤ -->
+                <!-- BẢNG LỊCH SỬ DỊCH VỤ -->
+                <div class="history-content">
+                    <h3><i class="fas fa-list-ul"></i> Chi Tiết Dịch Vụ Đã Sử Dụng</h3>
+
+                    <!-- 🟢 Dịch vụ ĐÃ THANH TOÁN -->
+                    <div class="history-table-container">
+                        <h4 style="color:green; margin-bottom:8px;">
+                            <i class="fas fa-check-circle"></i> Dịch vụ đã thanh toán
+                        </h4>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên Dịch Vụ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đơn Giá</th>
+                                    <th>Thành Tiền</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="paidServiceTable">
+                                <tr>
+                                    <td colspan="6" class="text-center">Đang tải...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 🔴 Dịch vụ CHƯA THANH TOÁN -->
+                    <div class="history-table-container" style="margin-top: 20px;">
+                        <h4 style="color:#d9534f; margin-bottom:8px;">
+                            <i class="fas fa-exclamation-circle"></i> Dịch vụ chưa thanh toán
+                        </h4>
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Tên Dịch Vụ</th>
+                                    <th>Số Lượng</th>
+                                    <th>Đơn Giá</th>
+                                    <th>Thành Tiền</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="unpaidServiceTable">
+                                <tr>
+                                    <td colspan="6" class="text-center">Đang tải...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Tổng kết -->
+                    <div class="history-summary" style="margin-top: 20px; border-top: 1px solid #ccc; padding-top: 10px;">
+                        <div class="summary-item">
+                            <span class="summary-label">Tổng đã thanh toán:</span>
+                            <span class="summary-value" id="totalPaid">0 VNĐ</span>
+                        </div>
+                        <div class="summary-item total">
+                            <span class="summary-label">Tổng chưa thanh toán:</span>
+                            <span class="summary-value" id="totalUnpaid">0 VNĐ</span>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- No Data State -->
+                <div class="no-history-data" id="noHistoryData" style="display: none;">
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard-list"></i>
+                        <h3>Chưa có dịch vụ nào</h3>
+                        <p>Booking này chưa sử dụng dịch vụ nào.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeServiceHistoryModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+                <!-- Print button removed as requested -->
+            </div>
+        </div>
+    </div>
+
+    <script src="api/service.api.js"></script>
+    <script src="js/service.ui.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+
+    <!-- TẢI DỮ LIỆU  -->
+    <div id="loadingOverlay" class="modal" style="display:none; align-items:center; justify-content:center;">
+        <div style="background:#fff; padding:20px 30px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.2); display:flex; gap:12px; align-items:center;">
+            <i class="fas fa-spinner fa-spin" style="font-size:20px;"></i>
+            <div id="loadingMessage">Đang tải...</div>
+        </div>
+    </div>
+</body>
+
+</html>

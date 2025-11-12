@@ -1,0 +1,646 @@
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="vi"><html lang="vi">
+
+
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quản Lý Phòng - Lễ Tân</title>    <title>Quản Lý Phòng - Hệ Thống Lễ Tân</title>
+
+    <link rel="stylesheet" href="css/letan_dashboard.css">    <link rel="stylesheet" href="css/letan_dashboard.css">
+
+    <link rel="stylesheet" href="css/rooms_management.css">    <link rel="stylesheet" href="css/rooms_management.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head></head>
+
+
+
+<body><body>
+
+    <!-- Sidebar -->    <div class="dashboard-container">
+
+    <div class="sidebar">        <!-- Sidebar -->
+
+        <div class="logo">        <aside class="sidebar">
+
+            <i class="fas fa-hotel"></i>            <div class="sidebar-header">
+
+            <h2>Lễ Tân</h2>                <div class="logo">
+
+        </div>                    <i class="fas fa-hotel"></i>
+
+        <nav class="nav-menu">                    <span>Lễ Tân</span>
+
+            <a href="letan_dashboard.html" class="nav-item">                </div>
+
+                <i class="fas fa-chart-line"></i>                <button class="menu-toggle" id="menuToggle">
+
+                <span>Tổng Quan</span>                    <i class="fas fa-bars"></i>
+
+            </a>                </button>
+
+            <a href="checkin.html" class="nav-item">            </div>
+
+                <i class="fas fa-calendar-check"></i>
+
+                <span>Check-in</span>            <nav class="sidebar-nav">
+
+            </a>                <a href="letan_dashboard.html" class="nav-item">
+
+            <a href="checkout.html" class="nav-item">                    <i class="fas fa-home"></i>
+
+                <i class="fas fa-door-open"></i>                    <span>Tổng Quan</span>
+
+                <span>Check-out</span>                </a>
+
+            </a>                <a href="checkin.html" class="nav-item">
+
+            <a href="services.html" class="nav-item">                    <i class="fas fa-sign-in-alt"></i>
+
+                <i class="fas fa-concierge-bell"></i>                    <span>Check-in</span>
+
+                <span>Dịch Vụ</span>                </a>
+
+            </a>                <a href="checkout.html" class="nav-item">
+
+            <a href="rooms_management.html" class="nav-item active">                    <i class="fas fa-sign-out-alt"></i>
+
+                <i class="fas fa-bed"></i>                    <span>Check-out</span>
+
+                <span>Quản Lý Phòng</span>                </a>
+
+            </a>                <a href="rooms_management.html" class="nav-item active">
+
+            <a href="booking.html" class="nav-item">                    <i class="fas fa-door-open"></i>
+
+                <i class="fas fa-calendar-alt"></i>                    <span>Quản Lý Phòng</span>
+
+                <span>Đặt Phòng</span>                </a>
+
+            </a>                <a href="booking.html" class="nav-item">
+
+            <a href="room_change.html" class="nav-item">                    <i class="fas fa-calendar-check"></i>
+
+                <i class="fas fa-exchange-alt"></i>                    <span>Đặt Phòng</span>
+
+                <span>Đổi Phòng</span>                </a>
+
+            </a>                <a href="room_change.html" class="nav-item">
+
+            <a href="customers.html" class="nav-item">                    <i class="fas fa-exchange-alt"></i>
+
+                <i class="fas fa-users"></i>                    <span>Đổi Phòng</span>
+
+                <span>Khách Hàng</span>                </a>
+
+            </a>                <a href="customers.html" class="nav-item">
+
+        </nav>                    <i class="fas fa-users"></i>
+
+        <div class="sidebar-footer">                    <span>Khách Hàng</span>
+
+            <a href="#" class="nav-item" id="logoutBtn">                </a>
+
+                <i class="fas fa-sign-out-alt"></i>            </nav>
+
+                <span>Đăng Xuất</span>
+
+            </a>            <div class="sidebar-footer">
+
+        </div>                <a href="#" class="nav-item">
+
+    </div>                    <i class="fas fa-sign-out-alt"></i>
+
+                    <span>Đăng Xuất</span>
+
+    <!-- Main Content -->                </a>
+
+    <div class="main-content">            </div>
+
+        <!-- Header -->        </aside>
+
+        <header class="header">
+
+            <div class="header-left">        <!-- Main Content -->
+
+                <button class="menu-toggle" id="menuToggle">        <main class="main-content">
+
+                    <i class="fas fa-bars"></i>            <!-- Header -->
+
+                </button>            <header class="main-header">
+
+                <h1>Quản Lý Phòng</h1>                <div class="header-left">
+
+            </div>                    <h1>Quản Lý Phòng</h1>
+
+            <div class="header-right">                    <p>Quản lý tình trạng và thông tin phòng</p>
+
+                <div class="user-profile">                </div>
+
+                    <i class="fas fa-user-circle"></i>                <div class="header-right">
+
+                    <span id="userName">Nhân Viên</span>                    <div class="user-info">
+
+                </div>                        <i class="fas fa-user-circle"></i>
+
+            </div>                        <span id="userName">Admin</span>
+
+        </header>                    </div>
+
+                </div>
+
+        <!-- Room Management Content -->            </header>
+
+        <div class="room-content">
+
+            <!-- Statistics Cards -->            <!-- Statistics Cards -->
+
+            <div class="stats-container">            <section class="stats-section">
+
+                <div class="stat-card">                <div class="stats-grid">
+
+                    <div class="stat-icon" style="background: #10b981">                    <div class="stat-card stat-available">
+
+                        <i class="fas fa-door-open"></i>                        <div class="stat-icon">
+
+                    </div>                            <i class="fas fa-door-open"></i>
+
+                    <div class="stat-info">                        </div>
+
+                        <h3 id="availableRooms">0</h3>                        <div class="stat-info">
+
+                        <p>Phòng Trống</p>                            <h3 id="availableRooms">0</h3>
+
+                    </div>                            <p>Phòng Trống</p>
+
+                </div>                        </div>
+
+                <div class="stat-card">                    </div>
+
+                    <div class="stat-icon" style="background: #3b82f6;">
+
+                        <i class="fas fa-user-check"></i>                    <div class="stat-card stat-occupied">
+
+                    </div>                        <div class="stat-icon">
+
+                    <div class="stat-info">                            <i class="fas fa-user-check"></i>
+
+                        <h3 id="occupiedRooms">0</h3>                        </div>
+
+                        <p>Đang Sử Dụng</p>                        <div class="stat-info">
+
+                    </div>                            <h3 id="occupiedRooms">0</h3>
+
+                </div>                            <p>Đang Sử Dụng</p>
+
+                <div class="stat-card">                        </div>
+
+                    <div class="stat-icon" style="background: #f59e0b;">                    </div>
+
+                        <i class="fas fa-broom"></i>
+
+                    </div>                    <div class="stat-card stat-cleaning">
+
+                    <div class="stat-info">                        <div class="stat-icon">
+
+                        <h3 id="cleaningRooms">0</h3>                            <i class="fas fa-broom"></i>
+
+                        <p>Đang Dọn Dẹp</p>                        </div>
+
+                    </div>                        <div class="stat-info">
+
+                </div>                            <h3 id="cleaningRooms">0</h3>
+
+                <div class="stat-card">                            <p>Đang Dọn Dẹp</p>
+
+                    <div class="stat-icon" style="background: #ef4444;">                        </div>
+
+                        <i class="fas fa-tools"></i>                    </div>
+
+                    </div>
+
+                    <div class="stat-info">                    <div class="stat-card stat-maintenance">
+
+                        <h3 id="maintenanceRooms">0</h3>                        <div class="stat-icon">
+
+                        <p>Bảo Trì</p>                            <i class="fas fa-tools"></i>
+
+                    </div>                        </div>
+
+                </div>                        <div class="stat-info">
+
+            </div>                            <h3 id="maintenanceRooms">0</h3>
+
+                            <p>Bảo Trì</p>
+
+            <!-- Search and Filter Section -->                        </div>
+
+            <div class="card search-filter-section">                    </div>
+
+                <div class="section-header">                </div>
+
+                    <h3><i class="fas fa-filter"></i> Bộ Lọc</h3>            </section>
+
+                </div>
+
+                <div class="search-filter-form">            <!-- Filter Section -->
+
+                    <div class="form-row">            <section class="filter-section">
+
+                        <div class="form-group">                <div class="filter-card">
+
+                            <label for="filterRoomType">Loại Phòng</label>                    <div class="filter-header">
+
+                            <select id="filterRoomType">                        <h2><i class="fas fa-filter"></i> Bộ Lọc</h2>
+
+                                <option value="">Tất cả</option>                    </div>
+
+                                <option value="Standard">Standard</option>                    <div class="filter-content">
+
+                                <option value="Deluxe">Deluxe</option>                        <div class="filter-group">
+
+                                <option value="Suite">Suite</option>                            <label><i class="fas fa-layer-group"></i> Loại Phòng</label>
+
+                                <option value="VIP">VIP</option>                            <select id="filterRoomType" onchange="applyFilters()">
+
+                            </select>                                <option value="">Tất cả</option>
+
+                        </div>                                <option value="Standard">Standard</option>
+
+                        <div class="form-group">                                <option value="Deluxe">Deluxe</option>
+
+                            <label for="filterStatus">Trạng Thái</label>                                <option value="Suite">Suite</option>
+
+                            <select id="filterStatus">                                <option value="VIP">VIP</option>
+
+                                <option value="">Tất cả</option>                            </select>
+
+                                <option value="Trống">Trống</option>                        </div>
+
+                                <option value="Đang sử dụng">Đang sử dụng</option>
+
+                                <option value="Đang dọn dẹp">Đang dọn dẹp</option>                        <div class="filter-group">
+
+                                <option value="Bảo trì">Bảo trì</option>                            <label><i class="fas fa-info-circle"></i> Trạng Thái</label>
+
+                            </select>                            <select id="filterStatus" onchange="applyFilters()">
+
+                        </div>                                <option value="">Tất cả</option>
+
+                        <div class="form-group">                                <option value="Trống">Trống</option>
+
+                            <label for="filterFloor">Tầng</label>                                <option value="Đang sử dụng">Đang sử dụng</option>
+
+                            <select id="filterFloor">                                <option value="Đang dọn dẹp">Đang dọn dẹp</option>
+
+                                <option value="">Tất cả</option>                                <option value="Bảo trì">Bảo trì</option>
+
+                                <option value="1">Tầng 1</option>                            </select>
+
+                                <option value="2">Tầng 2</option>                        </div>
+
+                                <option value="3">Tầng 3</option>
+
+                                <option value="4">Tầng 4</option>                        <div class="filter-group">
+
+                                <option value="5">Tầng 5</option>                            <label><i class="fas fa-building"></i> Tầng</label>
+
+                            </select>                            <select id="filterFloor" onchange="applyFilters()">
+
+                        </div>                                <option value="">Tất cả</option>
+
+                        <div class="form-group">                                <option value="1">Tầng 1</option>
+
+                            <button type="button" id="applyFiltersBtn" class="btn btn-primary">                                <option value="2">Tầng 2</option>
+
+                                <i class="fas fa-check"></i> Áp Dụng                                <option value="3">Tầng 3</option>
+
+                            </button>                                <option value="4">Tầng 4</option>
+
+                            <button type="button" id="resetFiltersBtn" class="btn btn-secondary">                                <option value="5">Tầng 5</option>
+
+                                <i class="fas fa-redo"></i> Đặt Lại                            </select>
+
+                            </button>                        </div>
+
+                        </div>
+
+                    </div>                        <div class="filter-actions">
+
+                </div>                            <button class="btn btn-apply" onclick="applyFilters()">
+
+            </div>                                <i class="fas fa-check"></i> Áp Dụng
+
+                            </button>
+
+            <!-- Rooms List Section -->                            <button class="btn btn-reset" onclick="resetFilters()">
+
+            <div class="card rooms-list-section">                                <i class="fas fa-redo"></i> Đặt Lại
+
+                <div class="section-header">                            </button>
+
+                    <h3><i class="fas fa-bed"></i> Danh Sách Phòng (<span id="roomCount">0</span>)</h3>                        </div>
+
+                    <div class="view-options">                    </div>
+
+                        <button class="view-btn active" data-view="grid" title="Xem dạng lưới">                </div>
+
+                            <i class="fas fa-th"></i>            </section>
+
+                        </button>
+
+                        <button class="view-btn" data-view="list" title="Xem dạng danh sách">            <!-- Rooms Grid -->
+
+                            <i class="fas fa-list"></i>            <section class="rooms-section">
+
+                        </button>                <div class="rooms-card">
+
+                    </div>                    <div class="rooms-header">
+
+                </div>                        <h2><i class="fas fa-th-large"></i> Sơ Đồ Phòng</h2>
+
+                        <div class="view-toggle">
+
+                <!-- Grid View -->                            <button class="toggle-btn active" onclick="setView('grid')" id="gridViewBtn">
+
+                <div id="roomsGrid" class="rooms-grid">                                <i class="fas fa-th-large"></i> Lưới
+
+                    <!-- Room cards will be loaded here -->                            </button>
+
+                </div>                            <button class="toggle-btn" onclick="setView('list')" id="listViewBtn">
+
+                                <i class="fas fa-list"></i> Danh Sách
+
+                <!-- List View -->                            </button>
+
+                <div id="roomsList" class="rooms-list" style="display: none;">                        </div>
+
+                    <table class="rooms-table">                    </div>
+
+                        <thead>
+
+                            <tr>                    <!-- Grid View -->
+
+                                <th>Số Phòng</th>                    <div class="rooms-grid" id="roomsGridView">
+
+                                <th>Loại Phòng</th>                        <div class="loading">
+
+                                <th>Tầng</th>                            <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+
+                                <th>Giá</th>                        </div>
+
+                                <th>Sức Chứa</th>                    </div>
+
+                                <th>Diện Tích</th>
+
+                                <th>Trạng Thái</th>                    <!-- List View -->
+
+                                <th>Thao Tác</th>                    <div class="rooms-list" id="roomsListView" style="display: none;">
+
+                            </tr>                        <table class="rooms-table">
+
+                        </thead>                            <thead>
+
+                        <tbody id="roomsTableBody">                                <tr>
+
+                            <!-- Table rows will be loaded here -->                                    <th>Số Phòng</th>
+
+                        </tbody>                                    <th>Loại Phòng</th>
+
+                    </table>                                    <th>Tầng</th>
+
+                </div>                                    <th>Giá</th>
+
+            </div>                                    <th>Trạng Thái</th>
+
+        </div>                                    <th>Khách Hàng</th>
+
+    </div>                                    <th>Ghi Chú</th>
+
+                                    <th>Thao Tác</th>
+
+    <!-- Room Detail Modal -->                                </tr>
+
+    <div class="modal" id="roomDetailModal">                            </thead>
+
+        <div class="modal-content large">                            <tbody id="roomsListBody">
+
+            <div class="modal-header">                                <tr>
+
+                <h3><i class="fas fa-door-open"></i> Chi Tiết Phòng</h3>                                    <td colspan="8" class="loading">
+
+                <button class="close-btn" onclick="closeRoomDetailModal()">                                        <i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...
+
+                    <i class="fas fa-times"></i>                                    </td>
+
+                </button>                                </tr>
+
+            </div>                            </tbody>
+
+            <div class="modal-body">                        </table>
+
+                <div class="room-detail-tabs">                    </div>
+
+                    <button class="tab-btn active" data-tab="info">                </div>
+
+                        <i class="fas fa-info-circle"></i> Thông Tin            </section>
+
+                    </button>        </main>
+
+                    <button class="tab-btn" data-tab="guest">    </div>
+
+                        <i class="fas fa-user"></i> Khách Hàng
+
+                    </button>    <!-- Room Detail Modal -->
+
+                </div>    <div id="roomDetailModal" class="modal">
+
+        <div class="modal-content">
+
+                <!-- Info Tab -->            <div class="modal-header">
+
+                <div class="tab-content active" id="infoTab">                <h2><i class="fas fa-door-open"></i> Chi Tiết Phòng</h2>
+
+                    <div class="room-info-grid" id="roomInfoGrid">                <button class="modal-close" onclick="closeRoomDetailModal()">
+
+                        <!-- Room info will be loaded here -->                    <i class="fas fa-times"></i>
+
+                    </div>                </button>
+
+                </div>            </div>
+
+
+
+                <!-- Guest Tab -->            <div class="modal-body">
+
+                <div class="tab-content" id="guestTab">                <!-- Room Information -->
+
+                    <div class="guest-info" id="guestInfo">                <div class="info-section">
+
+                        <!-- Guest info will be loaded here -->                    <h3><i class="fas fa-info-circle"></i> Thông Tin Phòng</h3>
+
+                    </div>                    <div class="room-info-grid">
+
+                </div>                        <div class="info-item">
+
+                            <label>Số Phòng:</label>
+
+                <!-- Update Status Section -->                            <span id="modalRoomNumber" class="room-number-highlight">-</span>
+
+                <div class="update-status-section">                        </div>
+
+                    <h4><i class="fas fa-edit"></i> Cập Nhật Trạng Thái</h4>                        <div class="info-item">
+
+                    <form id="updateStatusForm">                            <label>Loại Phòng:</label>
+
+                        <div class="form-row">                            <span id="modalRoomType">-</span>
+
+                            <div class="form-group">                        </div>
+
+                                <label for="newStatus">Trạng Thái Mới</label>                        <div class="info-item">
+
+                                <select id="newStatus">                            <label>Tầng:</label>
+
+                                    <option value="Trống">Trống - Sẵn sàng cho thuê</option>                            <span id="modalFloor">-</span>
+
+                                    <option value="Đang sử dụng">Đang sử dụng - Có khách</option>                        </div>
+
+                                    <option value="Đang dọn dẹp">Đang dọn dẹp - Đang vệ sinh</option>                        <div class="info-item">
+
+                                    <option value="Bảo trì">Bảo trì - Đang sửa chữa</option>                            <label>Giá Phòng:</label>
+
+                                </select>                            <span id="modalPrice">-</span>
+
+                            </div>                        </div>
+
+                        </div>                        <div class="info-item">
+
+                        <div class="form-row">                            <label>Sức Chứa:</label>
+
+                            <div class="form-group full-width">                            <span id="modalCapacity">-</span>
+
+                                <label for="statusNote">Ghi Chú</label>                        </div>
+
+                                <textarea id="statusNote" rows="3" placeholder="Nhập ghi chú về trạng thái phòng..."></textarea>                        <div class="info-item">
+
+                            </div>                            <label>Diện Tích:</label>
+
+                        </div>                            <span id="modalArea">-</span>
+
+                    </form>                        </div>
+
+                </div>                        <div class="info-item">
+
+            </div>                            <label>Trạng Thái:</label>
+
+            <div class="modal-footer">                            <span id="modalStatus">-</span>
+
+                <button class="btn btn-secondary" onclick="closeRoomDetailModal()">                        </div>
+
+                    <i class="fas fa-times"></i> Đóng                        <div class="info-item">
+
+                </button>                            <label>Ghi Chú:</label>
+
+                <button class="btn btn-primary" id="updateRoomStatusBtn">                            <span id="modalNote">-</span>
+
+                    <i class="fas fa-save"></i> Cập Nhật                        </div>
+
+                </button>                    </div>
+
+            </div>                </div>
+
+        </div>
+
+    </div>                <!-- Current Guest Info (if occupied) -->
+
+                <div class="info-section" id="guestInfoSection" style="display: none;">
+
+    <!-- Loading Overlay -->                    <h3><i class="fas fa-user"></i> Thông Tin Khách Hàng</h3>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">                    <div class="room-info-grid">
+
+        <div class="spinner"></div>                        <div class="info-item">
+
+        <p>Đang tải dữ liệu...</p>                            <label>Mã Booking:</label>
+
+    </div>                            <span id="modalBookingCode">-</span>
+
+                        </div>
+
+    <!-- Scripts -->                        <div class="info-item">
+
+    <script src="api/rooms_management.js"></script>                            <label>Tên Khách:</label>
+
+    <script src="api/navigation-preloader.js"></script>                            <span id="modalGuestName">-</span>
+
+</body>                        </div>
+
+                        <div class="info-item">
+
+</html>                            <label>Số Điện Thoại:</label>
+
+                            <span id="modalGuestPhone">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Check-in:</label>
+                            <span id="modalCheckIn">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Check-out:</label>
+                            <span id="modalCheckOut">-</span>
+                        </div>
+                        <div class="info-item">
+                            <label>Số Đêm:</label>
+                            <span id="modalNights">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Room Status -->
+                <div class="info-section">
+                    <h3><i class="fas fa-edit"></i> Thay Đổi Trạng Thái</h3>
+                    <form class="status-form">
+                        <div class="form-group">
+                            <label for="newStatus">
+                                <i class="fas fa-toggle-on"></i> Trạng Thái Mới
+                            </label>
+                            <select id="newStatus">
+                                <option value="Trống">Trống - Sẵn sàng cho thuê</option>
+                                <option value="Đang dọn dẹp">Đang dọn dẹp - Đang vệ sinh</option>
+                                <option value="Bảo trì">Bảo trì - Đang sửa chữa</option>
+                                <option value="Đang sử dụng">Đang sử dụng - Có khách</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusNote">
+                                <i class="fas fa-sticky-note"></i> Ghi Chú
+                            </label>
+                            <textarea id="statusNote" rows="3" placeholder="Nhập ghi chú về trạng thái phòng..."></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeRoomDetailModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="updateRoomStatus()">
+                    <i class="fas fa-save"></i> Cập Nhật
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="api/rooms_management.js"></script>
+</body>
+
+</html>

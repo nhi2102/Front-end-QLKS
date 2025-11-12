@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khách sạn Thanh Trà</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="chatbot.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main>
+
+        <section class="hero-section" id="hero">
+
+            <div class="booking-widget" id="booking-search">
+                <div class="input-group">
+                    <label for="date-range-picker">Ngày nhận - trả phòng</label>
+                    <div class="input-field">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <input type="text" id="date-range-picker" placeholder="Chọn ngày của bạn" readonly>
+                    </div>
+                </div>
+
+                <div class="input-group custom-dropdown-container">
+                    <label>Số phòng</label>
+                    <div class="input-field dropdown-trigger" id="room-trigger">
+                        <i class="fa-solid fa-bed"></i>
+                        <span id="room-display">1 phòng</span>
+                        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="custom-dropdown-menu hidden" id="room-menu">
+                        <div class="dropdown-item" data-value="1">1 phòng</div>
+                        <div class="dropdown-item" data-value="2">2 phòng</div>
+                        <div class="dropdown-item" data-value="3">3 phòng</div>
+                        <div class="dropdown-item" data-value="4">4 phòng</div>
+                        <div class="dropdown-item" data-value="5">5 phòng</div>
+                    </div>
+                </div>
+
+                <div class="input-group custom-dropdown-container">
+                    <label>Số người</label>
+                    <div class="input-field dropdown-trigger" id="guest-trigger">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span id="guest-display">2 người</span>
+                        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="custom-dropdown-menu hidden" id="guest-menu">
+                        <div class="dropdown-item" data-value="1">1 người</div>
+                        <div class="dropdown-item" data-value="2">2 người</div>
+                        <div class="dropdown-item" data-value="3">3 người</div>
+                        <div class="dropdown-item" data-value="4">4 người</div>
+                        <div class="dropdown-item" data-value="5">5 người</div>
+                        <div class="dropdown-item" data-value="6">6 người</div>
+                    </div>
+                </div>
+
+
+                <button type="submit" class="search-button">Tìm kiếm</button>
+            </div>
+        </section>
+
+        <section class="about-section" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image">
+                        <img src="/assets/img/introduce.webp" alt="Khách sạn Thanh Trà">
+                    </div>
+
+                    <div class="about-content">
+                        <span class="sub-title">Về chúng tôi</span>
+                        <h2>Chào mừng đến với khách sạn Thanh Trà</h2>
+                        <p>
+                            Tọa lạc tại vị trí đắc địa, Khách sạn Thanh Trà là sự kết hợp hoàn hảo giữa nét kiến trúc hiện đại và dịch vụ đẳng cấp. Chúng tôi tự hào mang đến một không gian nghỉ dưỡng yên bình, sang trọng cùng những trải nghiệm ẩm thực khó quên.
+                        </p>
+                        <p>
+                            Với đội ngũ nhân viên chuyên nghiệp và tận tâm, mỗi kỳ nghỉ của bạn tại đây đều sẽ trở nên thật đặc biệt và đáng nhớ.
+                        </p>
+                        <a href="#" class="button-primary">Khám phá thêm</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-rooms-section" id="rooms">
+            <div class="container">
+                <h2>Khám phá phòng nghỉ đặc biệt</h2>
+                <div class="rooms-grid" id="rooms-container">
+                    <!-- Các thẻ room-card sẽ được thêm vào đây bởi JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section class="services-section" id="services">
+            <div class="container">
+                <h2>Trải nghiệm dịch vụ đẳng cấp</h2>
+                <div class="services-grid" id="services-container">
+                    <!-- Các thẻ service-card sẽ được thêm vào đây bởi JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <section class="offers-section">
+            <div class="container">
+                <h2>Ưu đãi hấp dẫn</h2>
+                <div class="offers-wrapper">
+                    <button class="carousel-nav carousel-prev" id="carousel-prev">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="offers-grid" id="offers-container">
+                        <!-- Các thẻ offer-card sẽ được thêm vào đây bởi JavaScript -->
+                    </div>
+                    <button class="carousel-nav carousel-next" id="carousel-next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Offer Detail Modal -->
+    <div id="offerModal" class="offer-modal">
+        <div class="offer-modal-content">
+            <div class="offer-modal-header">
+                <h2 id="offer-modal-title">Chi tiết ưu đãi</h2>
+                <button class="offer-modal-close">&times;</button>
+            </div>
+            <div class="offer-modal-body">
+                <div class="offer-modal-image">
+                    <img id="offer-modal-img" src="" alt="Offer Image">
+                </div>
+                <div class="offer-modal-info">
+                    <div class="offer-badge">
+                        <span id="offer-modal-discount"></span>
+                    </div>
+                    <h3 id="offer-modal-name"></h3>
+                    <p id="offer-modal-description"></p>
+
+                    <div class="offer-details">
+                        <h4>Điều kiện áp dụng:</h4>
+                        <ul id="offer-modal-conditions">
+                            <li>Áp dụng cho tất cả các loại phòng</li>
+                            <li>Có hiệu lực trong thời gian khuyến mãi</li>
+                            <li>Không áp dụng đồng thời với ưu đãi khác</li>
+                            <li>Liên hệ lễ tân để được hỗ trợ</li>
+                        </ul>
+
+                        <h4>Thời gian áp dụng:</h4>
+                        <p id="offer-modal-dates" class="offer-dates">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span id="offer-date-range">Đang cập nhật</span>
+                        </p>
+                    </div>
+
+                    <div class="offer-modal-actions">
+                        <button class="btn-book-now" onclick="window.location.href='rooms.html'">
+                            <i class="fa-solid fa-calendar-check"></i> Đặt phòng ngay
+                        </button>
+                        <button class="btn-contact">
+                            <i class="fa-solid fa-phone"></i> Liên hệ: 1900 9999
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <a href="#header" id="backToTopBtn" class="back-to-top-btn">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+
+</body>
+<script src="api/home.js"></script>
+<!-- Payment.js và booking.js sẽ được load động khi có VNPay callback -->
+<script>
+    // Load payment script để xử lý callback VNPay nếu cần
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('vnp_ResponseCode')) {
+            // Có VNPay callback, load payment script
+            const paymentScript = document.createElement('script');
+            paymentScript.src = 'api/payment.js';
+            document.head.appendChild(paymentScript);
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+<script src="script.js"></script>
+<script src="chatbot.js"></script>
+
+</html>

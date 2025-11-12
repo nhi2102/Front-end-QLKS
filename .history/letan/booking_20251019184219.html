@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Tân - Đặt Phòng</title>
+    <link rel="stylesheet" href="css/booking.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Litepicker styles (required for date range calendar) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/litepicker.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="letan_dashboard.html" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="#" class="nav-item active">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-money-bill-wave"></i>
+                <span>Thanh Toán</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Đặt Phòng</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName">Nhân Viên</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Booking Content -->
+        <div class="booking-content">
+            <!-- Search Section -->
+            <div class="card search-section">
+                <h3><i class="fas fa-search"></i> Tìm Phòng Trống</h3>
+                <div class="search-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date-range-picker">Ngày Nhận - Trả Phòng</label>
+                            <!-- Visible date range picker (Litepicker) similar to customer UI -->
+                            <input type="text" id="date-range-picker" placeholder="Chọn khoảng ngày" required>
+                            <!-- Hidden individual date inputs kept for compatibility with existing JS -->
+                            <input type="date" id="checkInDate" style="display:none;">
+                        </div>
+                        <div class="form-group">
+                            <label for="checkOutDate" style="display:none;">Ngày Trả Phòng</label>
+                            <input type="date" id="checkOutDate" style="display:none;">
+                        </div>
+                        <div class="form-group">
+                            <label for="guestCount">Số Người</label>
+                            <select id="guestCount">
+                                <option value="1">1 người</option>
+                                <option value="2" selected>2 người</option>
+                                <option value="3">3 người</option>
+                                <option value="4">4 người</option>
+                                <option value="5">5 người</option>
+                                <option value="6">6 người</option>
+                                <option value="7">7 người</option>
+                                <option value="8">8 người</option>
+                                <option value="9">9 người</option>
+                            </select>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="roomType">Loại Phòng</label>
+                            <select id="roomType">
+                                <option value="">Tất cả loại phòng</option>
+                                <option value="standard">Phòng Tiêu Chuẩn</option>
+                                <option value="deluxe">Phòng Deluxe</option>
+                                <option value="suite">Phòng Suite</option>
+                                <option value="vip">Phòng VIP</option>
+                            </select>
+                        </div> -->
+                        <div class="form-group">
+                            <button type="button" id="searchRoomsBtn" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Tìm Phòng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Available Rooms Section -->
+            <div class="card rooms-section" id="roomsSection" style="display: none;">
+                <h3><i class="fas fa-bed"></i> Phòng Trống (<span id="roomCount">0</span> phòng)</h3>
+                <div class="rooms-grid" id="roomsGrid">
+                    <!-- Available rooms will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Booking Form Section -->
+            <div class="card booking-form-section" id="bookingFormSection" style="display: none;">
+                <h3><i class="fas fa-edit"></i> Thông Tin Đặt Phòng</h3>
+                <form id="bookingForm">
+                    <div class="form-sections">
+                        <!-- Customer Information -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-user"></i> Thông Tin Khách Hàng</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="customerName">Họ Tên <span class="required">*</span></label>
+                                    <input type="text" id="customerName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerPhone">Số Điện Thoại <span class="required">*</span></label>
+                                    <input type="tel" id="customerPhone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerEmail">Email</label>
+                                    <input type="email" id="customerEmail">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="customerIdCard">CCCD/CMND <span class="required">*</span></label>
+                                    <input type="text" id="customerIdCard" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerAddress">Địa Chỉ</label>
+                                    <input type="text" id="customerAddress">
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerGender">Giới Tính</label>
+                                    <select id="customerGender">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Room Selection Summary -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-bed"></i> Phòng Đã Chọn</h4>
+                            <div id="selectedRoomInfo" class="selected-room-info">
+                                <!-- Selected room info will appear here -->
+                            </div>
+                        </div>
+
+                        <!-- Booking Details -->
+                        <div class="form-section">
+                            <h4><i class="fas fa-calendar"></i> Chi Tiết Đặt Phòng</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="bookingType">Loại Đặt Phòng</label>
+                                    <select id="bookingType" onchange="handleBookingTypeChange()">
+                                        <option value="advance">Đặt</option>
+                                        <option value="checkin-now">Check-in Luôn</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="checkinTimeGroup" style="display: none;">
+                                    <label for="checkinTime">Thời Gian Check-in</label>
+                                    <input type="time" id="checkinTime">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="specialRequests">Yêu Cầu Đặc Biệt</label>
+                                    <textarea id="specialRequests" rows="6" placeholder="Ghi chú về yêu cầu đặc biệt của khách hàng..."></textarea>
+                                </div>
+                            </div>
+                            <!-- Deposit and payment method removed per request: payments handled at checkout/check-in -->
+                        </div>
+
+                        <!-- Price Summary -->
+                        <div class="form-section price-summary">
+                            <h4><i class="fas fa-calculator"></i> Tổng Kết Giá</h4>
+                            <div class="price-details">
+                                <div class="price-row">
+                                    <span>Giá phòng/đêm:</span>
+                                    <span id="roomPricePerNight">0 ₫</span>
+                                </div>
+                                <div class="price-row">
+                                    <span>Số đêm:</span>
+                                    <span id="totalNights">0</span>
+                                </div>
+                                <div class="price-row">
+                                    <span>Tạm tính:</span>
+                                    <span id="subtotal">0 ₫</span>
+                                </div>
+                                <!-- Tax removed per request -->
+                                <div class="price-row total">
+                                    <span><strong>Tổng tiền:</strong></span>
+                                    <span id="totalAmount"><strong>0 ₫</strong></span>
+                                </div>
+                                <!-- Deposit/remaining removed: payment will be handled at checkout/check-in -->
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <button type="button" id="cancelBookingBtn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Hủy Bỏ
+                            </button>
+                            <button type="submit" id="confirmBookingBtn" class="btn btn-primary">
+                                <i class="fas fa-check"></i> <span id="confirmButtonText">Xác Nhận Đặt Phòng</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div class="modal" id="bookingSuccessModal">
+        <div class="modal-content">
+            <div class="modal-header success">
+                <h3><i class="fas fa-check-circle"></i> Đặt Phòng Thành Công!</h3>
+            </div>
+            <div class="modal-body">
+                <div class="success-info">
+                    <p><strong>Mã đặt phòng:</strong> <span id="bookingCode"></span></p>
+                    <p><strong>Khách hàng:</strong> <span id="successCustomerName"></span></p>
+                    <p><strong>Phòng:</strong> <span id="successRoomNumber"></span></p>
+                    <p><strong>Thời gian:</strong> <span id="successDates"></span></p>
+                    <p><strong>Tổng tiền:</strong> <span id="successTotalAmount"></span></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeSuccessModal()">
+                    <i class="fas fa-times"></i> Đóng
+                </button>
+                <button class="btn btn-primary" onclick="printBookingInfo()">
+                    <i class="fas fa-print"></i> In Phiếu
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Litepicker library - must be loaded before booking.js so the picker can initialize -->
+    <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
+    <script src="api/booking.api.js"></script>
+    <script src="js/booking.ui.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

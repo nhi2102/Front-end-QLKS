@@ -1,0 +1,1180 @@
+/* --- General & Global Styles --- */
+
+:root {
+    --primary-blue: #0a2144;
+    --primary-yellow: #f3b31c;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --background-light: #f9f9f9;
+    --white: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lora', serif;
+    background-color: var(--white);
+    color: var(--text-dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 50px;
+    color: var(--primary-blue);
+}
+
+
+/* --- Hero Section & Final Booking Widget --- */
+
+.hero-section {
+    min-height: 80vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../assets/img/bg_hero.avif');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+    padding: 20px;
+    position: relative;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #ffeb99;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+    font-family: 'Playfair Display', serif;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    font-weight: 400;
+    color: #ffeb99;
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+    font-family: 'Poppins', sans-serif;
+}
+
+.booking-widget {
+    display: grid;
+    grid-template-columns: 2fr 1.2fr 1.2fr auto;
+    gap: 15px;
+    align-items: flex-end;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 800px;
+    position: absolute;
+    bottom: 10px;
+    scroll-margin-top: 80px;
+    transition: box-shadow 0.3s ease;
+}
+
+#booking-search:target {
+    box-shadow: 0 15px 50px rgba(243, 179, 28, 0.4);
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #f0f0f0;
+    margin-bottom: 8px;
+    padding-left: 5px;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    height: 49px;
+    cursor: pointer;
+}
+
+.input-field:hover,
+.input-field.active {
+    border-color: #eab018;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.input-field i {
+    color: #f0f0f0;
+    margin-right: 10px;
+}
+
+.input-field input,
+.input-field span {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.input-field input::placeholder {
+    color: #ccc;
+}
+
+.dropdown-arrow {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+}
+
+.input-field.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* === Custom Dropdown (Combobox) === */
+
+.custom-dropdown-container {
+    position: relative;
+}
+
+.custom-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background-color: #2d3748;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.custom-dropdown-menu.hidden {
+    display: none;
+}
+
+.dropdown-item {
+    padding: 12px 15px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #eab018;
+    color: #111;
+}
+
+.search-button {
+    background-color: #eab018;
+    color: #111111;
+    border: none;
+    border-radius: 8px;
+    padding: 0 30px;
+    height: 49px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #ffd460;
+}
+
+@media (max-width: 992px) {
+    .booking-widget {
+        grid-template-columns: 1fr;
+        position: static;
+        margin: 40px 15px 0;
+    }
+}
+
+
+/* --- About Section --- */
+
+.about-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    /* Bố cục 2 cột bằng nhau */
+    gap: 50px;
+    /* Khoảng cách giữa 2 cột */
+}
+
+
+/* Cột hình ảnh bên trái */
+
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-image img:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Cột nội dung bên phải */
+
+.about-content {
+    background-color: #d0cfcfda;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.about-content .sub-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #eab018;
+    /* Màu vàng chủ đạo */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.about-content h2 {
+    font-size: 2rem;
+    color: #0a2144;
+    /* Màu xanh navy */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    text-align: left;
+    /* Căn lề trái cho tiêu đề */
+}
+
+.about-content p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+
+/* Nút bấm (sử dụng lại class button-primary nếu có, hoặc tạo mới) */
+
+.about-content .button-primary {
+    display: inline-block;
+    background-color: #eab018;
+    color: #111;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.about-content .button-primary:hover {
+    background-color: #ffd460;
+}
+
+.about-content:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Responsive cho Section này */
+
+@media (max-width: 992px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        /* Chuyển thành 1 cột trên màn hình nhỏ */
+    }
+}
+
+
+/* --- Services Section --- */
+
+.services-section {
+    padding: 80px 0;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    text-align: center;
+}
+
+.service-item i {
+    font-size: 2.5rem;
+    color: var(--primary-yellow);
+    margin-bottom: 20px;
+}
+
+.service-item h3 {
+    margin: 0 0 10px 0;
+}
+
+.service-item p {
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+
+/* DÁN CODE MỚI BẮT ĐẦU TỪ ĐÂY */
+
+
+/* --- Offers Section --- */
+
+.offers-section {
+    padding: 80px 0;
+}
+
+.offers-wrapper {
+    position: relative;
+    padding: 0 50px;
+}
+
+.offers-grid {
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    padding: 20px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #f3b31c #f0f0f0;
+}
+
+.offers-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.offers-grid::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.offers-grid::-webkit-scrollbar-thumb {
+    background: #f3b31c;
+    border-radius: 10px;
+}
+
+.offers-grid::-webkit-scrollbar-thumb:hover {
+    background: #eab018;
+}
+
+.offer-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    color: var(--white);
+    height: 400px;
+    min-width: 350px;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.offer-card:hover {
+    transform: translateY(-5px);
+}
+
+.offer-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.offer-card:hover img {
+    transform: scale(1.1);
+}
+
+.offer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.1));
+    padding: 25px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.offer-tag {
+    background-color: var(--primary-yellow);
+    color: var(--primary-blue);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.offer-overlay h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.5rem;
+}
+
+.offer-overlay p {
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.button-secondary {
+    background-color: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    width: 120px;
+}
+
+
+/* Carousel Navigation Buttons */
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(243, 179, 28, 0.9);
+    color: #111;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.carousel-nav:hover {
+    background-color: #f3b31c;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.carousel-nav.disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.carousel-prev {
+    left: 0;
+}
+
+.carousel-next {
+    right: 0;
+}
+
+.button-secondary:hover {
+    background-color: var(--white);
+    color: var(--primary-blue);
+}
+
+
+/* --- Featured Rooms Section --- */
+
+.featured-rooms-section {
+    padding: 80px 0;
+    background-color: #f8f9fa;
+    /* Nền xám nhạt */
+}
+
+.featured-rooms-section h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 50px;
+    color: #0a2144;
+}
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.room-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.room-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.room-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.room-card:hover .room-image img {
+    transform: scale(1.05);
+}
+
+.room-price {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    padding: 8px 15px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    backdrop-filter: blur(5px);
+}
+
+.room-content {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* Giúp các thẻ có chiều cao bằng nhau */
+}
+
+.room-content h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1rem;
+    color: #0a2144;
+}
+
+.room-description {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    /* Đẩy các mục bên dưới xuống đáy thẻ */
+}
+
+.room-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 25px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.room-features span {
+    display: flex;
+    align-items: center;
+}
+
+.room-features i {
+    color: #eab018;
+    /* Màu vàng chủ đạo */
+    margin-right: 8px;
+}
+
+.button-secondary {
+    display: block;
+    width: 100%;
+    background-color: #ffffff;
+    color: #eab018;
+    border-color: #eab018;
+    padding: 10px 25px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+    /* Nút nằm ở đầu */
+}
+
+.button-secondary:hover {
+    background-color: #eab018;
+    color: #ffffff;
+}
+
+
+/* Responsive */
+
+@media (max-width: 992px) {
+    .rooms-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* --- News Section --- */
+
+.news-section {
+    padding: 80px 0;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.news-card {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.news-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.news-card .card-body {
+    padding: 25px;
+}
+
+.news-date {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-bottom: 10px;
+    display: block;
+}
+
+.news-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.2rem;
+}
+
+.news-card p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.news-card a {
+    color: var(--primary-blue);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.news-card a:hover {
+    color: var(--primary-yellow);
+}
+
+.news-card a i {
+    margin-left: 5px;
+    transition: transform 0.3s;
+}
+
+.news-card a:hover i {
+    transform: translateX(5px);
+}
+
+
+/* --- Responsive for New Sections --- */
+
+@media (max-width: 992px) {
+    .offers-grid,
+    .brands-grid,
+    .news-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* --- Responsive for Main Content --- */
+
+@media (max-width: 992px) {
+    .destinations-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .destinations-grid {
+        grid-template-columns: 1fr;
+    }
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    /* Carousel responsive */
+    .offers-wrapper {
+        padding: 0 15px;
+    }
+    .carousel-nav {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+    .offer-card {
+        min-width: 280px;
+        height: 350px;
+    }
+}
+
+
+/* --- Nút Cuộn lên đầu trang (Back to Top) --- */
+
+.back-to-top-btn {
+    position: fixed;
+    /* Giữ nút cố định khi cuộn trang */
+    bottom: 30px;
+    right: 30px;
+    /* Giao diện nút */
+    background-color: #eab018;
+    /* Màu vàng chủ đạo */
+    color: #111;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    /* Bo tròn thành hình tròn */
+    /* Căn giữa icon */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 999;
+    /* Đảm bảo nút luôn nổi lên trên */
+    /* Hiệu ứng ẩn/hiện */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.4s ease;
+}
+
+
+/* Lớp .show sẽ được thêm bằng JavaScript */
+
+.back-to-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top-btn:hover {
+    background-color: #ffd460;
+    transform: translateY(-5px);
+    /* Hiệu ứng nhấc lên khi di chuột */
+}
+
+
+/* --- Offer Detail Modal --- */
+
+.offer-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.75);
+    animation: fadeIn 0.3s ease;
+}
+
+.offer-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.offer-modal-content {
+    background-color: #ffffff;
+    margin: 20px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1200px;
+    height: 85vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.4s ease;
+    overflow: hidden;
+}
+
+.offer-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #f3b31c 0%, #eab018 100%);
+    color: #111;
+}
+
+.offer-modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.offer-modal-close {
+    background: none;
+    border: none;
+    color: #111;
+    font-size: 32px;
+    cursor: pointer;
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.offer-modal-close:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
+}
+
+.offer-modal-body {
+    padding: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 45% 55%;
+    height: 100%;
+}
+
+.offer-modal-image {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.offer-modal-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.offer-modal-info {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
+}
+
+.offer-modal-info::-webkit-scrollbar {
+    width: 6px;
+}
+
+.offer-modal-info::-webkit-scrollbar-track {
+    background: #f0f0f0;
+}
+
+.offer-modal-info::-webkit-scrollbar-thumb {
+    background: #f3b31c;
+    border-radius: 10px;
+}
+
+.offer-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #f3b31c 0%, #eab018 100%);
+    color: #111;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+}
+
+.offer-modal-info h3 {
+    color: #0a2144;
+    font-size: 24px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.offer-modal-info>p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.offer-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.offer-details h4 {
+    color: #0a2144;
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.offer-details ul {
+    margin: 0 0 15px 0;
+    padding-left: 20px;
+}
+
+.offer-details li {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.offer-dates {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.offer-dates i {
+    color: #f3b31c;
+    font-size: 16px;
+}
+
+.offer-modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 0;
+}
+
+.offer-modal-actions button {
+    flex: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-book-now {
+    background: linear-gradient(135deg, #f3b31c 0%, #eab018 100%);
+    color: #111;
+}
+
+.btn-book-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(243, 179, 28, 0.3);
+}
+
+.btn-contact {
+    background-color: #fff;
+    color: #0a2144;
+    border: 2px solid #0a2144;
+}
+
+.btn-contact:hover {
+    background-color: #0a2144;
+    color: #fff;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* Responsive for offer modal */
+
+@media (max-width: 768px) {
+    .offer-modal-content {
+        width: 95%;
+        margin: 10px;
+        height: 90vh;
+        grid-template-rows: auto 1fr;
+    }
+    .offer-modal-header {
+        padding: 15px 20px;
+    }
+    .offer-modal-header h2 {
+        font-size: 20px;
+    }
+    .offer-modal-body {
+        grid-template-columns: 1fr;
+        grid-template-rows: 200px 1fr;
+    }
+    .offer-modal-info {
+        padding: 20px;
+    }
+    .offer-modal-info h3 {
+        font-size: 20px;
+    }
+    .offer-badge {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+    .offer-modal-actions {
+        flex-direction: column;
+    }
+    .offer-modal-actions button {
+        width: 100%;
+    }
+}
+
+
+/* Modal nền mờ */
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* Ẩn modal khi chưa bật */
+
+.modal.hidden {
+    display: none;
+}
+
+
+/* Nội dung modal */
+
+.modal-content {
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    text-align: center;
+}
+
+
+/* Ảnh chính */
+
+#modal-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+
+/* Nút đóng */
+
+.close {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+
+/* Nút điều hướng */
+
+.prev,
+.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.6);
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.prev {
+    left: 10px;
+}
+
+.next {
+    right: 10px;
+}

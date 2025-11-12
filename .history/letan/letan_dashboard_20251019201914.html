@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lễ Tân - Trang Tổng Quan</title>
+    <link rel="stylesheet" href="css/letan_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-hotel"></i>
+            <h2>Lễ Tân</h2>
+        </div>
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active">
+                <i class="fas fa-chart-line"></i>
+                <span>Tổng Quan</span>
+            </a>
+            <a href="checkin.html" class="nav-item">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-in</span>
+            </a>
+            <a href="checkout.html" class="nav-item">
+                <i class="fas fa-door-open"></i>
+                <span>Check-out</span>
+            </a>
+            <a href="services.html" class="nav-item">
+                <i class="fas fa-concierge-bell"></i>
+                <span>Dịch Vụ</span>
+            </a>
+            <a href="rooms_management.html" class="nav-item">
+                <i class="fas fa-bed"></i>
+                <span>Quản Lý Phòng</span>
+            </a>
+            <a href="booking.html" class="nav-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Đặt Phòng</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+
+        </nav>
+        <div class="sidebar-footer">
+
+            <a href="#" class="nav-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Đăng Xuất</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>Tổng Quan</h1>
+            </div>
+            <div class="header-right">
+                <div class="user-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="userName"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="dashboard-content">
+            <!-- Statistics Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-bed"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRooms">0</h3>
+                        <p>Tổng Số Phòng</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="availableRooms">0</h3>
+                        <p>Phòng Trống</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="occupiedRooms">0</h3>
+                        <p>Phòng Đang Ở</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="todayCheckIn">0</h3>
+                        <p>Check-in Hôm Nay</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">
+                        <i class="fas fa-calendar-times"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="todayCheckOut">0</h3>
+                        <p>Check-out Hôm Nay</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities and Quick Actions -->
+            <div class="content-grid">
+                <!-- Quick Actions -->
+                <div class="card quick-actions">
+                    <h3><i class="fas fa-bolt"></i> Thao Tác Nhanh</h3>
+                    <div class="action-buttons">
+                        <a href="checkin.html" class="action-btn btn-checkin">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Check-in</span>
+                        </a>
+                        <a href="checkout.html" class="action-btn btn-checkout">
+                            <i class="fas fa-door-open"></i>
+                            <span>Check-out</span>
+                        </a>
+                        <a href="booking.html" class="action-btn btn-booking">
+                            <i class="fas fa-calendar-plus"></i>
+                            <span>Đặt Phòng</span>
+                        </a>
+                        <a href="#" class="action-btn btn-payment">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Đổi Phòng</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Today's Check-in List -->
+            <div class="card">
+                <h3><i class="fas fa-calendar-check"></i> Lịch Check-in Hôm Nay</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Đặt</th>
+                                <th>Khách Hàng</th>
+                                <th>Phòng</th>
+                                <th>Ngày</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkInList">
+                            <tr>
+                                <td colspan="5" class="no-data">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Today's Check-out List -->
+            <div class="card">
+                <h3><i class="fas fa-door-open"></i> Lịch Check-out Hôm Nay</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã Đặt</th>
+                                <th>Khách Hàng</th>
+                                <th>Phòng</th>
+                                <th>Ngày</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkOutList">
+                            <tr>
+                                <td colspan="5" class="no-data">Đang tải dữ liệu...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Status Overview -->
+        <div class="card room-status-card">
+            <h3><i class="fas fa-th-large"></i> Tình Trạng Phòng</h3>
+            <div class="room-status-legend">
+                <span class="legend-item"><span class="dot available"></span> Trống</span>
+                <span class="legend-item"><span class="dot occupied"></span> Đang Ở</span>
+                <span class="legend-item"><span class="dot cleaning"></span> Đang Dọn</span>
+                <span class="legend-item"><span class="dot maintenance"></span> Bảo Trì</span>
+            </div>
+            <div class="rooms-grid" id="roomsGrid">
+                <!-- Rooms will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="api/dashboard.api.js"></script>
+    <script src="js/dashboard.ui.js"></script>
+    <script src="api/navigation-preloader.js"></script>
+</body>
+
+</html>

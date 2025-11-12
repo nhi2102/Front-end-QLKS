@@ -1,0 +1,181 @@
+// js/checkin.ui.js
+let currentBookingsData = [];
+
+// =========================
+//  Utilities (global)
+// =========================
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+}
+
+function formatCurrency(amount) {
+    const value = amount != null ? Number(amount) : 0;
+    return value.toLocaleString('vi-VN') + ' ₫';
+}
+
+// Khởi tạo
+document.addEventListener('DOMContentLoaded', () => {
+    checkUserLogin();
+    setupEventListeners();
+    loadPendingCheckIns();
+});
+
+// =========================
+//  Kiểm tra đăng nhập
+// =========================
+function checkUserLogin() {
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+        alert('Vui lòng đăng nhập!');
+        return (window.location.href = '../login.html');
+    }
+    const user = JSON.parse(currentUser);
+    document.getElementById('userName').textContent = user.name || user.username;
+}
+
+// Thiết lập sự kiện chung cho trang (global)
+function setupEventListeners() {
+    // Toggle sidebar
+    const menuToggle = document.getElementById('menuToggle');
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            if (sidebar) sidebar.classList.toggle('active');
+        });
+    }
+
+    // Đóng modal khi click ngoài
+    const modal = document.getElementById('checkInModal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.style.display = 'none';
+        });
+    }
+}
+
+// =========================
+//  Gọi danh sách chờ check-in
+// =========================
+async function loadPendingCheckIns() {
+    try {
+        const data = await apiGetPendingCheckIns();
+        currentBookingsData = data;
+        displayPendingCheckIns(data);
+    } catch (error) {
+        console.error(' loadPendingCheckIns error:', error);
+        const tbody = document.getElementById('pendingCheckInsList');
+        tbody.innerHTML = `
+            <tr><td colspan="8" class="no-data error">
+                <i class="fas fa-exclamation-triangle"></i> ${error.message}
+            </td></tr>`;
+    }
+}
+
+// =========================
+//  Hiển thị danh sách
+// =========================
+function displayPendingCheckIns(bookings) {
+    const tbody = document.getElementById('pendingCheckInsList');
+    if (!bookings || bookings.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="no-data">Không có booking nào chờ check-in hôm nay</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = bookings.map(b => `
+        <tr>
+            <td>${b.maDatPhong || b.madatphong}</td>
+            <td>${b.tenKhachHang || b.Hoten || 'N/A'}</td>
+            <td>${b.soDienThoai || b.Sdt || 'N/A'}</td>
+            <td>${b.phong || (b.chitietdatphongs?.[0]?.maphongNavigation?.Sophong ?? 'N/A')}</td>
+            <td>${formatDate(b.ngaynhanphong)}</td>
+            <td>${formatDate(b.ngaytraphong)}</td>
+            <td><span class="status-badge status-pending">${b.trangthai || 'Chờ check-in'}</span></td>
+            <td><button class="btn btn-sm btn-primary" onclick="openCheckInModal('${b.madatphong}')">
+                <i class="fas fa-calendar-check"></i> Check-in</button></td>
+        </tr>`).join('');
+}
+
+// =========================
+//  Mở modal check-in
+// =========================
+async function openCheckInModal(bookingId) {
+    const booking = currentBookingsData.find(b => {
+        const id = b && (b.maDatPhong || b.madatphong);
+        return id != null && id.toString() === bookingId.toString();
+    });
+    if (!booking) return alert('Không tìm thấy booking');
+
+    populateCheckInModal(booking);
+    document.getElementById('checkInModal').style.display = 'flex';
+}
+
+// =========================
+//  Điền thông tin vào modal
+// =========================
+function populateCheckInModal(booking) {
+    document.getElementById('modalBookingCode').textContent = booking.maDatPhong || booking.madatphong;
+    document.getElementById('modalCustomerName').textContent = booking.tenKhachHang || 'N/A';
+    document.getElementById('modalPhone').textContent = booking.soDienThoai || booking.Sdt || 'N/A';
+
+    // Determine room number without optional chaining
+    let roomNumber = 'N/A';
+    if (booking.phong) {
+        roomNumber = booking.phong;
+    } else if (booking.chitietdatphongs && booking.chitietdatphongs.length > 0) {
+        const firstDetail = booking.chitietdatphongs[0];
+        if (firstDetail && firstDetail.maphongNavigation && firstDetail.maphongNavigation.Sophong) {
+            roomNumber = firstDetail.maphongNavigation.Sophong;
+        }
+    }
+    document.getElementById('modalRoomNumber').textContent = roomNumber;
+
+    document.getElementById('modalCheckInDate').textContent = formatDate(booking.ngaynhanphong);
+    document.getElementById('modalCheckOutDate').textContent = formatDate(booking.ngaytraphong);
+
+    // Safe total amount
+    const totalAmount = booking.tongtien || booking.TongTien || 0;
+    document.getElementById('modalTotalAmount').textContent = formatCurrency(totalAmount);
+
+    document.getElementById('checkInModal').setAttribute('data-booking-id', booking.madatphong || booking.maDatPhong);
+
+    // =========================
+    //  Xác nhận Check-in
+    // =========================
+    async function confirmCheckIn() {
+        const modal = document.getElementById('checkInModal');
+        const bookingId = modal.getAttribute('data-booking-id');
+        const checkInTime = document.getElementById('checkInTime').value;
+        const actualGuests = parseInt(document.getElementById('actualGuests').value);
+        const specialRequests = document.getElementById('specialRequests').value;
+        const idCardVerified = document.getElementById('idCardVerified').checked;
+
+        const payload = { checkInTime, actualGuests, specialRequests, idCardVerified };
+
+        try {
+            await apiConfirmCheckIn(bookingId, payload);
+            alert(' Check-in thành công!');
+            closeCheckInModal();
+            loadPendingCheckIns();
+        } catch (err) {
+            alert('Lỗi check-in: ' + err.message);
+        }
+    }
+
+    // Note: use the global formatDate and formatCurrency utilities defined at file scope
+
+    function closeCheckInModal() {
+        document.getElementById('checkInModal').style.display = 'none';
+    }
+
+    // Gắn sự kiện cụ thể cho modal: nút xác nhận và đóng
+    const confirmBtn = document.getElementById('confirmCheckInBtn');
+    if (confirmBtn) {
+        confirmBtn.onclick = confirmCheckIn;
+    }
+    const closeBtn = document.querySelector('#checkInModal .modal-close');
+    if (closeBtn) {
+        closeBtn.onclick = closeCheckInModal;
+    }
+}

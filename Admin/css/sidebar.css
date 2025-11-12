@@ -1,0 +1,124 @@
+/* CSS styles specifically for the sidebar component */
+
+/* Main sidebar container */
+.sidebar {
+    width: 16rem; /* Adjust width as needed */
+    background-color: var(--sidebar-bg, #111827); /* Default color if var not defined */
+    color: var(--sidebar-text, #d1d5db);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    height: 100%; /* Ensure sidebar takes full height */
+    position: sticky; /* Make sidebar sticky */
+    top: 0;
+    flex-shrink: 0; /* Prevent sidebar from shrinking */
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 0.75rem;
+}
+.sidebar-header i.bi {
+    font-size: 1.6rem; /* Larger header icon */
+    margin-right: 0.5rem; /* Reduce right margin */
+    color: var(--primary-color, #3b82f6); /* Ensure icon color */
+    flex-shrink: 0;
+}
+.sidebar-header h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-left: 0.5rem; /* Reduce left margin */
+    margin-bottom: 0; /* Reset default margin */
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+    flex: 1; /* Allow nav to take remaining space */
+    overflow-y: auto; /* Add scroll if content exceeds height */
+}
+.sidebar-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem; /* Adjust gap */
+}
+
+/* Sidebar Links */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 0.75rem; /* Adjust padding */
+    text-decoration: none;
+    color: var(--sidebar-text, #d1d5db);
+    border-radius: 0.5rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+.sidebar-link:hover {
+    background-color: var(--sidebar-hover-bg, #374151);
+    color: white;
+}
+.sidebar-link.active {
+    background-color: var(--primary-color, #3b82f6);
+    color: white;
+}
+
+/* Bootstrap Icons within links */
+.sidebar-link i.bi {
+    font-size: 1.15rem; /* Slightly increase icon size */
+    width: 1.5rem; /* Increase width for better centering */
+    text-align: center;
+    margin-right: 1.25rem; /* Reduce right margin */
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+/* Text span within links */
+.sidebar-link span {
+   margin-left: 0; /* Remove old margin */
+   white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+    margin-top: auto; /* Push footer to the bottom */
+    margin-bottom: 20px;
+    padding-top: 1rem; /* Add some space above the footer */
+    border-top: 1px solid var(--sidebar-hover-bg, #374151); /* Optional separator */
+}
+
+/* General Action/Tab/Button Icon Sizes (can be refined or moved to main.css if preferred) */
+.action-btn i.bi {
+    font-size: 1.1rem; /* Icon size in table */
+}
+.tab-btn i.bi {
+    font-size: 1rem; /* Icon size in tab */
+    margin-bottom: 1px; /* Align with text */
+}
+.btn i.bi {
+    font-size: 1rem; /* Icon size in button */
+    display: inline-flex; /* Helps with alignment */
+    align-items: center;
+}
+.card-search i.bi {
+    font-size: 0.9rem; /* Smaller search icon */
+    width: auto;
+    height: auto;
+}
+.custom-select-button i.bi {
+    font-size: 0.8rem; /* Smaller dropdown arrow */
+}
+.modal-close-btn i.bi {
+    font-size: 1.2rem; /* Modal close icon size */
+}
+
+/* Error message style for sidebar loading failure */
+.sidebar-error {
+    color: var(--danger-color, #ef4444);
+    padding: 1rem;
+    text-align: center;
+}

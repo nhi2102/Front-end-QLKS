@@ -1,0 +1,391 @@
+/* ===========================
+   accounts.css (style như rooms.css, giữ màu icon gốc)
+   =========================== */
+
+/* --- FORM GRID --- */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.form-grid-span-2 {
+    grid-column: span 2;
+}
+
+.form-grid label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 4px;
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #1a202c;
+    background: #fff;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+}
+
+.form-grid input:focus,
+.form-grid select:focus,
+.form-grid textarea:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.form-grid input[disabled] {
+    background-color: #f7fafc;
+    color: #64748b;
+}
+
+/* --- FORM NOTE --- */
+.form-note {
+    grid-column: span 2;
+    font-size: 0.8125rem;
+    color: #718096;
+    background-color: #f8fafc;
+    padding: 0.75rem;
+    border-radius: 6px;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+/* --- TAB BUTTONS --- */
+.tab-container {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-btn {
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    color: #718096;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s, border-bottom-color 0.2s;
+}
+
+.tab-btn:hover {
+    color: #2b6cb0;
+}
+
+.tab-btn.active {
+    color: #3182ce;
+    border-bottom-color: #3182ce;
+    font-weight: 600;
+}
+
+/* --- SEARCH BOX --- */
+.card-search {
+    position: relative;
+    margin-bottom: 1rem;
+    margin-top: 5px;
+}
+
+.card-search input {
+    padding-left: 2.5rem;
+    width: 100%;
+    padding: 0.75rem 0.875rem 0.75rem 2.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.9375rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-search i {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #718096;
+}
+
+.card-search input:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+/* --- TABLE WRAPPER --- */
+.table-wrapper {
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    position: relative;
+    max-height: calc(100vh - 400px);
+}
+
+.table-wrapper th,
+.table-wrapper td {
+    padding: 0.75rem 0.5rem;
+    text-align: center;
+}
+
+.table-wrapper th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2d3748;
+    z-index: 10;
+}
+
+.table-wrapper tr:hover {
+    background-color: #f7fafc;
+}
+
+/* Scrollbar */
+.table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e0;
+    border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}
+
+/* --- STATUS BADGE --- */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    min-width: 5.5rem;
+    text-align: center;
+}
+
+.status-active {
+    background-color: #dcfce7;
+    color: #166534;
+}
+.status-locked {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* --- ACTION BUTTONS --- */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.35rem;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    width: 2rem;
+    height: 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* GIỮ MÀU ICON NHƯ CŨ */
+.action-btn-edit { color: #007bff; }     /* xanh */
+.action-btn-lock { color: #f59e0b; }     /* cam */
+.action-btn-delete { color: #dc3545; }   /* đỏ */
+
+/* Hover */
+.action-btn:hover {
+    background-color: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+/* --- BUTTONS --- */
+.btn {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary {
+    background: #3182ce;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: #2b6cb0;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #edf2f7;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+/* --- MODAL --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    color: #718096;
+}
+
+.modal-close-btn:hover {
+    background: #e2e8f0;
+}
+
+.modal-body {
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+
+
+/* --- RESET EMAIL --- */
+.reset-controls {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    
+}
+
+.reset-controls input {
+    flex: 1;
+    min-width: 200px;
+    height: 38px;
+    border-radius: 5px;
+    border: 1px solid #e2e8f0;
+    
+}
+
+.reset-controls input:focus {
+    outline: none;
+    border-color: #3182ce;
+    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+
+.reset-controls button {
+    height: 38px;
+}
+
+.reset-controls #save-reset-email-btn{
+    background-color: #fabe46;   
+    color: #000000;
+}
+
+.reset-controls #send-reset-btn{
+    background-color: #fa4646;   
+    color: #000000;
+}
+
+#reset-msg-container {
+    margin-top: 10px;
+    min-height: 1.2em;
+}
+
+.form-message {
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-grid-span-2 {
+        grid-column: span 1;
+    }
+    .modal-content {
+        width: 95%;
+    }
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+}

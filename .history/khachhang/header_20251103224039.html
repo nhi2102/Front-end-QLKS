@@ -1,0 +1,53 @@
+<!-- Header -->
+<header>
+    <div class="container header-container" id="header">
+        <a href="../khachhang/home.html" class="logo">
+            <img src="../assets/img/logo.jpg" alt="Hotel Logo" class="logo-img">
+            <!--<div class="logo-text">Hotel Thanh Trà</div>-->
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu-toggle" aria-label="Toggle mobile menu">
+                &#9776;
+            </button>
+
+        <nav id="mobile-nav">
+            <ul>
+                <li><a href="../khachhang/home.html">TRANG CHỦ</a></li>
+                <li><a href="../khachhang/home.html#about">GIỚI THIỆU</a></li>
+                <li><a href="../khachhang/home.html#rooms">PHÒNG</a></li>
+                <li><a href="../khachhang/home.html#services">DỊCH VỤ</a></li>
+            </ul>
+        </nav>
+        <div class="nav-button">
+            <!-- Hiển thị khi chưa đăng nhập -->
+            <div id="not-logged-in" class="auth-section">
+                <a href="../khachhang/login.html" class="btn btn-secondary">ĐĂNG NHẬP</a>
+            </div>
+            <!-- Hiển thị khi đã đăng nhập -->
+            <div id="logged-in" class="auth-section" style="display: none;">
+                <div class="user-menu-container">
+                    <div class="user-info dropdown-toggle">
+                        <span class="welcome-text">Xin chào, </span>
+                        <span id="username-display" class="username"></span>
+                    </div>
+                    <ul class="dropdown-menu" id="user-dropdown-menu">
+                        <li>
+                            <a href="../khachhang/profile.html" class="menu-link">Thông Tin Cá Nhân</a>
+                        </li>
+                        <li>
+                            <a href="../khachhang/my_room.html" class="menu-link">Phòng Của Tôi</a>
+                        </li>
+                        <li>
+                            <a href="../khachhang/change_password.html" class="menu-link">Đổi Mật Khẩu</a>
+                        </li>
+
+                        <li>
+                            <a href="../khachhang/login.html" id="logout-btn-dropdown" class="menu-link btn-link">ĐĂNG XUẤT</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

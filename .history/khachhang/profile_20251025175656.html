@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa Thông tin cá nhân</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../khachhang/css/style.css">
+    <link rel="stylesheet" href="../khachhang/css/header.css">
+    <link rel="stylesheet" href="../khachhang/css/footer.css">
+    <link rel="stylesheet" href="../khachhang/css/chatbot.css">
+    <link rel="stylesheet" href="../khachhang/css/profile.css">
+
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <section class="profile-section">
+            <div class="container">
+                <h3 class="section-title">Chỉnh Sửa Thông Tin</h3>
+
+                <div class="profile-card">
+
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+
+                    <form class="profile-form">
+
+                        <div class="form-group">
+                            <i class="fas fa-user"></i>
+                            <label for="hoten">Họ và tên</label>
+                            <input type="text" id="hoten" name="hoten" value="Nguyễn Văn A">
+                        </div>
+
+                        <div class="form-group">
+                            <i class="fas fa-envelope"></i>
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" value="nguyenvana@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <i class="fas fa-phone"></i>
+                            <label for="sodienthoai">Số điện thoại</label>
+                            <input type="tel" id="sodienthoai" name="sodienthoai" value="0123456789">
+                        </div>
+                        <div class="form-group">
+                            <i class="fas fa-id-card"></i>
+                            <label for="cccd">Căn cước công dân</label>
+                            <input type="cccd" id="cccd" name="cccd" value="0123456789">
+                        </div>
+
+                        <div class="profile-actions">
+                            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                            <button type="button" id="cancelButton" class="btn btn-secondary">Hủy</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <script src="../khachhang/js/script.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentUserJSON = localStorage.getItem('currentUser');
+
+            // 2. Kiểm tra xem người dùng đã đăng nhập chưa
+            if (!currentUserJSON) {
+                // Nếu chưa đăng nhập, đá về trang login
+                alert('Bạn cần đăng nhập để xem trang này.');
+                window.location.href = '../khachhang/login.html';
+                return;
+            }
+
+            // 3. Chuyển chuỗi JSON thành object JavaScript
+            const user = JSON.parse(currentUserJSON);
+            console.log("Dữ liệu user đã lưu:", user);
+            // 4. Đổ dữ liệu user vào các input tương ứng
+            try {
+                document.getElementById('hoten').value = user.hoten || user.tenkh || user.name || '';
+                document.getElementById('email').value = user.email || user.Email || '';
+                document.getElementById('sodienthoai').value = user.sdt || user.Sdt || user.sodienthoai || '';
+                document.getElementById('cccd').value = user.cccd || '';
+
+            } catch (error) {
+                console.error("Lỗi khi đổ dữ liệu vào input:", error);
+            }
+            const cancelButton = document.getElementById('cancelButton');
+
+            // Thêm sự kiện click
+            if (cancelButton) {
+                cancelButton.addEventListener('click', () => {
+                    const confirmCancel = confirm('Bạn có chắc muốn hủy thay đổi và quay về trang chủ?');
+                    if (confirmCancel) {
+                        window.location.href = '../khachhang/home.html';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

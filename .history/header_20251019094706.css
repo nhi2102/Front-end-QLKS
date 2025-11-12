@@ -1,0 +1,629 @@
+/* Reset CSS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+
+/* Container */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+/* Header Styles */
+
+header {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+}
+
+
+/* Logo Styles */
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #2c3e50;
+}
+
+.logo-img {
+    width: 100px;
+    height: 100px;
+    max-height: 100%;
+    margin-right: 12px;
+    border-radius: 8px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #70cb96;
+}
+
+
+/* Navigation Styles */
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 8px 0;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #eab018;
+}
+
+nav ul li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #eab018;
+    transition: width 0.3s ease;
+}
+
+nav ul li a:hover::after {
+    width: 100%;
+}
+
+
+/* Navigation Buttons */
+
+.nav-button {
+    display: flex;
+    gap: 15px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.btn-secondary {
+    color: #eab018;
+    border-color: #eab018;
+    background-color: transparent;
+}
+
+.btn-secondary:hover {
+    background-color: #eab018;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #eab018;
+    color: #fff;
+    border-color: #eab018;
+}
+
+.btn-primary:hover {
+    background-color: #229954;
+    border-color: #229954;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Mobile Menu Toggle */
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #eab018;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.mobile-menu-toggle:hover {
+    background-color: rgba(165, 174, 39, 0.1);
+}
+
+.mobile-menu-toggle:focus {
+    outline: 2px solid #eab018;
+    outline-offset: 2px;
+}
+
+
+/* Hide menu by default on mobile */
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+    nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: #fff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 12px 12px;
+        padding: 20px;
+        z-index: 999;
+    }
+    nav.active {
+        display: block;
+        animation: slideDown 0.3s ease-out;
+    }
+    nav ul {
+        flex-direction: column;
+        gap: 0;
+        text-align: center;
+    }
+    nav ul li {
+        border-bottom: 1px solid #f0f0f0;
+        margin: 0;
+    }
+    nav ul li:last-child {
+        border-bottom: none;
+    }
+    nav ul li a {
+        display: block;
+        padding: 15px 20px;
+        font-size: 16px;
+        color: #2c3e50;
+        transition: all 0.3s ease;
+    }
+    nav ul li a:hover {
+        background-color: rgba(39, 174, 96, 0.05);
+        color: #eab018;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Responsive Design - Header */
+
+
+/* Large Desktop */
+
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+    .logo-text {
+        font-size: 26px;
+    }
+    nav ul {
+        gap: 40px;
+    }
+    nav ul li a {
+        font-size: 17px;
+    }
+}
+
+
+/* Desktop */
+
+@media (max-width: 1199px) {
+    .container {
+        max-width: 960px;
+    }
+    nav ul {
+        gap: 25px;
+    }
+}
+
+
+/* Tablet Landscape */
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 720px;
+    }
+    .header-container {
+        flex-wrap: wrap;
+        gap: 15px;
+        position: relative;
+    }
+    nav ul {
+        gap: 20px;
+    }
+    .nav-button {
+        order: 3;
+        flex-basis: 100%;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    .logo-text {
+        font-size: 22px;
+    }
+}
+
+
+/* Tablet Portrait */
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 540px;
+        padding: 0 15px;
+    }
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+        padding: 15px 20px;
+        position: relative;
+    }
+    .logo {
+        flex: 1;
+    }
+    .logo-text {
+        font-size: 20px;
+    }
+    .logo-img {
+        width: 45px;
+        height: 45px;
+    }
+    .nav-button {
+        display: none;
+    }
+}
+
+
+/* Mobile Large */
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 12px;
+    }
+    .header-container {
+        padding: 12px 15px;
+    }
+    .logo-text {
+        font-size: 18px;
+    }
+    .logo-img {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    .mobile-menu-toggle {
+        font-size: 22px;
+        padding: 6px;
+    }
+    nav {
+        left: -15px;
+        right: -15px;
+        padding: 15px;
+    }
+    nav ul li a {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+}
+
+
+/* Mobile Small */
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    .header-container {
+        padding: 10px 12px;
+    }
+    .logo-text {
+        font-size: 16px;
+    }
+    .logo-img {
+        width: 35px;
+        height: 35px;
+        margin-right: 8px;
+    }
+    nav {
+        left: -12px;
+        right: -12px;
+        padding: 12px;
+    }
+    nav ul li a {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+
+/* Mobile Extra Small */
+
+@media (max-width: 360px) {
+    .header-container {
+        padding: 8px 10px;
+    }
+    .logo-text {
+        font-size: 15px;
+    }
+    .logo-img {
+        width: 32px;
+        height: 32px;
+    }
+    .mobile-menu-toggle {
+        font-size: 20px;
+        padding: 4px;
+    }
+}
+
+
+/* Hover effects for better UX */
+
+.logo:hover .logo-text {
+    color: #eab018;
+}
+
+.logo:hover .logo-img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+
+/* Focus states for accessibility */
+
+nav ul li a:focus,
+.btn:focus {
+    outline-offset: 2px;
+}
+
+
+/* User Info Styles */
+
+.auth-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background-color: #f2f2f7;
+    border-radius: 40px;
+    border: 1px solid #dcddde;
+}
+
+.welcome-text {
+    font-size: 14px;
+    color: #676b6e;
+    font-weight: 400;
+}
+
+.username {
+    font-size: 14px;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.btn-outline {
+    color: #dc3545;
+    border-color: #dc3545;
+    background-color: transparent;
+    font-size: 12px;
+    padding: 6px 12px;
+}
+
+.btn-outline:hover {
+    background-color: #dc3545;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+
+/* --- User Dropdown Styles --- */
+
+
+/* --- User Dropdown Styles (Phiên bản Hoàn Chỉnh) --- */
+
+.user-menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+/* Kích hoạt Dropdown */
+
+.user-info.dropdown-toggle {
+    cursor: pointer;
+    transition: all 0.2s;
+    padding-right: 30px;
+    /* Thêm padding cho biểu tượng mũi tên */
+    background-color: #f2f2f7;
+    border: 1px solid #dcddde;
+}
+
+
+/* Biểu tượng mũi tên */
+
+.user-info.dropdown-toggle::after {
+    content: '\25BE';
+    font-size: 10px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #eab018;
+    /* Màu vàng chủ đạo */
+    transition: transform 0.3s;
+}
+
+.user-info.dropdown-toggle:hover {
+    background-color: #fff8e8;
+    /* Nền trắng ngà/vàng nhạt hơn */
+    border-color: #eab018;
+    /* Viền chuyển sang màu vàng chủ đạo */
+    box-shadow: 0 0 5px rgba(234, 176, 24, 0.4);
+    /* Thêm đổ bóng nhẹ màu vàng */
+}
+
+
+/* Xoay mũi tên khi mở */
+
+.dropdown-menu.show~.dropdown-toggle::after {
+    /* Dùng sibling selector */
+    transform: translateY(-50%) rotate(180deg);
+}
+
+
+/* Menu Thả Xuống */
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    list-style: none;
+    padding: 8px 0;
+    margin: 10px 0 0 0;
+    /* Đẩy menu xuống dưới một chút */
+    min-width: 200px;
+    background-color: #fff;
+    border: none;
+    /* Loại bỏ viền */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    z-index: 1050;
+    display: none;
+    opacity: 0;
+    transform: translateY(-15px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-menu li {
+    padding: 0;
+    /* Đảm bảo không có padding thừa */
+    border-bottom: 1px solid #f0f0f0;
+    /* Đường phân cách mờ */
+}
+
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+
+/* Style cho cả link và button trong menu (menu-link) */
+
+.dropdown-menu .menu-link {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    text-decoration: none;
+    background-color: transparent;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    color: #2c3e50;
+    /* Màu chữ tối mặc định */
+    transition: background-color 0.2s, color 0.2s;
+}
+
+
+/* HIỆU ỨNG HOVER THEO TÔNG MÀU VÀNG */
+
+.dropdown-menu .menu-link:hover {
+    background-color: rgba(234, 176, 24, 0.08);
+    /* Nền vàng nhạt */
+    color: #eab018 !important;
+    /* Chữ màu vàng chủ đạo */
+}
+
+
+/* Style cho nút Đăng Xuất (màu đỏ) */
+
+.dropdown-menu .btn-link {
+    color: #dc3545;
+    /* Màu đỏ nổi bật */
+    font-weight: 600;
+}
+
+.dropdown-menu .btn-link:hover {
+    background-color: #fff0f0;
+    /* Nền đỏ nhạt */
+    color: #c82333;
+}
+
+
+/* Mobile responsive for user info */
+
+@media (max-width: 768px) {
+    .auth-section {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .user-info {
+        justify-content: center;
+        text-align: center;
+    }
+    .nav-button {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    .btn {
+        text-align: center;
+        width: 100%;
+    }
+}

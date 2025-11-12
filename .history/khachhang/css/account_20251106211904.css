@@ -1,0 +1,399 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(../../assets/img/bg_hero.avif);
+    background-size: 120% 120%;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: gradienntBG 15s ease infinite;
+    overflow: hidden;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url(../../assets/img/bg_hero.avif);
+    background-size: 120% 120%;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(3px);
+    z-index: -1;
+    animation: gradienntBG 15s ease infinite;
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: -1;
+}
+
+@keyframes gradienntBG {
+    0% {
+        background-position: 0% 0%;
+    }
+    25% {
+        background-position: 100% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    75% {
+        background-position: 0% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.glass-container {
+    position: relative;
+    width: 380px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    z-index: 10;
+    color: #fff;
+    overflow: hidden;
+}
+
+.glass-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    right: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    transform: skew(-15deg);
+    transition: 0.5s;
+    pointer-events: none;
+}
+
+.glass-container:hover::before {
+    left: 120%;
+}
+
+.glass-container h2 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    font-size: 16px;
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    color: rgba(27, 27, 27, 0.8);
+    font-size: 16px;
+    pointer-events: none;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus+label,
+.input-group input:valid+label {
+    top: 0;
+    left: 15px;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 25px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.remember-forgot label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.remember-forgot input {
+    margin-right: 8px;
+    accent-color: #fff;
+}
+
+.remember-forgot a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    outline: none;
+    border-radius: 35px;
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.register-link a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+
+/* Responsive Design */
+
+
+/* Tablet styles */
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 20px;
+        background-size: 150% 150%;
+    }
+    .glass-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px 25px;
+        margin: 0 auto;
+    }
+    .glass-container h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+    }
+    .input-group {
+        margin-bottom: 25px;
+    }
+    .input-group input {
+        padding: 12px 18px;
+        font-size: 15px;
+    }
+    .input-group label {
+        font-size: 15px;
+        left: 18px;
+    }
+    .input-group input:focus+label,
+    .input-group input:valid+label {
+        font-size: 11px;
+        left: 13px;
+    }
+    .login-btn {
+        padding: 12px 18px;
+        font-size: 15px;
+    }
+    .remember-forgot {
+        font-size: 13px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+}
+
+
+/* Mobile styles */
+
+@media screen and (max-width: 480px) {
+    body {
+        padding: 15px;
+        background-size: 200% 200%;
+        overflow-y: auto;
+        min-height: 100vh;
+        align-items: flex-start;
+        padding-top: 50px;
+    }
+    .glass-container {
+        width: 100%;
+        max-width: 350px;
+        padding: 25px 20px;
+        border-radius: 15px;
+    }
+    .glass-container h2 {
+        font-size: 22px;
+        margin-bottom: 25px;
+    }
+    .input-group {
+        margin-bottom: 20px;
+    }
+    .input-group input {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 25px;
+    }
+    .input-group label {
+        font-size: 14px;
+        left: 15px;
+    }
+    .input-group input:focus+label,
+    .input-group input:valid+label {
+        font-size: 10px;
+        left: 10px;
+    }
+    .login-btn {
+        padding: 10px 15px;
+        font-size: 14px;
+        border-radius: 25px;
+    }
+    .remember-forgot {
+        font-size: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    .register-link {
+        font-size: 13px;
+        margin-top: 20px;
+    }
+}
+
+
+/* Small mobile styles */
+
+@media screen and (max-width: 360px) {
+    body {
+        padding: 10px;
+        padding-top: 30px;
+    }
+    .glass-container {
+        padding: 20px 15px;
+        border-radius: 12px;
+    }
+    .glass-container h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    .input-group {
+        margin-bottom: 18px;
+    }
+    .input-group input {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    .input-group label {
+        font-size: 13px;
+        left: 12px;
+    }
+    .login-btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    .remember-forgot {
+        font-size: 11px;
+    }
+    .register-link {
+        font-size: 12px;
+        margin-top: 15px;
+    }
+}
+
+
+/* Landscape orientation for mobile */
+
+@media screen and (max-height: 600px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+        align-items: center;
+        overflow-y: auto;
+    }
+    .glass-container {
+        padding: 15px 20px;
+        max-width: 300px;
+    }
+    .glass-container h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .input-group {
+        margin-bottom: 15px;
+    }
+    .input-group input {
+        padding: 8px 12px;
+    }
+    .remember-forgot {
+        margin-bottom: 15px;
+    }
+    .register-link {
+        margin-top: 15px;
+    }
+}

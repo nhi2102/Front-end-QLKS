@@ -1,0 +1,987 @@
+/* ============================================
+   BOOKING PAGE STYLES
+   ============================================ */
+
+
+/* Import base dashboard styles */
+
+@import url('letan_dashboard.css');
+
+/* ============================================
+   BOOKING CONTENT STYLES
+   ============================================ */
+
+.booking-content {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+/* ============================================
+   SEARCH SECTION
+   ============================================ */
+
+.search-section {
+    margin-bottom: 20px;
+}
+
+.search-form .form-row {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 2fr 1fr;
+    gap: 15px;
+    align-items: end;
+}
+
+.search-form .form-row {
+    display: grid;
+    /* date-range | guest | roomType | spacer | button -> tightened for single-row layout */
+    grid-template-columns: 1.4fr 0.7fr 0.9fr 0.1fr 0.6fr;
+    gap: 10px;
+    align-items: center;
+}
+
+
+/* Make the guest select sit closer to the date picker */
+
+.date-and-guest {
+    grid-column: 1 / span 2;
+}
+
+.guest-inline {
+    align-self: end;
+    margin-top: 0;
+}
+
+
+/* Make the visible date-range input more compact */
+
+#date-range-picker {
+    padding: 8px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+
+/* On wide layouts, keep date narrower so it sits closer to guest select */
+
+.search-form .form-row {
+    grid-template-columns: 1.6fr 0.8fr 1fr 2fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row>.form-group:last-child {
+    /* keep column layout like other form groups, but push content to the bottom
+       so the button lines up with the inputs' baseline */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+/* Ensure controls in the search row are the same height and aligned */
+
+.search-form .form-row .form-group {
+    justify-content: flex-end;
+    /* push inputs to baseline so labels sit above and inputs align */
+}
+
+.search-form .form-row .form-group input,
+.search-form .form-row .form-group select,
+.search-form .form-row .form-group textarea,
+#date-range-picker,
+#searchRoomsBtn {
+    height: 42px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+
+
+/* Make labels slightly smaller and consistent spacing */
+
+.search-form .form-row .form-group label {
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #495057;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.required {
+    color: #dc3545;
+}
+
+
+/* ============================================
+   ROOMS GRID
+   ============================================ */
+
+.rooms-section {
+    margin-bottom: 20px;
+}
+
+.rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.room-card {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: #fff;
+    cursor: pointer;
+}
+
+.room-card:hover {
+    border-color: #007bff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+}
+
+.room-card.selected {
+    border-color: #28a745;
+    background-color: #f8fff9;
+}
+
+.room-card-header {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 15px;
+    position: relative;
+}
+
+.room-number {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.room-type {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.room-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+}
+
+.room-card-body {
+    padding: 20px;
+}
+
+.room-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.feature-tag {
+    background: #e9f4ff;
+    color: #007bff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.room-price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.price-amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.price-unit {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.select-room-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.select-room-btn:hover {
+    background: #0056b3;
+}
+
+.room-card.selected .select-room-btn {
+    background: #28a745;
+}
+
+
+/* ============================================
+   BOOKING FORM
+   ============================================ */
+
+.booking-form-section {
+    margin-bottom: 20px;
+}
+
+.form-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.form-section h4 {
+    margin: 0 0 20px 0;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 10px;
+}
+
+.form-section .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-section .form-row:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ============================================
+   SELECTED ROOM INFO
+   ============================================ */
+
+.selected-room-info {
+    background: #fff;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 10px;
+}
+
+
+/* Selected room card styles */
+
+.selected-rooms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.selected-room-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fdf8;
+    border: 1px solid #e6f4ea;
+    padding: 12px 14px;
+    border-radius: 8px;
+}
+
+.selected-room-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.selected-room-number {
+    font-weight: 700;
+    color: #155724;
+}
+
+.selected-room-type {
+    color: #4e4e4e;
+    font-size: 13px;
+}
+
+.selected-room-right {
+    text-align: right;
+}
+
+.selected-room-price {
+    font-weight: 700;
+    color: #28a745;
+}
+
+.selected-room-sub {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.remove-selected-room {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    font-size: 20px;
+    line-height: 1;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.remove-selected-room:hover {
+    color: #a71d2a;
+}
+
+.selected-room-info.empty {
+    background: #f8f9fa;
+    border-color: #e9ecef;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.room-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.room-info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+    /* Larger, nicer textarea for special requests */
+    #specialRequests {
+        min-height: 140px;
+        /* bigger than default 3 rows */
+        padding: 16px;
+        font-size: 15px;
+        line-height: 1.5;
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        background: linear-gradient(180deg, #ffffff, #fbfdff);
+        resize: vertical;
+    }
+    #specialRequests::placeholder {
+        color: #9aa3ad;
+        opacity: 1;
+    }
+    #specialRequests:focus {
+        border-color: #17a2b8;
+        box-shadow: 0 6px 20px rgba(23, 162, 184, 0.12);
+        outline: none;
+    }
+}
+
+.room-info-item:last-child {
+    border-bottom: none;
+}
+
+.room-info-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.room-info-value {
+    color: #007bff;
+    font-weight: 500;
+}
+
+
+/* ============================================
+   PRICE SUMMARY
+   ============================================ */
+
+.price-summary {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    border: 2px solid #007bff !important;
+}
+
+.price-details {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.price-row.total {
+    border-top: 2px solid #007bff;
+    margin-top: 10px;
+    padding-top: 15px;
+    font-size: 18px;
+}
+
+.price-row.remaining {
+    background: #fff3cd;
+    margin: 10px -10px -10px -10px;
+    padding: 15px 10px;
+    border-radius: 6px;
+    border: 1px solid #ffc107;
+}
+
+
+/* ============================================
+   FORM ACTIONS
+   ============================================ */
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #e9ecef;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+
+/* Make search button slimmer so it fits inline with inputs */
+
+#searchRoomsBtn {
+    padding: 8px 12px;
+    height: 42px;
+    /* match inputs */
+    align-self: center;
+    /* center horizontally in its column */
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004494);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #545b62;
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ============================================
+   MODAL STYLES
+   ============================================ */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header.success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.modal-header h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.success-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.success-info p {
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.success-info p:last-child {
+    border-bottom: none;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.loading i {
+    animation: spin 2s linear infinite;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.no-data {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.error {
+    text-align: center;
+    padding: 40px;
+    color: #dc3545;
+}
+
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 1200px) {
+    .search-form .form-row {
+        grid-template-columns: 2fr 2fr 1fr;
+        gap: 10px;
+    }
+    .form-group:nth-child(4),
+    .form-group:nth-child(5) {
+        grid-column: span 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-content {
+        padding: 15px;
+    }
+    .search-form .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .rooms-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .form-section .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .form-actions {
+        flex-direction: column;
+    }
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .modal-content {
+        width: 95%;
+        margin: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .room-card-header {
+        padding: 10px;
+    }
+    .room-card-body {
+        padding: 15px;
+    }
+    .room-number {
+        font-size: 20px;
+    }
+    .price-amount {
+        font-size: 16px;
+    }
+}
+
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.text-center {
+    text-align: center;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.text-info {
+    color: #17a2b8 !important;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
+
+.mb-1 {
+    margin-bottom: 0.25rem !important;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+    margin-bottom: 1rem !important;
+}
+
+.mt-0 {
+    margin-top: 0 !important;
+}
+
+.mt-1 {
+    margin-top: 0.25rem !important;
+}
+
+.mt-2 {
+    margin-top: 0.5rem !important;
+}
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+
+/* ============================================
+   IMMEDIATE BOOKING STYLES
+   ============================================ */
+
+#bookingType {
+    font-weight: 600;
+    color: #007bff;
+}
+
+#bookingType option[value="checkin-now"] {
+    background-color: #e7f3ff;
+    font-weight: bold;
+}
+
+#checkinTimeGroup {
+    background: #f0f8ff;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #b3d9ff;
+}
+
+#immediatePaymentSection {
+    background: #fff3cd;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ffc107;
+}
+
+#immediatePaymentSection label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #856404;
+    cursor: pointer;
+}
+
+#immediatePaymentSection input[type="checkbox"] {
+    transform: scale(1.2);
+    accent-color: #ffc107;
+}
+
+
+/* Success modal variants */
+
+.modal-header.success-checkin {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.modal-header.warning {
+    background: linear-gradient(135deg, #ffc107, #ffb347);
+    color: #212529;
+}
+
+
+/* Booking type indicator */
+
+.booking-type-indicator {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.booking-type-advance {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.booking-type-immediate {
+    background: #f3e5f5;
+    color: #7b1fa2;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
+/* Disabled state for check-in date when immediate booking */
+
+#checkInDate:disabled {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+
+/* Full payment checkbox styling */
+
+#fullPaymentNow:checked+span {
+    color: #28a745;
+    font-weight: bold;
+}
+
+
+/* Vùng chưa chọn phòng */
+
+.no-selected-room {
+    background: #f8f9fa;
+    color: #6c757d;
+    padding: 12px;
+    text-align: center;
+    border-radius: 8px;
+    font-style: italic;
+}
+
+
+/* Thẻ hiển thị mỗi phòng */
+
+.selected-room-card {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.selected-room-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+/* Header của mỗi phòng */
+
+.selected-room-card .room-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+    color: #0d6efd;
+    margin-bottom: 6px;
+}
+
+.room-index {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.room-name {
+    font-size: 1.05rem;
+}
+
+.room-type {
+    font-size: 0.9rem;
+    color: #495057;
+}
+
+
+/* Nội dung thông tin phòng */
+
+.selected-room-card .room-body {
+    color: #343a40;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.selected-room-card .room-body i {
+    color: #0d6efd;
+    margin-right: 6px;
+}
+
+
+/* Nút bỏ chọn */
+
+.remove-room-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.remove-room-btn:hover {
+    background: #b02a37;
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="../khachhang/css/account.css" />
+</head>
+
+<body>
+    <div class="glass-container">
+        <h2>ĐĂNG NHẬP</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" required />
+                <label>Tên đăng nhập (Email hoặc SĐT)</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" required />
+                <label>Mật khẩu</label>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox" /> Ghi nhớ tôi</label>
+                <a href="../khachhang/forgot.html">Quên mật khẩu?</a>
+            </div>
+            <button type="submit" class="login-btn">Đăng nhập</button>
+            <br /><br />
+            <div class="register-link">
+                Chưa có tài khoản? <a href="../khachhang/register.html">Đăng ký</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE = "https://localhost:7076/api";
+        //khi bấm "Đăng nhập"
+        document.getElementById("loginForm").addEventListener("submit", async(e) => {
+            e.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value;
+            const loginBtn = document.querySelector(".login-btn");
+
+            if (!username || !password) {
+                alert("Vui lòng nhập đầy đủ tài khoản và mật khẩu!");
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Đang đăng nhập...";
+
+            try {
+                // Gọi API login
+                const response = await fetch(
+                    `${API_BASE}/Taikhoans/DangNhap?emailorsdt=${encodeURIComponent(username)}&matkhau=${encodeURIComponent(password)}`, {
+                        method: "POST"
+                    }
+                );
+
+                // Đọc response một lần duy nhất
+                const responseText = await response.text();
+                let result;
+
+                try {
+                    // Thử parse JSON trước
+                    result = JSON.parse(responseText);
+                } catch (jsonError) {
+                    // Nếu không parse được JSON, tạo object từ text
+                    console.log(" Response text:", responseText);
+
+                    if (responseText.includes("BCrypt") || responseText.includes("Exception")) {
+                        result = {
+                            message: "Lỗi hệ thống: Vấn đề với mã hóa mật khẩu. Vui lòng liên hệ admin."
+                        };
+                    } else {
+                        result = {
+                            message: responseText || "Lỗi server không xác định"
+                        };
+                    }
+                }
+
+                console.log(" Raw API result:", result);
+                console.log(" All result keys:", Object.keys(result));
+                console.log(" Looking for customer ID in:", {
+                    'result.makh': result.makh,
+                    'result.MaKh': result.MaKh,
+                    'result.Makh': result.Makh,
+                    'result.id': result.id,
+                    'result.customerId': result.customerId,
+                    'result.makhachhang': result.makhachhang,
+                    'result.maKh': result.maKh
+                });
+
+                if (!response.ok) {
+                    alert(result.message || "Tên đăng nhập hoặc mật khẩu không đúng!");
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = "Đăng nhập";
+                    return;
+                }
+
+                //  Xác định loại tài khoản
+                let role = result.role ? result.role.toLowerCase() : "customer";
+                let name = result.hoten || result.Hoten || result.name || "Người dùng";
+                let redirect = "../khachhang/home.html";
+
+                if (role === "admin") redirect = "../Admin/Admin/index.html";
+                else if (role === "receptionist") redirect = "../letan/letan_dashboard.html";
+
+                //  Lưu TOÀN BỘ result vào userData (để không bỏ sót trường nào)
+                const userData = {
+                    ...result, // Lưu tất cả fields từ API
+                    // Override/thêm các trường chuẩn hóa
+                    id: result.makh || result.MaKh || result.Makh || result.manv || result.id || result.maKh || null,
+                    makh: result.makh || result.MaKh || result.Makh || result.maKh || result.id || null,
+                    customerId: result.customerId || result.makh || result.MaKh || result.id || null,
+                    makhachhang: result.makhachhang || result.makh || result.MaKh || result.id || null,
+                    name,
+                    email: result.email || result.Email || username,
+                    sdt: result.sdt || result.Sdt || result.phone || result.sodienthoai || null,
+                    role,
+                    loginTime: new Date().toISOString(),
+                };
+
+                console.log(' Stored currentUser (before customer lookup):', userData);
+
+                //  Tìm thông tin khách hàng đầy đủ từ API Khachhangs
+                if (role === "customer" && username) {
+                    try {
+                        console.log(' Looking up customer by email/phone:', username);
+                        const khResponse = await fetch(`${API_BASE}/Khachhangs`);
+                        if (khResponse.ok) {
+                            const allCustomers = await khResponse.json();
+                            const normalizePhone = (p) => (p || '').toString().replace(/[^\d]/g, '');
+                            const searchPhone = normalizePhone(username);
+                            const searchEmail = username.toLowerCase().trim();
+
+                            // Tìm khách hàng theo email hoặc sdt
+                            const customer = allCustomers.find(kh => {
+                                const khEmail = (kh.email || kh.Email || '').toLowerCase().trim();
+                                const khPhone = normalizePhone(kh.sdt || kh.Sdt || kh.sodienthoai);
+                                return khEmail === searchEmail || (searchPhone && khPhone === searchPhone);
+                            });
+
+                            if (customer) {
+                                console.log(' Found customer:', customer);
+                                Object.assign(userData, customer);
+                                // Gắn thông tin khách hàng vào userData
+                                userData.makh = customer.makh || customer.MaKh || customer.id || null;
+                                userData.id = customer.makh || customer.MaKh || customer.id || null;
+                                userData.customerId = customer.makh || customer.MaKh || customer.id || null;
+                                userData.makhachhang = customer.makh || customer.MaKh || customer.id || null;
+                                userData.email = customer.email || customer.Email || userData.email;
+                                userData.sdt = customer.sdt || customer.Sdt || userData.sdt;
+                                console.log(' Updated with customer ID:', userData.makh);
+                            } else {
+                                console.warn(' Customer not found in database');
+                            }
+                        }
+                    } catch (err) {
+                        console.error(' Error fetching customer info:', err);
+                    }
+                }
+
+                console.log(' Final currentUser saved to localStorage:', userData);
+                localStorage.setItem("currentUser", JSON.stringify(userData));
+                alert(` Xin chào ${name}!`);
+                window.location.href = redirect;
+            } catch (error) {
+                //console.error(" Lỗi khi đăng nhập:", error);
+                alert("Không thể kết nối đến server. Vui lòng kiểm tra lại!");
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Đăng nhập";
+            }
+        });
+
+        //  Nếu đã đăng nhập → tự động chuyển hướng
+        window.onload = function() {
+            const currentUser = localStorage.getItem("currentUser");
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                if (user.role === "admin") window.location.href = "admin-dashboard.html";
+                else if (user.role === "receptionist" || user.role === "manager")
+                    window.location.href = "../letan/letan_dashboard.html";
+                else window.location.href = "../khachhang/home.html";
+            }
+        };
+    </script>
+</body>
+
+</html>
