@@ -676,58 +676,25 @@ async function printBooking() {
                 @media print {
                     @page {
                         size: A4 portrait;
-                        margin: 15mm 15mm 15mm 15mm;
+                        margin: 20mm;
                     }
                     body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    * {
-                        page-break-inside: avoid;
+                        page-break-after: avoid;
                     }
                 }
                 body { 
                     font-family: 'Times New Roman', serif; 
-                    padding: 15px;
-                    color: #000;
-                    width: 100%;
-                    max-width: 190mm;
+                    padding:20px; 
+                    color:#000;
+                    max-width: 210mm;
                     margin: 0 auto;
-                    box-sizing: border-box;
                 }
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin-bottom: 15px;
-                    font-size: 13px;
-                }
-                td, th { 
-                    border: 1px solid #000; 
-                    padding: 6px 8px;
-                }
-                th { 
-                    background: #f3f3f3; 
-                }
-                h3, h4 { 
-                    text-align: center; 
-                    margin: 8px 0;
-                    font-size: 16px;
-                }
-                img { 
-                    display: block; 
-                    margin: auto; 
-                    height: 70px;
-                }
-                .center { 
-                    text-align: center; 
-                }
-                p {
-                    margin: 8px 0;
-                    font-size: 13px;
-                }
-                strong {
-                    font-size: 13px;
-                }
+                table { width:100%; border-collapse: collapse; margin-bottom: 20px; }
+                td, th { border: 1px solid #000; padding: 8px; }
+                th { background: #f3f3f3; }
+                h3, h4 { text-align:center; margin:10px 0; }
+                img { display:block; margin:auto; height:80px; }
+                .center { text-align:center; }
             </style>
         </head>
         <body>${printContent}</body>

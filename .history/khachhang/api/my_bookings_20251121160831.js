@@ -446,8 +446,8 @@ async function checkReviewStatus(madatphong) {
 
         // Kiểm tra xem khách hàng đã đánh giá cho ĐẶT PHÒNG NÀY chưa
         // Phải kiểm tra CẢ makh VÀ madatphong
-        const hasReviewed = allReviews.some(review =>
-            (review.makh === makhachhang || review.Makh === makhachhang) &&
+        const hasReviewed = allReviews.some(review => 
+            (review.makh === makhachhang || review.Makh === makhachhang) && 
             (review.madatphong === madatphong || review.Madatphong === madatphong)
         );
 

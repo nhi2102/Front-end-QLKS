@@ -65,36 +65,23 @@ window.BookingAPI = {
     // Lấy tiền đền bù thiệt hại theo mã đặt phòng
     async getDamageCompensation(madatphong) {
         try {
-            console.log('🔍 Đang lấy tiền đền bù cho booking:', madatphong);
             const res = await fetch(`${API_BASE_URL}/Denbuthiethais`);
-            if (!res.ok) {
-                console.warn('⚠️ API Denbuthiethais không OK:', res.status);
-                return 0;
-            }
-
+            if (!res.ok) return 0;
+            
             const allCompensations = await res.json();
-            console.log('📦 Tất cả đền bù từ API:', allCompensations);
-
-            const compensation = allCompensations.filter(c => {
-                const maDp = c.madatphong || c.Madatphong || c.MaDatPhong;
-                console.log(`   - Record: madatphong=${maDp}, so sánh với ${madatphong}, khớp: ${maDp == madatphong}`);
-                return maDp == madatphong;
-            });
-
-            console.log(`✅ Tìm thấy ${compensation.length} record đền bù cho booking ${madatphong}:`, compensation);
-
+            const compensation = allCompensations.filter(c => 
+                (c.madatphong || c.Madatphong) === madatphong
+            );
+            
             // Tính tổng tiền đền bù
             const total = compensation.reduce((sum, item) => {
-                const sotien = item.tongtien || item.Tongtien || item.TongTien ||
-                    item.sotien || item.Sotien || item.SoTien || 0;
-                console.log(`   💰 Cộng ${sotien} VNĐ (từ field: tongtien)`);
+                const sotien = item.sotien || item.Sotien || item.SoTien || 0;
                 return sum + sotien;
             }, 0);
-
-            console.log(`📊 Tổng tiền đền bù: ${total} VNĐ`);
+            
             return total;
         } catch (error) {
-            console.error('❌ Lỗi lấy tiền đền bù:', error);
+            console.error('Lỗi lấy tiền đền bù:', error);
             return 0;
         }
     }

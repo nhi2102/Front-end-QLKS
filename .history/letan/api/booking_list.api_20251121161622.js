@@ -71,26 +71,26 @@ window.BookingAPI = {
                 console.warn('⚠️ API Denbuthiethais không OK:', res.status);
                 return 0;
             }
-
+            
             const allCompensations = await res.json();
             console.log('📦 Tất cả đền bù từ API:', allCompensations);
-
+            
             const compensation = allCompensations.filter(c => {
                 const maDp = c.madatphong || c.Madatphong || c.MaDatPhong;
                 console.log(`   - Record: madatphong=${maDp}, so sánh với ${madatphong}, khớp: ${maDp == madatphong}`);
                 return maDp == madatphong;
             });
-
+            
             console.log(`✅ Tìm thấy ${compensation.length} record đền bù cho booking ${madatphong}:`, compensation);
-
+            
             // Tính tổng tiền đền bù
             const total = compensation.reduce((sum, item) => {
-                const sotien = item.tongtien || item.Tongtien || item.TongTien ||
-                    item.sotien || item.Sotien || item.SoTien || 0;
+                const sotien = item.tongtien || item.Tongtien || item.TongTien || 
+                              item.sotien || item.Sotien || item.SoTien || 0;
                 console.log(`   💰 Cộng ${sotien} VNĐ (từ field: tongtien)`);
                 return sum + sotien;
             }, 0);
-
+            
             console.log(`📊 Tổng tiền đền bù: ${total} VNĐ`);
             return total;
         } catch (error) {

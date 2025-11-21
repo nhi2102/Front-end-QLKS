@@ -646,12 +646,7 @@ async function printBooking() {
 
     document.getElementById('p_tienPhong').textContent = formatCurrency(selectedBooking.tienPhong || 0);
     document.getElementById('p_tienDichVu').textContent = formatCurrency(selectedBooking.tienDichVu || 0);
-    
-    // Kiểm tra element tồn tại trước khi set
-    const tienDenBuElement = document.getElementById('p_tienDenBu');
-    if (tienDenBuElement) {
-        tienDenBuElement.textContent = formatCurrency(damageCompensation);
-    }
+    document.getElementById('p_tienDenBu').textContent = formatCurrency(damageCompensation);
     
     // Tính lại tổng tiền bao gồm đền bù
     const totalWithDamage = (selectedBooking.tienPhong || 0) + (selectedBooking.tienDichVu || 0) + damageCompensation;
@@ -673,61 +668,13 @@ async function printBooking() {
         <head>
             <title>Phiếu Đặt Phòng #${selectedBooking.id}</title>
             <style>
-                @media print {
-                    @page {
-                        size: A4 portrait;
-                        margin: 15mm 15mm 15mm 15mm;
-                    }
-                    body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    * {
-                        page-break-inside: avoid;
-                    }
-                }
-                body { 
-                    font-family: 'Times New Roman', serif; 
-                    padding: 15px;
-                    color: #000;
-                    width: 100%;
-                    max-width: 190mm;
-                    margin: 0 auto;
-                    box-sizing: border-box;
-                }
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin-bottom: 15px;
-                    font-size: 13px;
-                }
-                td, th { 
-                    border: 1px solid #000; 
-                    padding: 6px 8px;
-                }
-                th { 
-                    background: #f3f3f3; 
-                }
-                h3, h4 { 
-                    text-align: center; 
-                    margin: 8px 0;
-                    font-size: 16px;
-                }
-                img { 
-                    display: block; 
-                    margin: auto; 
-                    height: 70px;
-                }
-                .center { 
-                    text-align: center; 
-                }
-                p {
-                    margin: 8px 0;
-                    font-size: 13px;
-                }
-                strong {
-                    font-size: 13px;
-                }
+                body { font-family: 'Times New Roman', serif; padding:20px; color:#000; }
+                table { width:100%; border-collapse: collapse; margin-bottom: 20px; }
+                td, th { border: 1px solid #000; padding: 8px; }
+                th { background: #f3f3f3; }
+                h3, h4 { text-align:center; margin:10px 0; }
+                img { display:block; margin:auto; height:80px; }
+                .center { text-align:center; }
             </style>
         </head>
         <body>${printContent}</body>
