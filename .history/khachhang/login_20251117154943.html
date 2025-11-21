@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href="../khachhang/css/account.css" />
+    <style>
+        .error-message {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            white-space: pre-line;
+        }
+        
+        .success-message {
+            color: #00C851;
+            background: rgba(0, 200, 81, 0.1);
+            border: 1px solid #00C851;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glass-container">
+        <h2>ĐĂNG NHẬP</h2>
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="text" id="username" required />
+                <label>Tên đăng nhập (Email hoặc SĐT)</label>
+            </div>
+            <div class="input-group">
+                <input type="password" id="password" required />
+                <label>Mật khẩu</label>
+            </div>
+            <div class="remember-forgot">
+                <label><input type="checkbox" /> Ghi nhớ tôi</label>
+                <a href="../khachhang/forgot.html">Quên mật khẩu?</a>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+
+            <button type="submit" class="login-btn">Đăng nhập</button>
+            <br /><br />
+            <div class="register-link">
+                Chưa có tài khoản? <a href="../khachhang/register.html">Đăng ký</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="../khachhang/api/login.js"></script>
+</body>
+
+</html>

@@ -1,3 +1,0 @@
-1. Lỗi thêm phòng mới, cập nhật phòng 
-2.Chi tiet dat phòng, hóa don lấy sai số phòng
-3. BÁO CÁO THỐNG KÊ LẤY NGÀY THỐNG KÊ SAI
