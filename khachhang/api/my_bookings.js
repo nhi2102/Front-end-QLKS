@@ -444,19 +444,15 @@ async function checkReviewStatus(madatphong) {
 
         const allReviews = await response.json();
 
-        // Kiểm tra xem khách hàng đã đánh giá cho ĐẶT PHÒNG NÀY chưa
-        // Phải kiểm tra CẢ makh VÀ madatphong
-        const hasReviewed = allReviews.some(review =>
-            (review.makh === makhachhang || review.Makh === makhachhang) &&
-            (review.madatphong === madatphong || review.Madatphong === madatphong)
-        );
+        // Kiểm tra xem khách hàng đã đánh giá cho đặt phòng này chưa
+        // (Tạm thời check theo makh, sau này có thể thêm field madatphong vào Reviews)
+        const hasReviewed = allReviews.some(review => review.makh === makhachhang);
 
         if (hasReviewed) {
-            console.log(`✅ Đặt phòng ${madatphong} đã được khách hàng ${makhachhang} đánh giá`);
+            console.log(` Khách hàng ${makhachhang} đã có đánh giá`);
             return true;
         }
 
-        console.log(`⭕ Đặt phòng ${madatphong} chưa được đánh giá`);
         return false;
 
     } catch (error) {

@@ -560,14 +560,14 @@ function generateChucVuOptions(selectedMaChucVu) {
 
 function getStaffAccountFormContent(account) {
     const isEditMode = !!account;
-    const username = account ? account.email : '';
-    const fullname = account ? account.hoten : '';
-    const sdt = account ? account.sdt : '';
-    const ngaysinh = account && account.ngaysinh ? account.ngaysinh.split('T')[0] : '';
-    const gioitinh = account ? account.gioitinh || 'Nam' : 'Nam';
-    const diachi = account ? account.diachi : '';
-    const machucvu = account ? account.machucvu : null;
-    const status = account ? account.trangthai : 'Hoạt động';
+    const username = account ? .email || '';
+    const fullname = account ? .hoten || '';
+    const sdt = account ? .sdt || '';
+    const ngaysinh = account ? .ngaysinh ? account.ngaysinh.split('T')[0] : '';
+    const gioitinh = account ? .gioitinh || 'Nam';
+    const diachi = account ? .diachi || '';
+    const machucvu = account ? .machucvu || null;
+    const status = account ? .trangthai || 'Hoạt động';
     const chucVuOptions = generateChucVuOptions(machucvu);
 
     let passwordSection = '';
@@ -671,14 +671,14 @@ function getStaffAccountFormContent(account) {
 
 function getCustomerAccountFormContent(account) {
     const isEditMode = !!account;
-    const username = account && account.email ? account.email : '';
-    const fullname = account && account.hoten ? account.hoten : '';
-    const phone = account && account.sdt ? account.sdt : '';
-    const ngaysinh = (account && account.ngaysinh) ? account.ngaysinh.split('T')[0] : '';
-    const diachi = account && account.diachi ? account.diachi : '';
-    const cccd = account && account.cccd ? account.cccd : '';
-    const status = account && account.trangthai ? account.trangthai : 'Hoạt động';
-    const memberPoints = (account && typeof account.diemthanhvien !== 'undefined') ? account.diemthanhvien : 0;
+    const username = account ? .email || '';
+    const fullname = account ? .hoten || '';
+    const phone = account ? .sdt || '';
+    const ngaysinh = account ? .ngaysinh ? account.ngaysinh.split('T')[0] : '';
+    const diachi = account ? .diachi || '';
+    const cccd = account ? .cccd || '';
+    const status = account ? .trangthai || 'Hoạt động';
+    const memberPoints = account ? .diemthanhvien || 0;
 
     let passwordSection = '';
     if (isEditMode) {
@@ -834,7 +834,7 @@ function attachSaveResetEmailHandler() {
     btn.parentNode.replaceChild(newBtn, btn);
 
     newBtn.addEventListener("click", async function() {
-        const id = currentRowBeingEdited ? currentRowBeingEdited.dataset.id : null;
+        const id = currentRowBeingEdited ? .dataset.id;
         if (!id) {
             showEmailMsg("Lỗi: Không tìm thấy ID tài khoản.", true);
             return;
@@ -927,10 +927,7 @@ async function validateForm() {
     const idKey = isStaff ? 'manv' : 'makh';
 
     // Lấy ID hiện tại (chỉ cần khi sửa)
-    let currentId = null;
-    if (currentRowBeingEdited && currentRowBeingEdited.dataset && currentRowBeingEdited.dataset.id) {
-        currentId = String(currentRowBeingEdited.dataset.id);
-    }
+    const currentId = currentRowBeingEdited ? .dataset.id;
 
     // --- XỬ LÝ EMAIL (USERNAME) ---
     const usernameInput = document.getElementById('username');
@@ -968,7 +965,7 @@ async function validateForm() {
     // --- XỬ LÝ HỌ VÀ TÊN (FULL NAME) ---
     const fullnameInput = document.getElementById('fullname');
     const fullname = fullnameInput ? fullnameInput.value.trim() : '';
-    const fullnameError = fullnameInput ? fullnameInput.nextElementSibling : null;
+    const fullnameError = fullnameInput ? .nextElementSibling; // Giả sử error text nằm ngay sau input
 
     if (fullnameInput && fullnameError) {
         if (!fullname) {
@@ -1058,11 +1055,8 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
     const totalBooking = datphongs.reduce((s, i) => s + (i.tongtien || 0), 0);
     const totalPayment = thanhtoans.reduce((s, i) => s + (i.sotien || 0), 0);
     const totalCompensation = denbus.reduce((s, i) => s + (i.tongtien || 0), 0);
-    const manv = (datphongs && datphongs[0] && datphongs[0].manv) ||
-        (thanhtoans && thanhtoans[0] && thanhtoans[0].manv) ||
-        (denbus && denbus[0] && denbus[0].manv) ||
-        'N/A';
-    const role = (datphongs && datphongs[0] && datphongs[0].machucvuNavigation && datphongs[0].machucvuNavigation.tenchucvu) || 'Nhân viên';
+    const manv = datphongs[0] ? .manv || thanhtoans[0] ? .manv || denbus[0] ? .manv || 'N/A';
+    const role = datphongs[0] ? .machucvuNavigation ? .tenchucvu || 'Nhân viên';
 
     const template = document.getElementById('staff-activity-template');
     const content = template.content.cloneNode(true);
@@ -1107,7 +1101,6 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
                 <tr>
                     <td><strong>#${db.madenbu}</strong></td>
                     <td><strong><span class="badge bg-secondary">#${db.madatphong}</span></strong></td>
-                    <td>${db.maphong}</td>
                     <td>${tenThietBi}</td>
                     <td class="text-center fw-bold">${db.soluong}</td>
                     <td class="text-end">
@@ -1214,12 +1207,7 @@ async function showCustomerDetail(customer) {
             }
 
             total += (b.totalAmount || 0);
-            let statusClass = 'warning';
-            if (b.status && b.status.includes('Đã')) {
-                statusClass = 'success';
-            } else if (b.status && b.status.includes('Hủy')) {
-                statusClass = 'danger';
-            }
+            const statusClass = b.status ? .includes('Đã') ? 'success' : (b.status ? .includes('Hủy') ? 'danger' : 'warning');
             const roomNumbers = b.rooms.map(r => r.number).filter(Boolean);
             const roomList = roomNumbers.length > 0 ? roomNumbers.join(', ') : 'Chưa có phòng';
             const rowStyle = `style="border-bottom: 1px solid #eee; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f9f9f9'" onmouseout="this.style.backgroundColor='transparent'"`;
@@ -1289,21 +1277,16 @@ async function showCustomerDetail(customer) {
     }, 100);
 }
 // Gắn kiểm tra real-time
-const modalEl = document.getElementById('modal');
-if (modalEl) {
-    modalEl.addEventListener('input', function(e) {
-        const target = e.target;
-        if (!target) return;
+document.getElementById('modal') ? .addEventListener('input', function(e) {
+    const target = e.target;
 
-        // Chỉ cho số + cắt 10 số
-        if (target.matches('#sdt, #phone')) {
-            target.value = target.value.replace(/\D/g, '').slice(0, 10);
-        }
+    // Chỉ cho số + cắt 10 số
+    if (target.matches('#sdt, #phone')) {
+        target.value = target.value.replace(/\D/g, '').slice(0, 10);
+    }
 
-        // Kiểm tra real-time
-        if (target.matches('#username, #sdt, #phone, #reset-email')) {
-            // Không await để không block UI
-            validateForm().catch(() => {});
-        }
-    });
-}
+    // Kiểm tra real-time
+    if (target.matches('#username, #sdt, #phone, #reset-email')) {
+        validateForm();
+    }
+});

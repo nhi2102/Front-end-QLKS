@@ -213,3 +213,63 @@ export async function sendPasswordReset(email) {
         throw err;
     }
 }
+
+// ✅ CHÍNH XÁC - Lấy đặt phòng do nhân viên thực hiện
+export async function getDatphongByStaff(manv) {
+    // Backend hiện tại KHÔNG có endpoint /staff/{id}
+    // Nhưng khi gọi GET /api/Datphongs → nó trả toàn bộ + có trường "manv"
+    // → Ta gọi toàn bộ rồi filter ở client (cách nhanh nhất & ổn định)
+    const response = await fetch(`${API_BASE_URL}/api/Datphongs`);
+    if (!response.ok) throw new Error("Không tải được danh sách đặt phòng");
+    const all = await response.json();
+    return all.filter(dp => Number(dp.manv) === Number(manv));
+}
+
+// ✅ CHÍNH XÁC - Lấy thanh toán do nhân viên thực hiện
+export async function getThanhtoanByStaff(manv) {
+    // Endpoint này đã đúng rồi, nhưng để đồng bộ và an toàn hơn:
+    const response = await fetch(`${API_BASE_URL}/api/Payment`);
+    if (!response.ok) throw new Error("Không tải được danh sách thanh toán");
+    const all = await response.json();
+    return all.filter(tt => Number(tt.manv) === Number(manv));
+}
+
+// ✅ CHÍNH XÁC - Lấy đền bù do nhân viên xử lý
+export async function getDenbuByStaff(manv) {
+    const response = await fetch(`${API_BASE_URL}/api/Denbuthiethais`);
+    if (!response.ok) throw new Error("Không tải được danh sách đền bù");
+    const all = await response.json();
+    return all.filter(db => Number(db.manv) === Number(manv));
+}
+
+let thietBiCache = null;
+
+export async function getDanhSachThietBi() {
+    if (thietBiCache) return thietBiCache;
+
+    try {
+        const data = await apiRequest(`${API_BASE_URL}/api/Thietbikhachsans`);
+        thietBiCache = data;
+        console.log('Đã tải danh sách thiết bị:', data);
+        return data;
+    } catch (error) {
+        console.error('Lỗi tải thiết bị:', error);
+        return [];
+    }
+}
+
+export async function getTenThietBi(mathietbi) {
+    if (!mathietbi) return 'Thiết bị hỏng';
+    const ds = await getDanhSachThietBi();
+    const tb = ds.find(item => item.mathietbi === mathietbi);
+    return tb ? tb.tenthietbi : 'Thiết bị hỏng';
+}
+
+export async function getThietBiInfo(mathietbi) {
+    if (!mathietbi) return null;
+    const ds = await getDanhSachThietBi();
+    return ds.find(item => item.mathietbi === mathietbi) || null;
+}
+
+// Tự động tải trước
+getDanhSachThietBi();

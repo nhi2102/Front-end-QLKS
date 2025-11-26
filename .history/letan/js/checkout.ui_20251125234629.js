@@ -343,12 +343,17 @@ async function handleEquipmentStatusChange() {
     }
 }
 
-// Thêm event listener cho checkbox phòng
-document.addEventListener('change', (e) => {
-    if (e.target.classList.contains('room-check')) {
-        handleEquipmentSelectionChange();
-    }
-});
+// Hàm tăng/giảm số lượng
+function changeQty(btn, delta) {
+    const input = btn.parentElement.querySelector('.equipment-qty');
+    let value = parseInt(input.value) || 1;
+    value = Math.max(1, value + delta);
+    input.value = value;
+
+    // Kích hoạt sự kiện change nếu bạn có tính lại tiền
+    input.dispatchEvent(new Event('change'));
+    handleEquipmentSelectionChange();
+}
 
 
 
@@ -360,11 +365,11 @@ function handleEquipmentSelectionChange() {
         const extraFields = item.querySelector('.equipment-extra');
 
         if (checkbox.checked) {
-            extraFields.style.display = 'block';
+            extraFields.style.display = 'inline-flex';
+            extraFields.style.gap = '10px';
+            extraFields.style.alignItems = 'center';
         } else {
             extraFields.style.display = 'none';
-            // Bỏ chọn tất cả phòng khi bỏ tick thiết bị
-            item.querySelectorAll('.room-check').forEach(rc => rc.checked = false);
         }
     });
 
@@ -372,14 +377,12 @@ function handleEquipmentSelectionChange() {
     let total = 0;
     document.querySelectorAll('.equipment-check:checked').forEach(cb => {
         const price = parseFloat(cb.dataset.price || 0);
-        const item = cb.closest('.equipment-item');
-        
-        // Đếm số phòng được chọn
-        const selectedRooms = item.querySelectorAll('.room-check:checked');
-        const roomCount = selectedRooms.length;
-        
-        // Tổng tiền = đơn giá × số phòng
-        total += price * roomCount;
+        const qtyInput = cb.closest('.equipment-item').querySelector('.equipment-qty');
+        let qty = 1;
+        if (qtyInput && qtyInput.value) {
+            qty = parseInt(qtyInput.value, 10) || 1;
+        }
+        total += price * qty;
     });
 
     // Gán tổng vào phần hiển thị và lưu dataset
@@ -388,10 +391,9 @@ function handleEquipmentSelectionChange() {
         compEl.textContent = formatCurrency(total);
         compEl.dataset.value = total;
     }
-    
-    if (currentBooking) {
-        calculateTotal(currentBooking.maDatPhong);
-    }
+    calculateTotal(currentBooking.maDatPhong);
+
+
 }
 
 
@@ -480,17 +482,14 @@ async function handleCheckout() {
         const damagedItems = [];
         document.querySelectorAll('.equipment-check:checked').forEach(cb => {
             const item = cb.closest('.equipment-item');
-            const selectedRooms = item.querySelectorAll('.room-check:checked');
-            
-            // Tạo 1 bản ghi đền bù cho mỗi phòng được chọn
-            selectedRooms.forEach(roomCheckbox => {
-                damagedItems.push({
-                    mathietbi: cb.value,
-                    madatphong: bookingId,
-                    soluong: 1, // Mỗi phòng 1 thiết bị
-                    maphong: roomCheckbox.value,
-                    manv: manv
-                });
+            const qty = parseInt(item.querySelector('.equipment-qty').value) || 1;
+            const room = item.querySelector('.equipment-room').value;
+            damagedItems.push({
+                mathietbi: cb.value,
+                madatphong: bookingId,
+                soluong: qty,
+                maphong: room,
+                manv: manv // Thêm mã nhân viên
             });
         });
 

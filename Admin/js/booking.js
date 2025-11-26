@@ -77,6 +77,7 @@ function renderBookings(bookings) {
                 </button>
             </td>
         `;
+        row.dataset.allRooms = booking.allRoomNumbers || booking.roomNumber || 'Chưa có';
         tbody.appendChild(row);
     });
 }
@@ -180,10 +181,33 @@ function renderBookings(bookings) {
         loadBookings(date, query); // Gọi hàm đã sửa
     });
 
-    document.getElementById('invoice-search-btn')?.addEventListener('click', () => {
-        const query = document.getElementById('invoice-search').value.trim();
-        loadInvoices(query);
-    });
+    // document.getElementById('invoice-search-btn')?.addEventListener('click', () => {
+    //     const query = document.getElementById('invoice-search').value.trim();
+    //     loadInvoices(query);
+    // });
+
+
+    // TÌM KIẾM HÓA ĐƠN REALTIME (gõ là ra)
+// TÌM KIẾM HÓA ĐƠN REALTIME – GIỐNG HỆT TAB ĐẶT PHÒNG
+    const invoiceSearchInput = document.getElementById('invoice-search');
+    if (invoiceSearchInput) {
+        let timeout = null;
+        invoiceSearchInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                const query = invoiceSearchInput.value.trim();
+                loadInvoices(query);
+            }, 300);
+        });
+
+        // Nhấn Enter cũng tìm luôn
+        invoiceSearchInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter') {
+                clearTimeout(timeout);
+                loadInvoices(invoiceSearchInput.value.trim());
+            }
+        });
+    }
 
     // === XEM CHI TIẾT ===
     document.addEventListener('click', async e => {
@@ -232,7 +256,16 @@ if (btn.dataset.action === 'view-booking') {
                         <p><strong>SĐT:</strong> ${booking.customerPhone}</p>
                         <p><strong>CCCD:</strong> ${booking.customerIdCard}</p>
                         <p><strong>Email:</strong> ${booking.customerEmail}</p>
-                    </div>
+                                        <!-- GHI CHÚ: CHỈ HIỂN THỊ KHI HOÀN TIỀN -->
+                ${booking.paymentStatus === 'refunded' && booking.ghichu 
+                    ? `<p><strong>Lý do hủy phòng:</strong></p>
+                <div style="background:#ebf8ff;padding:0.75rem 1rem;border-radius:0.5rem;border-left:4px solid #3182ce;margin-top:0.5rem;font-weight:500;">
+
+                           ${booking.ghichu}
+                       </div>`
+                    : ''
+                }
+                        </div>
                 </div>
 
                 <!-- ĐẶT PHÒNG -->
@@ -241,19 +274,19 @@ if (btn.dataset.action === 'view-booking') {
                         Thông tin đặt phòng
                     </h4>
                     <div style="display:grid;gap:.5rem;">
-<p><strong>Phòng đã đặt:</strong></p>
-<div style="background:#ebf8ff;padding:0.75rem 1rem;border-radius:0.5rem;border-left:4px solid #3182ce;margin-top:0.5rem;font-weight:500;">
-${(() => {
-    const rooms = Array.isArray(booking.rooms) ? booking.rooms : [];
-    if (rooms.length === 0) return '<em style="color:#a0aec0;">Chưa có phòng</em>';
-    return rooms.map(r => 
-        `<span style="font-weight:600;color:#2b6cb0;">${r.number || 'N/A'}</span>`
-    ).join(' • ');
-})()}
-<span style="margin-left:0.75rem;color:#718096;font-size:0.9em;">
-    (${Array.isArray(booking.rooms) ? booking.rooms.length : 0} phòng)
-</span>
-</div>
+                <p><strong>Phòng đã đặt:</strong></p>
+                <div style="background:#ebf8ff;padding:0.75rem 1rem;border-radius:0.5rem;border-left:4px solid #3182ce;margin-top:0.5rem;font-weight:500;">
+                ${(() => {
+                    const rooms = Array.isArray(booking.rooms) ? booking.rooms : [];
+                    if (rooms.length === 0) return '<em style="color:#a0aec0;">Chưa có phòng</em>';
+                    return rooms.map(r => 
+                        `<span style="font-weight:600;color:#2b6cb0;">${r.number || 'N/A'}</span>`
+                    ).join(' • ');
+                })()}
+                <span style="margin-left:0.75rem;color:#718096;font-size:0.9em;">
+                    (${Array.isArray(booking.rooms) ? booking.rooms.length : 0} phòng)
+                </span>
+                </div>
                         <p><strong>Nhận phòng:</strong> ${formatDateOnly(booking.checkInDate)}</p>
                         <p><strong>Trả phòng:</strong> ${formatDateOnly(booking.checkOutDate)}</p>
                         <p><strong>Ngày đặt:</strong> ${formatDateOnly(booking.bookingDateTime)}</p>
@@ -267,16 +300,24 @@ ${(() => {
                                 ${booking.status}
                             </span>
                         </p>
-
+                        <!-- NGÀY HỦY: CHỈ HIỂN THỊ KHI ĐÃ HỦY -->
+                        ${booking.status === 'Đã hủy' && booking.ngayhuy 
+                            ? `<p><strong>Ngày hủy:</strong> 
+                                <span style="color:#e53e3e;font-weight:600;">
+                                    ${formatDateOnly(booking.ngayhuy)}
+                                </span>
+                            </p>`
+                            : ''
+                        }
                     </div>
                 </div>
             </div>
 
-            <div class="modal-form-footer" style="margin-top:1.5rem;text-align:right;">
+           <!-- <div class="modal-form-footer" style="margin-top:1.5rem;text-align:right;">
                 <button class="btn btn-secondary" onclick="document.getElementById('modal').classList.remove('show')">
                     Đóng
                 </button>
-            </div>
+            </div>-->
         `);
     } catch (err) {
         console.error('Lỗi:', err);
@@ -383,55 +424,60 @@ ${(() => {
     loadBookings(today);
 });
 
-// === XUẤT EXCEL ===
+// === XUẤT EXCEL – HIỆN ĐẦY ĐỦ TẤT CẢ PHÒNG, ỔN ĐỊNH 100% (KHÔNG GỌI API LẠI) ===
 document.getElementById('export-excel-btn')?.addEventListener('click', () => {
-    // Lấy dữ liệu từ bảng hiện tại (hoặc load tất cả nếu cần)
-    const table = document.getElementById('booking-table-body');
-    if (table.children.length === 0 || table.innerHTML.includes('Không có dữ liệu')) {
+    const tableBody = document.getElementById('booking-table-body');
+    const rowsInTable = tableBody.querySelectorAll('tr');
+
+    if (rowsInTable.length === 0 || tableBody.innerHTML.includes('Không có dữ liệu')) {
         alert('Không có dữ liệu để xuất!');
         return;
     }
 
-    // Tạo dữ liệu từ bảng (hoặc từ cache nếu có)
-    const rows = [];
-    const header = ['Mã ĐP', 'Khách hàng', 'Số phòng', 'Ngày nhận', 'Ngày trả', 'Ngày đặt', 'Thanh toán'];
+    const header = ['Mã ĐP', 'Khách hàng', 'Số phòng', 'Ngày nhận', 'Ngày trả', 'Ngày đặt', 'Trạng thái'];
+    const dataRows = [header];
 
-    // Lấy từ rows hiện tại
-    Array.from(table.querySelectorAll('tr')).forEach(row => {
-        const cells = Array.from(row.querySelectorAll('td'));
-        if (cells.length >= 7) {
-            rows.push([
-                cells[0].textContent.trim(),
-                cells[1].textContent.trim(),
-                cells[2].textContent.trim(),
-                cells[3].textContent.trim(),
-                cells[4].textContent.trim(),
-                cells[5].textContent.trim(),
-                cells[6].textContent.trim()
-            ]);
-        }
+    rowsInTable.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 7) return;
+
+        // Lấy dữ liệu hiển thị bình thường
+        const maDP = cells[0].textContent.trim();
+        const khachHang = cells[1].textContent.trim();
+        const ngayNhan = cells[3].textContent.trim();
+        const ngayTra = cells[4].textContent.trim();
+        const ngayDat = cells[5].textContent.trim();
+        const trangThai = cells[6].querySelector('.status-badge')?.textContent.trim() || 'N/A';
+
+        // QUAN TRỌNG: LẤY DANH SÁCH PHÒNG ĐẦY ĐỦ TỪ data-attribute đã lưu khi render
+        const fullRoomList = row.dataset.allRooms || cells[2].textContent.trim();
+
+        dataRows.push([
+            maDP,
+            khachHang,
+            fullRoomList,        // ← ĐÂY LÀ ĐẦY ĐỦ, KHÔNG BỊ CẮT!
+            ngayNhan,
+            ngayTra,
+            ngayDat,
+            trangThai
+        ]);
     });
 
-    if (rows.length === 0) {
-        alert('Không có dữ liệu để xuất!');
-        return;
-    }
-
-    // Tạo workbook với SheetJS
+    // Tạo file Excel
     const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+    const ws = XLSX.utils.aoa_to_sheet(dataRows);
 
     // Tự động điều chỉnh độ rộng cột
-    const colWidths = header.map(h => ({ wch: Math.max(10, h.length + 2) }));
-    ws['!cols'] = colWidths;
+    ws['!cols'] = [
+        { wch: 12 }, { wch: 25 }, { wch: 45 }, 
+        { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 15 }
+    ];
 
-    XLSX.utils.book_append_sheet(wb, ws, 'DanhSachDonDatPhong');
+    XLSX.utils.book_append_sheet(wb, ws, 'DanhSachDatPhong');
 
-    // Tạo tên file với timestamp
     const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-').replace('T', '_');
-    const filename = `DonDatPhong_${timestamp}.xlsx`;
+    const filename = `DanhSachDatPhong_${timestamp}.xlsx`;
 
-    // Tải file
     XLSX.writeFile(wb, filename);
-    alert(`Đã xuất thành công: ${filename}`);
+    alert(`Đã xuất thành công ${dataRows.length - 1} đặt phòng!\nFile: ${filename}`);
 });

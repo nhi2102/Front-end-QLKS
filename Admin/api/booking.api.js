@@ -26,6 +26,28 @@ async function fetchAllRooms() {
     }
 }
 
+function formatDateOnly(isoString) {
+    if (!isoString) return '';
+    try {
+        const date = new Date(isoString);
+        const d = String(date.getDate()).padStart(2, '0');
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const y = date.getFullYear();
+        return `${d}/${m}/${y}`;
+    } catch {
+        return '';
+    }
+}
+
+// function formatDateOnly(isoString) {
+//     if (!isoString) return '';
+//     try {
+//         const d = new Date(isoString);
+//         return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+//     } catch {
+//         return '';
+//     }
+// }
 
 export async function fetchBookingsByDate(date, query = '') {
     try {
@@ -79,6 +101,7 @@ export async function fetchBookingsByDate(date, query = '') {
         id: b.madatphong,
         customerName: b.tenKhachHang || customer.hoten || 'N/A',
         roomNumber: displayRooms, // ĐÃ SỬA
+    allRoomNumbers: roomNumbers.join(' • '),     // ← ĐẦY ĐỦ, dùng để xuất Excel
         checkInDate: b.ngaynhanphong,
         checkOutDate: b.ngaytraphong,
         bookingDateTime: b.ngaydat,
@@ -138,8 +161,16 @@ export async function fetchBookingDetails(id) {
             checkOutDate: booking.ngaytraphong,
             bookingDateTime: booking.ngaydat,
             totalAmount: booking.tongtien || 0,
-            status: booking.trangthai || 'Không xác định'
-        };
+            status: booking.trangthai || 'Không xác định',
+            paymentStatus: (() => {
+                const tt = (booking.trangthaithanhtoan || '').trim();
+                if (tt === 'Đã thanh toán') return 'paid';
+                if (tt === 'Hoàn tiền / Đã xử lý') return 'refunded';
+                return 'unpaid';
+            })(),
+            ghichu: booking.ghichu || null,
+            ngayhuy: booking.ngayhuy || null
+            };
     } catch (err) {
         console.error('Lỗi chi tiết đặt phòng:', err);
         throw err;
@@ -160,7 +191,7 @@ export async function fetchChiTietHoaDons() {
     }
 }
 // === 4. LẤY DANH SÁCH HÓA ĐƠN ===
-export async function fetchInvoices(date, query = '') {
+export async function fetchInvoices(query = '') {
     try {
         const [invoicesRes, bookingsRes, customersRes, chitietRes] = await Promise.all([
             fetch(`${API_BASE}/Hoadons`),
@@ -176,51 +207,70 @@ export async function fetchInvoices(date, query = '') {
             chitietRes.json()
         ]);
 
-// Tính tiền phòng + dịch vụ theo từng hóa đơn
+        // Tính tiền phòng + dịch vụ
         const chiTietMap = {};
         chitiet.forEach(ct => {
-            if (!chiTietMap[ct.mahoadon]) {
-                chiTietMap[ct.mahoadon] = { tienPhong: 0, tienDichVu: 0 };
-            }
+            if (!chiTietMap[ct.mahoadon]) chiTietMap[ct.mahoadon] = { tienPhong: 0, tienDichVu: 0 };
             if (ct.loaiphi === 'Tiền phòng') chiTietMap[ct.mahoadon].tienPhong += ct.dongia;
             if (ct.loaiphi === 'Dịch vụ') chiTietMap[ct.mahoadon].tienDichVu += ct.dongia;
         });
 
+        let result = invoices;
 
-        return invoices
-            .filter(inv => {
-                const matchDate = !date || (inv.ngaylap && inv.ngaylap.startsWith(date));
-                const search = query.toLowerCase();
-                const matchQuery = !query ||
-                    inv.mahoadon.toString().includes(query) ||
-                    inv.madatphong.toString().includes(query);
-                return matchDate && matchQuery;
-            })
-            .map(inv => {
-                const booking = bookings.find(b => b.madatphong === inv.madatphong) || {};
-                const customer = customers.find(c => c.makh === booking.makh) || {};
-                const chiTiet = chiTietMap[inv.mahoadon] || { tienPhong: 0, tienDichVu: 0 };
-                const trangThaiThanhToan = (booking.trangthaithanhtoan || '').trim();
+// TÌM KIẾM HOÀN HẢO: TÌM NGÀY RA NGÀY | TÌM MÃ RA MÃ (CÓ HOẶC KHÔNG PREFIX, IGNORE CASE)
+if (query && query.trim() !== '') {
+    const q = query.trim().toLowerCase();
+    result = invoices.filter(inv => {
+        const booking = bookings.find(b => b.madatphong === inv.madatphong) || {};
+        const customer = customers.find(c => c.makh === booking.makh) || {};
 
-                let paymentStatus = 'unpaid';
-                if (trangThaiThanhToan === 'Đã thanh toán') paymentStatus = 'paid';
-                else if (trangThaiThanhToan === 'Hoàn tiền / Đã xử lý') paymentStatus = 'refunded';
+        // 1. TÌM THEO MÃ HD HOẶC DP (hỗ trợ prefix HD/DP hoặc chỉ số, ignore case)
+        const maHD = String(inv.mahoadon || '').toLowerCase();
+        const maDP = String(inv.madatphong || '').toLowerCase();
+        
+        const fullMaHD = `hd${maHD}`; // Tạo chuỗi có prefix
+        const fullMaDP = `dp${maDP}`; // Tạo chuỗi có prefix
+        
+        const matchMa = 
+            maHD.includes(q) || fullMaHD.includes(q) ||  // Match mã HD
+            maDP.includes(q) || fullMaDP.includes(q);   // Match mã DP
 
-                return {
-                    mahoadon: inv.mahoadon,
-                    madatphong: inv.madatphong,
-                    customerName: customer.hoten || customer.tenkhachhang || 'N/A',
-                    ngaylap: inv.ngaylap,
-                    tongtien: inv.tongtien,
-                    tienPhong: chiTiet.tienPhong,
-                    tienDichVu: chiTiet.tienDichVu,
-                    paymentStatus,
-                    trangThaiText: trangThaiThanhToan
-                };
-            });
+        // 2. TÌM THEO TÊN, SĐT, CCCD (ignore case cho tên)
+        const matchCustomer = 
+            (customer.hoten || '').toLowerCase().includes(q) ||
+            (customer.sodienthoai || customer.sdt || '').includes(q) ||
+            (customer.cccd || '').includes(q);
+
+        // 3. TÌM THEO NGÀY LẬP (chuẩn dd/mm/yyyy)
+        const matchNgay = formatDateOnly(inv.ngaylap).includes(q);
+
+        return matchMa || matchCustomer || matchNgay;
+    });
+}
+
+        return result.map(inv => {
+            const booking = bookings.find(b => b.madatphong === inv.madatphong) || {};
+            const customer = customers.find(c => c.makh === booking.makh) || {};
+            const chiTiet = chiTietMap[inv.mahoadon] || { tienPhong: 0, tienDichVu: 0 };
+            const tt = (booking.trangthaithanhtoan || '').trim();
+
+            let paymentStatus = 'unpaid';
+            if (tt === 'Đã thanh toán') paymentStatus = 'paid';
+            else if (tt.includes('Hoàn tiền')) paymentStatus = 'refunded';
+
+            return {
+                mahoadon: inv.mahoadon,
+                madatphong: inv.madatphong,
+                customerName: customer.hoten || 'N/A',
+                ngaylap: inv.ngaylap,
+                tongtien: inv.tongtien,
+                paymentStatus
+            };
+        });
+
     } catch (err) {
-        console.error('Lỗi fetch hóa đơn:', err);
-        throw err;
+        console.error('Lỗi load hóa đơn:', err);
+        return [];
     }
 }
 

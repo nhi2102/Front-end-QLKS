@@ -116,7 +116,7 @@ async function loadBookings() {
         displayBookings();
 
     } catch (err) {
-        console.error("❌ Lỗi tải đặt phòng:", err);
+        console.error(" Lỗi tải đặt phòng:", err);
         //showError("Không thể tải danh sách đặt phòng từ máy chủ.");
     }
 }
@@ -262,7 +262,7 @@ function getActionButtons(b) {
 // Chi tiết & Hủy
 // ============================
 
-async function viewBookingDetail(id) {
+function viewBookingDetail(id) {
     selectedBooking = allBookings.find(b => b.id == id);
     if (!selectedBooking) return;
 
@@ -280,22 +280,15 @@ async function viewBookingDetail(id) {
     document.getElementById('modalCheckin').textContent = formatDate(selectedBooking.checkinDate);
     document.getElementById('modalCheckout').textContent = formatDate(selectedBooking.checkoutDate);
 
-    // 💰 Lấy tiền đền bù thiệt hại từ API
-    const damageCompensation = await BookingAPI.getDamageCompensation(id);
-    console.log('💵 Tiền đền bù nhận được:', damageCompensation);
-
     //  Dữ liệu tiền phòng và dịch vụ
     const roomPrice = selectedBooking.tienPhong || selectedBooking.TienPhong || 0;
     const serviceFee = selectedBooking.tienDichVu || selectedBooking.TienDichVu || 0;
-    const total = selectedBooking.totalAmount || selectedBooking.TongTien || roomPrice + serviceFee + damageCompensation;
+    const total = selectedBooking.totalAmount || selectedBooking.TongTien || roomPrice + serviceFee;
     const paid = (selectedBooking.paymentStatus === 'Đã thanh toán') ? total : 0;
     const remaining = total - paid;
 
-    console.log('📊 Chi tiết thanh toán:', { roomPrice, serviceFee, damageCompensation, total });
-
     document.getElementById('modalRoomPrice').textContent = formatCurrency(roomPrice);
     document.getElementById('modalServiceFee').textContent = formatCurrency(serviceFee);
-    document.getElementById('modalDamageCompensation').textContent = formatCurrency(damageCompensation);
     document.getElementById('modalGrandTotal').textContent = formatCurrency(total);
     document.getElementById('modalPaid').textContent = formatCurrency(paid);
     document.getElementById('modalRemaining').textContent = formatCurrency(remaining);
@@ -619,14 +612,11 @@ function changePage(page) {
 function refreshBookings() { loadBookings(); }
 
 //in phiếu
-async function printBooking() {
+function printBooking() {
     if (!selectedBooking) {
         alert("Vui lòng chọn đặt phòng để in.");
         return;
     }
-
-    // 🔹 Lấy tiền đền bù từ API
-    const damageCompensation = await BookingAPI.getDamageCompensation(selectedBooking.id);
 
     // 🔹 Gán dữ liệu vào template
     document.getElementById('p_maDatPhong').textContent = selectedBooking.id;
@@ -646,16 +636,7 @@ async function printBooking() {
 
     document.getElementById('p_tienPhong').textContent = formatCurrency(selectedBooking.tienPhong || 0);
     document.getElementById('p_tienDichVu').textContent = formatCurrency(selectedBooking.tienDichVu || 0);
-    
-    // Kiểm tra element tồn tại trước khi set
-    const tienDenBuElement = document.getElementById('p_tienDenBu');
-    if (tienDenBuElement) {
-        tienDenBuElement.textContent = formatCurrency(damageCompensation);
-    }
-    
-    // Tính lại tổng tiền bao gồm đền bù
-    const totalWithDamage = (selectedBooking.tienPhong || 0) + (selectedBooking.tienDichVu || 0) + damageCompensation;
-    document.getElementById('p_tongTien').textContent = formatCurrency(totalWithDamage);
+    document.getElementById('p_tongTien').textContent = formatCurrency(selectedBooking.totalAmount || 0);
 
     document.getElementById('p_ghiChu').textContent = selectedBooking.notes || "Không có ghi chú";
     document.getElementById('p_ngayIn').textContent = formatDateTime(new Date());
@@ -673,61 +654,13 @@ async function printBooking() {
         <head>
             <title>Phiếu Đặt Phòng #${selectedBooking.id}</title>
             <style>
-                @media print {
-                    @page {
-                        size: A4 portrait;
-                        margin: 15mm 15mm 15mm 15mm;
-                    }
-                    body {
-                        margin: 0;
-                        padding: 0;
-                    }
-                    * {
-                        page-break-inside: avoid;
-                    }
-                }
-                body { 
-                    font-family: 'Times New Roman', serif; 
-                    padding: 15px;
-                    color: #000;
-                    width: 100%;
-                    max-width: 190mm;
-                    margin: 0 auto;
-                    box-sizing: border-box;
-                }
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin-bottom: 15px;
-                    font-size: 13px;
-                }
-                td, th { 
-                    border: 1px solid #000; 
-                    padding: 6px 8px;
-                }
-                th { 
-                    background: #f3f3f3; 
-                }
-                h3, h4 { 
-                    text-align: center; 
-                    margin: 8px 0;
-                    font-size: 16px;
-                }
-                img { 
-                    display: block; 
-                    margin: auto; 
-                    height: 70px;
-                }
-                .center { 
-                    text-align: center; 
-                }
-                p {
-                    margin: 8px 0;
-                    font-size: 13px;
-                }
-                strong {
-                    font-size: 13px;
-                }
+                body { font-family: 'Times New Roman', serif; padding:20px; color:#000; }
+                table { width:100%; border-collapse: collapse; margin-bottom: 20px; }
+                td, th { border: 1px solid #000; padding: 8px; }
+                th { background: #f3f3f3; }
+                h3, h4 { text-align:center; margin:10px 0; }
+                img { display:block; margin:auto; height:80px; }
+                .center { text-align:center; }
             </style>
         </head>
         <body>${printContent}</body>

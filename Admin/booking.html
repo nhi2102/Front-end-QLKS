@@ -90,42 +90,45 @@
                     </div>
 
                     <!-- Hóa đơn -->
-                    <div id="invoice-content" class="tab-panel">
-                        <div class="card">
-                            <div class="card-header-action">
-                                <h3>Danh sách hóa đơn</h3>
-                            </div>
+<div class="tab-panel" id="invoice-content">
+    <div class="card">
+        <div class="card-header-action">
+            <h3>Danh sách hóa đơn</h3>
+        </div>
 
-                            <div class="booking-search-row">
-                                <div class="booking-search-text">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" id="invoice-search" placeholder="Tìm mã hóa đơn, mã đặt phòng...">
-                                </div>
-                                <button id="invoice-search-btn" class="btn btn-primary">
-                                    <i class="bi bi-search"></i> Tìm kiếm
-                                </button>
-                            </div>
+        <!-- Ô TÌM KIẾM DUY NHẤT – GIỐNG HỆT TRANG ACCOUNTS -->
+        <div class="card-search">
+            <i class="bi bi-search"></i>
+            <input 
+                type="text" 
+                id="invoice-search" 
+                placeholder="Tìm theo mã hóa đơn, mã đặt phòng, tên khách..." 
+                style="width: 100%; padding: 12px 40px 12px 40px; font-size: 15px; border-radius: 8px;"
+            >
+        </div>
 
-                            <div class="table-wrapper">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Mã HĐ</th>
-                                            <th>Mã ĐP</th>
-                                            <th>Khách hàng</th>
-                                            <th>Ngày lập</th>
-                                            <th>Tổng tiền</th>
-                                            <th>Thanh toán</th>
-                                            <th class="text-center">Hành động</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="invoice-table-body">
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã hóa đơn</th>
+                        <th>Mã đặt phòng</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày lập</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th class="text-center">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody id="invoice-table-body">
+                    <tr id="invoice-loading-row">
+                        <td colspan="7" class="text-center">Đang tải dữ liệu hóa đơn...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </main>

@@ -373,6 +373,100 @@
     font-weight: 500;
 }
 
+.customer-detail-modal .modal-header-custom {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px 12px 0 0;
+    text-align: center;
+}
+.customer-detail-modal .detail-tabs {
+    margin-top: 1.5rem;
+}
+.tab-buttons {
+    display: flex;
+    border-bottom: 2px solid #e0e6ed;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+.tab-btn-active {
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: #666;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s;
+    border-radius: 8px 8px 0 0;
+}
+.tab-btn-active.active {
+    color: #667eea;
+    border-bottom: 3px solid #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+.tab-pane-active { display: none; }
+.tab-pane-active.active { display: block; }
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+.info-item {
+    background: #f8f9fc;
+    padding: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+}
+.info-item .label {
+    display: block;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+}
+.info-item .value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 10px;
+}
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+.detail-table th {
+    background: #f8f9fc;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    color: #555;
+}
+.detail-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #eee;
+}
+.summary-bar {
+    padding: 1rem;
+    text-align: right;
+    font-size: 1.1rem;
+    background: #f0f2ff;
+    border-radius: 0 0 10px 10px;
+    margin-top: -10px;
+}
+.summary-bar.success { background: #f0fff4; color: #28a745; }
+.summary-bar.danger { background: #fff5f5; color: #dc3545; }
+
+
+
+
 /* --- RESPONSIVE --- */
 @media (max-width: 600px) {
     .form-grid {
@@ -389,3 +483,4 @@
         text-align: center;
     }
 }
+

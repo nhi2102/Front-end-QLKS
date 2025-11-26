@@ -1313,7 +1313,7 @@ function closeCancelModal() {
 
     // --- SETUP FORM SUBMIT ---
     function setupReviewFormSubmit(madatphong) {
-        console.log(' Setting up form submit for booking:', madatphong);
+        console.log('🔧 Setting up form submit for booking:', madatphong);
         
         const form = document.getElementById('reviewForm');
         

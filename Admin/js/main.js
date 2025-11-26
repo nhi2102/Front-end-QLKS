@@ -1,23 +1,16 @@
 
-    // Export các hàm modal để các module khác có thể import
-    export { openModal, closeModal };
-
-    // --- KIỂM TRA ĐĂNG NHẬP (Giữ nguyên logic kiểm tra currentUser) ---
-    const currentUserInfo = JSON.parse(localStorage.getItem('currentUser'));
-    const currentPath = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
-    const loginPageUrl = '../khachhang/login.html';
-    const isAdminOrReceptionist = currentUserInfo && (currentUserInfo.role === 'admin' || currentUserInfo.role === 'receptionist');
-
-    if (!isAdminOrReceptionist && currentPath !== 'login.html') {
-        console.warn("Chưa đăng nhập đúng quyền! Chuyển hướng...");
-        window.location.href = loginPageUrl;
-        throw new Error("Redirecting to login...");
-    } else if (isAdminOrReceptionist && currentPath === 'login.html') {
-        console.log("Đã đăng nhập, chuyển hướng vào admin...");
-        window.location.href = 'index.html';
-        throw new Error("Redirecting to dashboard...");
-    } else {
-        console.log(`Trạng thái đăng nhập: ${isAdminOrReceptionist ? 'OK' : 'Chưa đăng nhập/Ở trang login'}.`);
+    const userInfo = JSON.parse(localStorage.getItem('currentUserInfo')) || JSON.parse(localStorage.getItem('currentUser'));
+    const userNameDisplay = document.getElementById('user-display-name');
+    const userAvatar = document.getElementById('user-avatar');
+    if (userInfo && userNameDisplay) {
+        userNameDisplay.textContent = userInfo.name || userInfo.username || 'User';
+    }
+             // Optionally update avatar based on first letter
+    if(userInfo && (userInfo.name || userInfo.username) && userAvatar){
+        const nameString = userInfo.name || userInfo.username;
+        const firstLetter = nameString.charAt(0).toUpperCase();
+        userAvatar.src = `https://placehold.co/40x40/E2E8F0/4A5568?text=${firstLetter}`;
+        userAvatar.alt = `Avatar for ${nameString}`;
     }
 
     // --- Modal Handling ---
@@ -41,6 +34,26 @@
         if (modalBody) modalBody.innerHTML = '';
     };
 
+        // Export các hàm modal để các module khác có thể import
+    export { openModal, closeModal };
+
+    // --- KIỂM TRA ĐĂNG NHẬP (Giữ nguyên logic kiểm tra currentUser) ---
+    const currentUserInfo = JSON.parse(localStorage.getItem('currentUser'));
+    const currentPath = window.location.pathname.substring(window.location.pathname.lastIndexOf('/') + 1);
+    const loginPageUrl = '../khachhang/login.html';
+    const isAdminOrReceptionist = currentUserInfo && (currentUserInfo.role === 'admin' || currentUserInfo.role === 'receptionist');
+
+    if (!isAdminOrReceptionist && currentPath !== 'login.html') {
+        console.warn("Chưa đăng nhập đúng quyền! Chuyển hướng...");
+        window.location.href = loginPageUrl;
+        throw new Error("Redirecting to login...");
+    } else if (isAdminOrReceptionist && currentPath === 'login.html') {
+        console.log("Đã đăng nhập, chuyển hướng vào admin...");
+        window.location.href = 'index.html';
+        throw new Error("Redirecting to dashboard...");
+    } else {
+        console.log(`Trạng thái đăng nhập: ${isAdminOrReceptionist ? 'OK' : 'Chưa đăng nhập/Ở trang login'}.`);
+    }
 
     // --- Sidebar Loading ---
     async function loadSidebar() {

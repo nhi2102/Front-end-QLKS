@@ -1,10 +1,10 @@
 // js/reports.js
 import { ReportAPI } from '../api/reports.api.js';
 
-let revenueChart, topServicesChart, topRoomTypesChart;
+let revenueChart, topServicesChart, topRoomTypesChart, damageChart;
 let isLoading = false;
 
-document.addEventListener('DOMContentLoaded', async() => {
+document.addEventListener('DOMContentLoaded', async () => {
     setupFilters();
     setupTabs();
     await loadReport(getDefaultDateRange());
@@ -30,21 +30,33 @@ function getDefaultDateRange() {
     return { start: formatDate(start), end: formatDate(end) };
 }
 
-// Cài đặt bộ lọc
+// ==================== BỘ LỌC – HOÀN HẢO ====================
 function setupFilters() {
     const presetBtn = document.getElementById('preset-filter-btn');
     const presetValue = document.getElementById('preset-filter-value');
     const options = document.getElementById('preset-filter-options');
     const customGroup = document.getElementById('custom-range-group');
     const applyBtn = document.getElementById('apply-filter-btn');
+    const dateFrom = document.getElementById('date-from');
+    const dateTo = document.getElementById('date-to');
 
-    presetBtn.addEventListener('click', () => {
+    // Khởi tạo giá trị ngày mặc định
+    const today = new Date();
+    const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+    dateFrom.value = formatDate(firstDay);
+    dateTo.value = formatDate(today);
+
+    presetBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
         options.style.display = options.style.display === 'block' ? 'none' : 'block';
     });
+
+    document.addEventListener('click', () => options.style.display = 'none');
 
     options.querySelectorAll('.custom-select-option').forEach(opt => {
         opt.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             const value = opt.dataset.value;
             presetValue.textContent = opt.textContent;
             options.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('active'));
@@ -52,31 +64,40 @@ function setupFilters() {
 
             if (value === 'custom') {
                 customGroup.style.display = 'flex';
+                dateFrom.focus();
             } else {
                 customGroup.style.display = 'none';
-                applyBtn.click();
+                applyBtn.click(); // Tự động áp dụng
             }
             options.style.display = 'none';
         });
     });
 
-    applyBtn.addEventListener('click', async() => {
+    applyBtn.addEventListener('click', async () => {
         if (isLoading) return;
+
         let start, end;
         const activeOpt = document.querySelector('#preset-filter-options .custom-select-option.active');
-        const preset = activeOpt ? (activeOpt.dataset.value || 'this-month') : 'this-month';
+        const preset = activeOpt?.dataset.value || 'this-month';
 
         if (preset !== 'custom') {
             const range = getPresetRange(preset);
             start = range.start;
             end = range.end;
+            presetValue.textContent = activeOpt.textContent;
         } else {
-            start = document.getElementById('date-from').value;
-            end = document.getElementById('date-to').value;
-            if (!start || !end || start > end) {
-                alert('Vui lòng chọn khoảng thời gian hợp lệ.');
+            start = dateFrom.value;
+            end = dateTo.value;
+
+            if (!start || !end) {
+                alert('Vui lòng chọn đầy đủ Từ ngày và Đến ngày!');
                 return;
             }
+            if (start > end) {
+                alert('Ngày bắt đầu không được lớn hơn ngày kết thúc!');
+                return;
+            }
+            presetValue.textContent = `${formatDateVN(start)} → ${formatDateVN(end)}`;
         }
 
         await loadReport({ start, end });
@@ -101,30 +122,34 @@ function getPresetRange(preset) {
         end = new Date(now.getFullYear(), (quarter + 1) * 3, 0);
     }
 
+    if (end > now) end = now;
+
     return { start: formatDate(start), end: formatDate(end) };
 }
 
-// TẢI DỮ LIỆU – DOANH THU + TOP DỊCH VỤ
+// ==================== TẢI DỮ LIỆU ====================
 async function loadReport({ start, end }) {
     if (isLoading) return;
     isLoading = true;
     showLoading(true);
 
     try {
-        const [revenueRes, topServices, topRoomTypes, reviews] = await Promise.all([
+        const [revenueRes, topServices, topRoomTypes, reviews, damageData] = await Promise.all([
             ReportAPI.getRevenue(start, end),
             ReportAPI.getTopServices(5, start, end),
             ReportAPI.getTopRoomTypes(start, end),
-            ReportAPI.getReviews()
+            ReportAPI.getReviews(),
+            ReportAPI.getDamageSummary(start, end)
         ]);
 
-        updateKPI(revenueRes.summary.tongDoanhThu);
-        renderRevenueTrend(revenueRes.data);
-        renderTopServices(topServices);
-        renderTopRoomTypes(topRoomTypes);
-        renderReviews(reviews);
+        updateKPI(revenueRes.summary?.tongDoanhThu || 0);
+        renderRevenueTrend(revenueRes.data || []);
+        renderTopServices(topServices || []);
+        renderTopRoomTypes(topRoomTypes || []);
+        renderReviews(reviews || []);
+        renderDamageEquipment(damageData.chartData || [], damageData.totalDamage || 0);
     } catch (err) {
-        alert('Lỗi: ' + err.message);
+        alert('Lỗi tải dữ liệu: ' + err.message);
         console.error(err);
     } finally {
         showLoading(false);
@@ -132,7 +157,7 @@ async function loadReport({ start, end }) {
     }
 }
 
-// CHUYỂN TAB
+// ==================== CHUYỂN TAB ====================
 function setupTabs() {
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -144,18 +169,21 @@ function setupTabs() {
     });
 }
 
-// BIỂU ĐỒ DOANH THU THEO NGÀY
+// ==================== BIỂU ĐỒ DOANH THU ====================
 function renderRevenueTrend(data) {
-    const ctx = document.getElementById('revenueTrendChart').getContext('2d');
+    const canvas = document.getElementById('revenueTrendChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (revenueChart) revenueChart.destroy();
 
     if (!data || data.length === 0) {
-        ctx.canvas.parentElement.innerHTML = `
-            <div style="text-align:center; padding:60px; color:#999;">
-                Không có dữ liệu doanh thu
-            </div>`;
+        canvas.style.display = 'none';
+        canvas.parentElement.querySelector('.chart-container > div')?.remove();
+        canvas.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:60px;color:#999;">Không có dữ liệu doanh thu</div>`);
         return;
     }
+    canvas.style.display = 'block';
+    canvas.parentElement.querySelector('.chart-container > div')?.remove();
 
     const labels = data.map(d => formatDateVN(d.date));
     const values = data.map(d => d.tongDoanhThu);
@@ -188,18 +216,25 @@ function renderRevenueTrend(data) {
     });
 }
 
-// BIỂU ĐỒ TOP DỊCH VỤ – ĐẸP LUNG LINH
+// ==================== TOP DỊCH VỤ ====================
 function renderTopServices(services) {
-    const ctx = document.getElementById('topServicesChart').getContext('2d');
+    const canvas = document.getElementById('topServicesChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
     if (topServicesChart) topServicesChart.destroy();
 
-    if (!services || services.length === 0) {
-        ctx.canvas.parentElement.innerHTML = `
-            <div style="text-align:center; padding:60px; color:#999;">
-                Không có dữ liệu dịch vụ
-            </div>`;
+    const totalServiceRevenue = services.reduce((sum, s) => sum + (s.DoanhThu || 0), 0);
+    const totalEl = document.getElementById('total-service-revenue');
+    if (totalEl) totalEl.textContent = formatCurrency(totalServiceRevenue);
+
+    if (!services || services.length === 0 || totalServiceRevenue === 0) {
+        canvas.style.display = 'none';
+        canvas.parentElement.querySelector('.chart-container > div')?.remove();
+        canvas.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:60px;color:#999;">Không có dữ liệu dịch vụ</div>`);
         return;
     }
+    canvas.style.display = 'block';
+    canvas.parentElement.querySelector('.chart-container > div')?.remove();
 
     const labels = services.map(s => s.TenDichVu);
     const values = services.map(s => s.DoanhThu);
@@ -232,28 +267,21 @@ function renderTopServices(services) {
     });
 }
 
-
-// BIỂU ĐỒ TOP 5 LOẠI PHÒNG DOANH THU CAO NHẤT – ĐÃ FIX LỖI DESTROY
+// ==================== TOP LOẠI PHÒNG ====================
 function renderTopRoomTypes(roomTypes) {
     const canvas = document.getElementById('topRoomTypesChart');
-    const ctx = canvas ? canvas.getContext('2d') : null;
-    if (!ctx) {
-        console.warn('Không tìm thấy canvas topRoomTypesChart');
-        return;
-    }
-
-    // Fix lỗi destroy: chỉ destroy nếu đã tồn tại và có hàm destroy
-    if (topRoomTypesChart) {
-        topRoomTypesChart.destroy();
-    }
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (topRoomTypesChart) topRoomTypesChart.destroy();
 
     if (!roomTypes || roomTypes.length === 0) {
-        ctx.canvas.parentElement.innerHTML = `
-            <div style="text-align:center; padding:60px; color:#999;">
-                Không có dữ liệu loại phòng
-            </div>`;
+        canvas.style.display = 'none';
+        canvas.parentElement.querySelector('.chart-container > div')?.remove();
+        canvas.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:60px;color:#999;">Không có dữ liệu loại phòng</div>`);
         return;
     }
+    canvas.style.display = 'block';
+    canvas.parentElement.querySelector('.chart-container > div')?.remove();
 
     const labels = roomTypes.map(s => s.TenLoaiPhong);
     const values = roomTypes.map(s => s.DoanhThu);
@@ -275,91 +303,105 @@ function renderTopRoomTypes(roomTypes) {
             responsive: true,
             plugins: {
                 legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: ctx => `${ctx.label}: ${formatCurrency(ctx.raw)}`
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'TOP LOẠI PHÒNG DOANH THU CAO NHẤT',
-                    font: { size: 16, weight: 'bold' },
-                    color: '#1a73e8'
-                }
+                tooltip: { callbacks: { label: ctx => `${ctx.label}: ${formatCurrency(ctx.raw)}` } },
+                title: { display: true, text: 'TOP LOẠI PHÒNG DOANH THU CAO NHẤT', font: { size: 16, weight: 'bold' }, color: '#1a73e8' }
             },
             scales: {
-                x: {
-                    ticks: {
-                        callback: formatCurrency,
-                        font: { weight: 'bold' },
-                        color: '#555'
-                    },
-                    grid: {
-                        display: true, // HIỆN ĐƯỜNG KẺ DỌC
-                        color: 'rgba(0, 0, 0, 0.1)', // màu nhạt, đẹp
-                        lineWidth: 1,
-                        drawBorder: false
-                    },
-                    border: { display: false }
-                },
-                y: {
-                    grid: { display: false },
-                    ticks: { font: { weight: 'bold' }, color: '#333' }
-                }
+                x: { ticks: { callback: formatCurrency, font: { weight: 'bold' } } },
+                y: { grid: { display: false } }
             }
         }
     });
 }
 
+// ==================== THIỆT HẠI THIẾT BỊ ====================
+function renderDamageEquipment(data, totalDamage) {
+    const canvas = document.getElementById('damageEquipmentChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (damageChart) damageChart.destroy();
+
+    const totalEl = document.getElementById('total-damage-amount');
+    if (totalEl) totalEl.textContent = formatCurrency(totalDamage || 0);
+
+    if (!data || data.length === 0) {
+        canvas.style.display = 'none';
+        canvas.parentElement.querySelector('.chart-container > div')?.remove();
+        canvas.parentElement.insertAdjacentHTML('beforeend', `<div style="text-align:center;padding:60px;color:#999;">Không có dữ liệu thiệt hại thiết bị</div>`);
+        return;
+    }
+    canvas.style.display = 'block';
+    canvas.parentElement.querySelector('.chart-container > div')?.remove();
+
+    const labels = data.map(d => d.tenThietBi);
+    const values = data.map(d => d.tongTien);
+
+    damageChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Tiền bồi thường',
+                data: values,
+                backgroundColor: '#ff9800',
+                borderColor: '#ff9800',
+                borderWidth: 1,
+                borderRadius: 8,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { callbacks: { label: ctx => `Bồi thường: ${formatCurrency(ctx.raw)}` } },
+                title: { display: true, text: 'THIẾT BỊ HƯ HỎNG NHIỀU NHẤT', font: { size: 16, weight: 'bold' }, color: '#1a73e8' }
+            },
+            scales: {
+                x: { ticks: { callback: formatCurrency, font: { weight: 'bold' } } },
+                y: { grid: { display: false } }
+            }
+        }
+    });
+}
+
+// ==================== ĐÁNH GIÁ ====================
 function renderReviews(reviews) {
     const container = document.getElementById('reviews-container');
     if (!container) return;
 
     if (!reviews || reviews.length === 0) {
-        container.innerHTML = `
-            <div style="text-align:center; padding:80px; color:#999; font-size:1.2rem;">
-                Chưa có đánh giá nào từ khách hàng
-            </div>`;
+        container.innerHTML = `<div style="text-align:center;padding:80px;color:#999;font-size:1.2rem;">Chưa có đánh giá nào từ khách hàng</div>`;
         return;
     }
 
     container.innerHTML = reviews.map(r => `
         <div class="review-item">
             <div class="review-header">
-                <div>
-                    <strong class="customer-name">${r.tenKhach}</strong>
-                    <span class="room-info">
-                        ${r.maDatPhong && r.maDatPhong !== 'N/A' ? `• Mã ĐP: <strong>#${r.maDatPhong}</strong>` : ''}
-                    </span>
-                </div>
+                <strong class="customer-name">${r.tenKhach}</strong>
+                <span class="room-info">${r.maDatPhong && r.maDatPhong !== 'N/A' ? `• Mã ĐP: <strong>#${r.maDatPhong}</strong>` : ''}</span>
             </div>
-
             <div class="review-stars">
-                ${'★'.repeat(r.sosao)}${'☆'.repeat(5 - r.sosao)}
-                <span class="star-count">(${r.sosao}/5)</span>
+                ${'★'.repeat(r.sosao)}${'☆'.repeat(5 - r.sosao)} <span class="star-count">(${r.sosao}/5)</span>
             </div>
-
-            <p class="review-text">${r.danhgia}</p>
+            <p class="review-text">${r.danhgia || '(Không có nội dung)'}</p>
         </div>
     `).join('');
 }
 
-
-
-// CẬP NHẬT KPI
+// ==================== HỖ TRỢ ====================
 function updateKPI(total) {
-    document.getElementById('kpi-revenue').textContent = formatCurrency(total);
-    //document.getElementById('kpi-revenue-phong').textContent = '—';
-    //document.getElementById('kpi-revenue-dichvu').textContent = '—';
+    document.getElementById('kpi-revenue').textContent = formatCurrency(total || 0);
 }
 
-// HỖ TRỢ
 function formatDate(date) {
     return date.toISOString().split('T')[0];
 }
 
 function formatDateVN(dateStr) {
-    return new Date(dateStr).toLocaleDateString('vi-VN', { day: 'numeric', month: 'short' });
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 function formatCurrency(value) {

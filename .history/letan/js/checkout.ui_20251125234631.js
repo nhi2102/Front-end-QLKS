@@ -343,12 +343,17 @@ async function handleEquipmentStatusChange() {
     }
 }
 
-// Thêm event listener cho checkbox phòng
-document.addEventListener('change', (e) => {
-    if (e.target.classList.contains('room-check')) {
-        handleEquipmentSelectionChange();
-    }
-});
+// Hàm tăng/giảm số lượng
+function changeQty(btn, delta) {
+    const input = btn.parentElement.querySelector('.equipment-qty');
+    let value = parseInt(input.value) || 1;
+    value = Math.max(1, value + delta);
+    input.value = value;
+
+    // Kích hoạt sự kiện change nếu bạn có tính lại tiền
+    input.dispatchEvent(new Event('change'));
+    handleEquipmentSelectionChange();
+}
 
 
 
@@ -480,17 +485,14 @@ async function handleCheckout() {
         const damagedItems = [];
         document.querySelectorAll('.equipment-check:checked').forEach(cb => {
             const item = cb.closest('.equipment-item');
-            const selectedRooms = item.querySelectorAll('.room-check:checked');
-            
-            // Tạo 1 bản ghi đền bù cho mỗi phòng được chọn
-            selectedRooms.forEach(roomCheckbox => {
-                damagedItems.push({
-                    mathietbi: cb.value,
-                    madatphong: bookingId,
-                    soluong: 1, // Mỗi phòng 1 thiết bị
-                    maphong: roomCheckbox.value,
-                    manv: manv
-                });
+            const qty = parseInt(item.querySelector('.equipment-qty').value) || 1;
+            const room = item.querySelector('.equipment-room').value;
+            damagedItems.push({
+                mathietbi: cb.value,
+                madatphong: bookingId,
+                soluong: qty,
+                maphong: room,
+                manv: manv // Thêm mã nhân viên
             });
         });
 

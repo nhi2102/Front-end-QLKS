@@ -431,22 +431,13 @@ async function submitBooking(e) {
             diachi: address,
         });
 
-        // Tính số đêm
-        const checkIn = new Date(document.getElementById('checkInDate').value);
-        const checkOut = new Date(document.getElementById('checkOutDate').value);
-        const nights = Math.max(1, Math.round((checkOut - checkIn) / (1000 * 60 * 60 * 24)));
-
-        console.log('🔢 Số đêm:', nights);
-
         // 2️ Chuẩn bị dữ liệu chi tiết đặt phòng
        const details = selectedRooms.map(r => {
             const dongia = r.giaHienThi || r.giaCoBan || r.giacoban || r.loaiPhong?.giacoban || 0;
-            const tongcong = dongia * nights; // ✅ NHÂN VỚI SỐ ĐÊM
-            console.log(`🏨 Phòng ${r.sophong}: ${dongia} x ${nights} đêm = ${tongcong}`);
             return {
                 Maphong: r.maphong,
-                Dongia: dongia,
-                Tongcong: tongcong, // ✅ Tổng = đơn giá x số đêm
+                Dongia: dongia, // Thêm đơn giá
+                Tongcong: dongia, // Tổng cộng = đơn giá (sẽ tính lại theo số đêm ở backend nếu cần)
                 MaphongNavigation: null,
                 MadatphongNavigation: null
             };

@@ -89,6 +89,7 @@
                             <button class="tab-btn active" data-tab="revenue">Doanh thu</button>
                             <button class="tab-btn" data-tab="services">Dịch vụ</button>
                             <button class="tab-btn" data-tab="room-types">Loại phòng</button>
+                            <button class="tab-btn" data-tab="damages">Thiệt hại thiết bị</button>
                             <button class="tab-btn" data-tab="reviews">Đánh giá</button>
                         </div>
 
@@ -106,6 +107,14 @@
                                 <h4>Top Dịch vụ Bán chạy</h4>
                                 <canvas id="topServicesChart"></canvas>
                             </div>
+
+                            <!-- THÊM DÒNG TỔNG DOANH THU DỊCH VỤ -->
+                            <div class="summary-card" style="margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <p style="margin:0; font-size:1.1rem;">
+                                    <strong>Tổng doanh thu dịch vụ:</strong> 
+                                    <span id="total-service-revenue" style="color:#ff9800; font-size:1.4rem; font-weight:bold;">0 ₫</span>
+                                </p>
+                            </div>
                         </div>
 
                         <div class="tab-content" id="room-types" style="display: none;">
@@ -115,12 +124,28 @@
                             </div>
                         </div>
 
+                        <!-- Tab: Thiệt hại thiết bị -->
+                        <div class="tab-content" id="damages" style="display: none;">
+                            <div class="chart-container">
+                                <h4>Top Thiết bị bị hư hỏng</h4>
+                                <canvas id="damageEquipmentChart"></canvas>
+                            </div>
+
+                            <div class="summary-card" style="margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <p style="margin:0; font-size:1.1rem;">
+                                    <strong>Tổng tiền bồi thường:</strong> 
+                                    <span id="total-damage-amount" style="color:#ff9800; font-size:1.3rem; font-weight:bold;">0 ₫</span>
+                                </p>
+                            </div>
+                        </div>                        
+
                         <div class="tab-content" id="reviews" style="display: none;">
                             <div class="chart-container">
                                 <h4>Đánh giá từ khách hàng</h4>
                                 <div id="reviews-container" class="reviews-list"></div>
                             </div>
                         </div>
+                        
 
                     </div>
                 </section>

@@ -343,12 +343,17 @@ async function handleEquipmentStatusChange() {
     }
 }
 
-// Thêm event listener cho checkbox phòng
-document.addEventListener('change', (e) => {
-    if (e.target.classList.contains('room-check')) {
-        handleEquipmentSelectionChange();
-    }
-});
+// Hàm tăng/giảm số lượng
+function changeQty(btn, delta) {
+    const input = btn.parentElement.querySelector('.equipment-qty');
+    let value = parseInt(input.value) || 1;
+    value = Math.max(1, value + delta);
+    input.value = value;
+
+    // Kích hoạt sự kiện change nếu bạn có tính lại tiền
+    input.dispatchEvent(new Event('change'));
+    handleEquipmentSelectionChange();
+}
 
 
 

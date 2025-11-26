@@ -28,14 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     customerTab.addEventListener('click', () => switchTab('customer'));
     staffTableBody.addEventListener('click', (e) => handleAccountAction(e, 'staff'));
     customerTableBody.addEventListener('click', (e) => handleAccountAction(e, 'customer'));
-    const addStaffBtn = document.getElementById('add-staff-btn');
-    if (addStaffBtn) addStaffBtn.addEventListener('click', handleAddAccount);
-    const searchStaffInput = document.getElementById('search-staff-input');
-    if (searchStaffInput) searchStaffInput.addEventListener('input', handleSearch);
-    const searchCustomerInput = document.getElementById('search-customer-input');
-    if (searchCustomerInput) searchCustomerInput.addEventListener('input', handleSearch);
-    const modalEl = document.getElementById('modal');
-    if (modalEl) modalEl.addEventListener('submit', handleModalSubmit);
+    document.getElementById('add-staff-btn')?.addEventListener('click', handleAddAccount);
+    document.getElementById('search-staff-input')?.addEventListener('input', handleSearch);
+    document.getElementById('search-customer-input')?.addEventListener('input', handleSearch);
+    document.getElementById('modal')?.addEventListener('submit', handleModalSubmit);
 
     console.log("Accounts.js: Đã gắn listener. Tải tab mặc định...");
     switchTab('staff');
@@ -81,12 +77,8 @@ async function loadTabData() {
     showLoading(currentTab, true);
     try {
         switch (currentTab) {
-            case 'staff':
-                await initializeStaffTab();
-                break;
-            case 'customer':
-                await initializeCustomerTab();
-                break;
+            case 'staff': await initializeStaffTab(); break;
+            case 'customer': await initializeCustomerTab(); break;
         }
     } catch (error) {
         console.error(`Error loading data for tab ${currentTab}:`, error);
@@ -222,16 +214,16 @@ function renderTable(type, data, isLoading, error = null) {
         const editDisabled = isLocked ? 'disabled' : '';
 
         // Nút xem chi tiết: khác tooltip + icon cho nhân viên & khách hàng
-        const viewButtonHTML = type === 'staff' ?
-            `<button class="action-btn btn-view-details" data-action="view-details" title="Xem hoạt động nhân viên">
+        const viewButtonHTML = type === 'staff' 
+            ? `<button class="action-btn btn-view-details" data-action="view-details" title="Xem hoạt động nhân viên">
                  <i class="bi bi-eye-fill text-primary"></i>
-               </button>` :
-            `<button class="action-btn btn-view-details" data-action="view-details" title="Xem chi tiết khách hàng">
+               </button>`
+            : `<button class="action-btn btn-view-details" data-action="view-details" title="Xem chi tiết khách hàng">
                  <i class="bi bi-eye-fill text-success"></i>
                </button>`;
 
         if (type === 'staff') {
-            const roleName = (account.machucvuNavigation && account.machucvuNavigation.tenchucvu) || 'Chưa xác định';
+            const roleName = account.machucvuNavigation?.tenchucvu || 'Chưa xác định';
             row.innerHTML = `
                 <td class="email-cell">${account.email || '—'}</td>
                 <td class="name-cell fw-600">${account.hoten || '—'}</td>
@@ -301,7 +293,7 @@ async function handleAccountAction(event, type) {
             // !!!!!!!!!! THÊM DÒNG NÀY !!!!!!!!!!
             if (type === 'customer') {
                 attachResetPasswordHandler();
-
+                
             }
             // !!!!!!!!!! KẾT THÚC DÒNG THÊM !!!!!!!!!!
 
@@ -313,20 +305,20 @@ async function handleAccountAction(event, type) {
 
     // --- Khóa/Mở khóa ---
     else if (action === 'lock') {
-        const currentStatus = (account && account.trangthai) || 'Hoạt động';
+        const currentStatus = account?.trangthai || 'Hoạt động';
         const newStatus = currentStatus.toLowerCase() === 'hoạt động' ? 'Đã khóa' : 'Hoạt động';
         console.log(`Toggling ${type} ID ${id} to status: ${newStatus}`);
 
         try {
             const payload = { status: newStatus };
             let updatedAccount;
-            const originalAccount = {...account };
+            const originalAccount = { ...account };
 
             if (type === 'staff') {
                 updatedAccount = await api.updateStaffAccount(id, payload, originalAccount);
                 if (!updatedAccount || updatedAccount.success) {
                     // Phản hồi rỗng hoặc 204, sử dụng originalAccount với trạng thái mới
-                    updatedAccount = {...originalAccount, trangthai: newStatus };
+                    updatedAccount = { ...originalAccount, trangthai: newStatus };
                 }
                 const tenchucvu = chucVuMap.get(Number(updatedAccount.machucvu)) || 'N/A';
                 updatedAccount.machucvuNavigation = { tenchucvu: tenchucvu };
@@ -339,7 +331,7 @@ async function handleAccountAction(event, type) {
                 updatedAccount = await api.updateCustomerAccount(id, payload, originalAccount);
                 if (!updatedAccount || updatedAccount.success) {
                     // Phản hồi rỗng hoặc 204, sử dụng originalAccount với trạng thái mới
-                    updatedAccount = {...originalAccount, trangthai: newStatus };
+                    updatedAccount = { ...originalAccount, trangthai: newStatus };
                 }
                 const index = allCustomerData.findIndex(acc => String(acc.makh) === String(id));
                 if (index !== -1) allCustomerData[index] = updatedAccount;
@@ -373,9 +365,9 @@ async function handleAccountAction(event, type) {
             console.error(`Lỗi khi cập nhật trạng thái ID: ${id}`, error);
             alert(`Lỗi khi cập nhật trạng thái: ${error.message}`);
             renderTable(type, dataList, false); // Làm mới bảng với dữ liệu hiện tại
-        }
-    } else if (action === 'view-details') {
-        if (type == 'staff') {
+        }   
+    }else if (action === 'view-details') {
+        if (type == 'staff'){
             const manv = account.manv;
             const hoten = account.hoten || 'Nhân viên';
 
@@ -389,9 +381,9 @@ async function handleAccountAction(event, type) {
             }).catch(err => {
                 console.error("Lỗi tải hoạt động nhân viên:", err);
                 alert("Không thể tải chi tiết hoạt động: " + err.message);
-            });
-        } else {
-            // KHÁCH HÀNG: Dùng dữ liệu đã có trong allCustomerData (nếu có bookings)
+            });            
+        }else{
+        // KHÁCH HÀNG: Dùng dữ liệu đã có trong allCustomerData (nếu có bookings)
             showCustomerDetail(account);
         }
     }
@@ -434,15 +426,15 @@ async function handleModalSubmit(event) {
         event.preventDefault();
         const form = event.target;
         if (!await validateForm()) {
-            alert("Vui lòng sửa các lỗi trong form!");
-            return;
-        }
+    alert("Vui lòng sửa các lỗi trong form!");
+    return;
+}
         const type = currentTab;
 
-        let emailValue;
+    let emailValue;
         const resetEmailInput = form.querySelector('#reset-email'); // Ô email mới ở dưới
         const usernameInput = form.querySelector('#username'); // Ô email cũ ở trên
-
+        
         if (resetEmailInput) {
             // Chế độ Sửa Khách hàng: lấy email từ ô reset ở dưới
             emailValue = resetEmailInput.value;
@@ -458,8 +450,8 @@ async function handleModalSubmit(event) {
         const payload = {
             username: emailValue, // Đã lấy đúng email
             fullName: form.fullname.value,
-            password: passwordValue,
-        };
+            password: passwordValue, 
+        };        
 
         if (type === 'staff') {
             payload.role = form.role.value;
@@ -493,7 +485,7 @@ async function handleModalSubmit(event) {
                 if (type === 'staff') {
                     updatedAccount = await api.updateStaffAccount(id, payload, originalAccount);
                     if (!updatedAccount || updatedAccount.success) {
-                        updatedAccount = {...originalAccount, ...payload, trangthai: payload.status };
+                        updatedAccount = { ...originalAccount, ...payload, trangthai: payload.status };
                     }
                     const tenchucvu = chucVuMap.get(Number(updatedAccount.machucvu)) || 'N/A';
                     updatedAccount.machucvuNavigation = { tenchucvu: tenchucvu };
@@ -504,7 +496,7 @@ async function handleModalSubmit(event) {
                 } else {
                     updatedAccount = await api.updateCustomerAccount(id, payload, originalAccount);
                     if (!updatedAccount || updatedAccount.success) {
-                        updatedAccount = {...originalAccount, ...payload, trangthai: payload.status };
+                        updatedAccount = { ...originalAccount, ...payload, trangthai: payload.status };
                     }
                     const index = allCustomerData.findIndex(acc => String(acc.makh) === String(id));
                     if (index !== -1) allCustomerData[index] = updatedAccount;
@@ -523,7 +515,7 @@ async function handleModalSubmit(event) {
                 if (type === 'staff') {
                     newAccount = await api.createStaffAccount(payload);
                     if (!newAccount || newAccount.success) {
-                        newAccount = {...payload, manv: Date.now() }; // Giả lập ID tạm thời
+                        newAccount = { ...payload, manv: Date.now() }; // Giả lập ID tạm thời
                     }
                     const tenchucvu = chucVuMap.get(Number(newAccount.machucvu)) || 'N/A';
                     newAccount.machucvuNavigation = { tenchucvu: tenchucvu };
@@ -532,7 +524,7 @@ async function handleModalSubmit(event) {
                 } else {
                     newAccount = await api.createCustomerAccount(payload);
                     if (!newAccount || newAccount.success) {
-                        newAccount = {...payload, makh: Date.now() }; // Giả lập ID tạm thời
+                        newAccount = { ...payload, makh: Date.now() }; // Giả lập ID tạm thời
                     }
                     allCustomerData.push(newAccount);
                     renderTable('customer', allCustomerData, false);
@@ -560,14 +552,14 @@ function generateChucVuOptions(selectedMaChucVu) {
 
 function getStaffAccountFormContent(account) {
     const isEditMode = !!account;
-    const username = account ? account.email : '';
-    const fullname = account ? account.hoten : '';
-    const sdt = account ? account.sdt : '';
-    const ngaysinh = account && account.ngaysinh ? account.ngaysinh.split('T')[0] : '';
-    const gioitinh = account ? account.gioitinh || 'Nam' : 'Nam';
-    const diachi = account ? account.diachi : '';
-    const machucvu = account ? account.machucvu : null;
-    const status = account ? account.trangthai : 'Hoạt động';
+    const username = account?.email || '';
+    const fullname = account?.hoten || '';
+    const sdt = account?.sdt || '';
+    const ngaysinh = account?.ngaysinh ? account.ngaysinh.split('T')[0] : '';
+    const gioitinh = account?.gioitinh || 'Nam';
+    const diachi = account?.diachi || '';
+    const machucvu = account?.machucvu || null;
+    const status = account?.trangthai || 'Hoạt động';
     const chucVuOptions = generateChucVuOptions(machucvu);
 
     let passwordSection = '';
@@ -586,7 +578,7 @@ function getStaffAccountFormContent(account) {
                 <div id="save-reset-email-msg" class="form-message"></div>
             </div>
         </div>`;
-    }
+    } 
 
     return `
         <form id="account-form" class="modal-form">
@@ -671,14 +663,14 @@ function getStaffAccountFormContent(account) {
 
 function getCustomerAccountFormContent(account) {
     const isEditMode = !!account;
-    const username = account && account.email ? account.email : '';
-    const fullname = account && account.hoten ? account.hoten : '';
-    const phone = account && account.sdt ? account.sdt : '';
-    const ngaysinh = (account && account.ngaysinh) ? account.ngaysinh.split('T')[0] : '';
-    const diachi = account && account.diachi ? account.diachi : '';
-    const cccd = account && account.cccd ? account.cccd : '';
-    const status = account && account.trangthai ? account.trangthai : 'Hoạt động';
-    const memberPoints = (account && typeof account.diemthanhvien !== 'undefined') ? account.diemthanhvien : 0;
+    const username = account?.email || '';
+    const fullname = account?.hoten || '';
+    const phone = account?.sdt || '';
+    const ngaysinh = account?.ngaysinh ? account.ngaysinh.split('T')[0] : '';
+    const diachi = account?.diachi || '';
+    const cccd = account?.cccd || '';
+    const status = account?.trangthai || 'Hoạt động';
+    const memberPoints = account?.diemthanhvien || 0;
 
     let passwordSection = '';
     if (isEditMode) {
@@ -771,14 +763,14 @@ function attachResetPasswordHandler() {
     btn.parentNode.replaceChild(newBtn, btn);
 
     newBtn.addEventListener("click", async function() {
-
+        
         // Nó vẫn đọc từ ô reset-email
         const email = document.getElementById("reset-email").value.trim();
-        const currentBtn = this;
+        const currentBtn = this; 
 
         successMsg.style.display = "none";
         errorMsg.style.display = "none";
-
+        
         // !!!!! DÒNG MỚI: Xóa thông báo của nút "Lưu Email" !!!!!
         document.getElementById("save-reset-email-msg").style.display = "none";
 
@@ -797,13 +789,13 @@ function attachResetPasswordHandler() {
         } catch (err) {
             console.error("Lỗi quên mật khẩu:", err);
             let errorMessage = err.message || "Lỗi kết nối tới server. Vui lòng thử lại!";
-
+            
             if (errorMessage.includes('không tồn tại') || errorMessage.includes('not found')) {
                 errorMessage = 'Email này không tồn tại trong hệ thống. (Bạn đã bấm "Lưu Email" chưa?)';
             } else if (errorMessage.includes('NetworkError') || errorMessage.includes('fetch')) {
                 errorMessage = 'Không thể kết nối đến server. Vui lòng kiểm tra kết nối.';
             }
-
+            
             showResetError(errorMessage);
         } finally {
             currentBtn.textContent = "Gửi mật khẩu mới";
@@ -834,7 +826,7 @@ function attachSaveResetEmailHandler() {
     btn.parentNode.replaceChild(newBtn, btn);
 
     newBtn.addEventListener("click", async function() {
-        const id = currentRowBeingEdited ? currentRowBeingEdited.dataset.id : null;
+        const id = currentRowBeingEdited?.dataset.id;
         if (!id) {
             showEmailMsg("Lỗi: Không tìm thấy ID tài khoản.", true);
             return;
@@ -882,7 +874,7 @@ function attachSaveResetEmailHandler() {
             // Cập nhật mảng dữ liệu
             const index = dataList.findIndex(acc => String(acc[idKey]) === String(id));
             if (index !== -1) dataList[index] = updatedAccount;
-
+            
             // Cập nhật giao diện
             if (topEmailInput) topEmailInput.value = newEmail;
             if (currentRowBeingEdited) {
@@ -927,24 +919,21 @@ async function validateForm() {
     const idKey = isStaff ? 'manv' : 'makh';
 
     // Lấy ID hiện tại (chỉ cần khi sửa)
-    let currentId = null;
-    if (currentRowBeingEdited && currentRowBeingEdited.dataset && currentRowBeingEdited.dataset.id) {
-        currentId = String(currentRowBeingEdited.dataset.id);
-    }
+    const currentId = currentRowBeingEdited?.dataset.id; 
 
     // --- XỬ LÝ EMAIL (USERNAME) ---
     const usernameInput = document.getElementById('username');
     const emailError = document.getElementById('email-error');
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
 
     if (usernameInput) {
         const email = usernameInput.value.trim();
 
         // 1. Kiểm tra bắt buộc & định dạng (Giữ nguyên logic cũ)
-        if (!email) {
+        if (!email) { 
             showError(usernameInput, emailError, "Email là bắt buộc!");
             isValid = false;
-        } else if (!emailRegex.test(email)) {
+        } else if (!emailRegex.test(email)) { 
             showError(usernameInput, emailError, "Email không hợp lệ!");
             isValid = false;
         } else {
@@ -964,11 +953,11 @@ async function validateForm() {
             }
         }
     }
-
+    
     // --- XỬ LÝ HỌ VÀ TÊN (FULL NAME) ---
     const fullnameInput = document.getElementById('fullname');
     const fullname = fullnameInput ? fullnameInput.value.trim() : '';
-    const fullnameError = fullnameInput ? fullnameInput.nextElementSibling : null;
+    const fullnameError = fullnameInput?.nextElementSibling; // Giả sử error text nằm ngay sau input
 
     if (fullnameInput && fullnameError) {
         if (!fullname) {
@@ -1011,20 +1000,23 @@ async function validateForm() {
     // === SỐ ĐIỆN THOẠI (Giữ nguyên logic cũ) ===
     const phoneInput = document.getElementById('sdt') || document.getElementById('phone');
     const phoneError = document.getElementById('phone-error');
-    if (!phoneInput) return isValid;
+    if (!phoneInput) return isValid; 
 
-    let phone = phoneInput.value.replace(/\D/g, '');
-    phoneInput.value = phone.slice(0, 10);
+    let phone = phoneInput.value.replace(/\D/g, ''); 
+    phoneInput.value = phone.slice(0, 10); 
 
     if (phone.length === 0) {
         clearValidation(phoneInput, phoneError);
-    } else if (phone.length !== 10) {
+    }
+    else if (phone.length !== 10) {
         showError(phoneInput, phoneError, "SĐT phải đúng 10 số!");
         isValid = false;
-    } else if (!/^0[3|5|7|8|9]/.test(phone)) {
+    }
+    else if (!/^0[3|5|7|8|9]/.test(phone)) {
         showError(phoneInput, phoneError, "SĐT phải bắt đầu 03/05/07/08/09");
         isValid = false;
-    } else {
+    }
+    else {
         showValid(phoneInput, phoneError, "SĐT hợp lệ");
     }
 
@@ -1058,11 +1050,8 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
     const totalBooking = datphongs.reduce((s, i) => s + (i.tongtien || 0), 0);
     const totalPayment = thanhtoans.reduce((s, i) => s + (i.sotien || 0), 0);
     const totalCompensation = denbus.reduce((s, i) => s + (i.tongtien || 0), 0);
-    const manv = (datphongs && datphongs[0] && datphongs[0].manv) ||
-        (thanhtoans && thanhtoans[0] && thanhtoans[0].manv) ||
-        (denbus && denbus[0] && denbus[0].manv) ||
-        'N/A';
-    const role = (datphongs && datphongs[0] && datphongs[0].machucvuNavigation && datphongs[0].machucvuNavigation.tenchucvu) || 'Nhân viên';
+    const manv = datphongs[0]?.manv || thanhtoans[0]?.manv || denbus[0]?.manv || 'N/A';
+    const role = datphongs[0]?.machucvuNavigation?.tenchucvu || 'Nhân viên';
 
     const template = document.getElementById('staff-activity-template');
     const content = template.content.cloneNode(true);
@@ -1099,15 +1088,14 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
 
     // Tạo mảng HTML từ dữ liệu đền bù (có await → phải dùng Promise.all)
     const compensationRows = await Promise.all(
-        denbus.map(async(db) => {
+        denbus.map(async (db) => {
             const tenThietBi = await api.getTenThietBi(db.mathietbi);
             const info = await api.getThietBiInfo(db.mathietbi);
 
             return `
                 <tr>
                     <td><strong>#${db.madenbu}</strong></td>
-                    <td><strong><span class="badge bg-secondary">#${db.madatphong}</span></strong></td>
-                    <td>${db.maphong}</td>
+                    <td><strong><span class="badge bg-secondary">#${db.maphong}</span></strong></td>
                     <td>${tenThietBi}</td>
                     <td class="text-center fw-bold">${db.soluong}</td>
                     <td class="text-end">
@@ -1118,11 +1106,11 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
         })
     );
 
-    compBody.innerHTML = compensationRows.length > 0 ?
-        compensationRows.join('') :
-        '<tr><td colspan="5" class="text-center text-muted py-4">Chưa có đền bù</td></tr>';
+compBody.innerHTML = compensationRows.length > 0
+    ? compensationRows.join('')
+    : '<tr><td colspan="5" class="text-center text-muted py-4">Chưa có đền bù</td></tr>';
 
-    content.querySelector('#total-compensation').textContent = formatMoney(totalCompensation);
+content.querySelector('#total-compensation').textContent = formatMoney(totalCompensation);
 
     // Tab switching
     content.querySelectorAll('.tab-btn-active').forEach(btn => {
@@ -1185,7 +1173,7 @@ async function showCustomerDetail(customer) {
     } catch (e) {
         console.error("Lỗi tải danh sách đặt phòng:", e);
     }
-
+    
     const detailedBookings = await Promise.all(
         rawBookings.map(b => fetchBookingDetails(b.madatphong).catch(err => {
             console.warn(`Không thể tải chi tiết DP #${b.madatphong}:`, err);
@@ -1196,7 +1184,7 @@ async function showCustomerDetail(customer) {
             };
         }))
     );
-
+    
     // === HIỂN THỊ CHI TIẾT ĐẶT PHÒNG ===
     const bookingBody = content.querySelector('#detail-booking-body');
     const totalBookingElement = content.querySelector('#detail-total-booking');
@@ -1205,7 +1193,7 @@ async function showCustomerDetail(customer) {
         let total = 0;
         bookingBody.innerHTML = detailedBookings.map(b => {
             if (b.isError) {
-                return `
+                 return `
                     <tr style="background-color: #fcebeb;">
                         <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>#DP${b.madatphong}</strong></td>
                         <td colspan="5" style="padding: 12px; border-bottom: 1px solid #eee; text-align: center; color: #e53e3e;">Lỗi tải chi tiết phòng.</td>
@@ -1214,12 +1202,7 @@ async function showCustomerDetail(customer) {
             }
 
             total += (b.totalAmount || 0);
-            let statusClass = 'warning';
-            if (b.status && b.status.includes('Đã')) {
-                statusClass = 'success';
-            } else if (b.status && b.status.includes('Hủy')) {
-                statusClass = 'danger';
-            }
+            const statusClass = b.status?.includes('Đã') ? 'success' : (b.status?.includes('Hủy') ? 'danger' : 'warning');
             const roomNumbers = b.rooms.map(r => r.number).filter(Boolean);
             const roomList = roomNumbers.length > 0 ? roomNumbers.join(', ') : 'Chưa có phòng';
             const rowStyle = `style="border-bottom: 1px solid #eee; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f9f9f9'" onmouseout="this.style.backgroundColor='transparent'"`;
@@ -1262,7 +1245,7 @@ async function showCustomerDetail(customer) {
                 b.classList.remove('active');
             });
             document.querySelectorAll('.tab-pane-active').forEach(p => p.style.display = 'none');
-
+            
             // Áp dụng style active và hiển thị pane mới
             this.style.borderBottom = '3px solid #3182ce';
             this.style.color = '#3182ce';
@@ -1289,21 +1272,16 @@ async function showCustomerDetail(customer) {
     }, 100);
 }
 // Gắn kiểm tra real-time
-const modalEl = document.getElementById('modal');
-if (modalEl) {
-    modalEl.addEventListener('input', function(e) {
-        const target = e.target;
-        if (!target) return;
+document.getElementById('modal')?.addEventListener('input', function(e) {
+    const target = e.target;
 
-        // Chỉ cho số + cắt 10 số
-        if (target.matches('#sdt, #phone')) {
-            target.value = target.value.replace(/\D/g, '').slice(0, 10);
-        }
+    // Chỉ cho số + cắt 10 số
+    if (target.matches('#sdt, #phone')) {
+        target.value = target.value.replace(/\D/g, '').slice(0, 10);
+    }
 
-        // Kiểm tra real-time
-        if (target.matches('#username, #sdt, #phone, #reset-email')) {
-            // Không await để không block UI
-            validateForm().catch(() => {});
-        }
-    });
-}
+    // Kiểm tra real-time
+    if (target.matches('#username, #sdt, #phone, #reset-email')) {
+        validateForm();
+    }
+});

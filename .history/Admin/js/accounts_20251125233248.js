@@ -1107,7 +1107,6 @@ async function showStaffActivityModal(hoten, datphongs, thanhtoans, denbus) {
                 <tr>
                     <td><strong>#${db.madenbu}</strong></td>
                     <td><strong><span class="badge bg-secondary">#${db.madatphong}</span></strong></td>
-                    <td>${db.maphong}</td>
                     <td>${tenThietBi}</td>
                     <td class="text-center fw-bold">${db.soluong}</td>
                     <td class="text-end">

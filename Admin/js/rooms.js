@@ -29,6 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchVoucherInput = document.getElementById('search-voucher-input');
     const voucherLoadingRow = document.getElementById('voucher-loading-row');
 
+
+             const userInfo = JSON.parse(localStorage.getItem('currentUserInfo')) || JSON.parse(localStorage.getItem('currentUser'));
+             const userNameDisplay = document.getElementById('user-display-name');
+              const userAvatar = document.getElementById('user-avatar');
+             if (userInfo && userNameDisplay) {
+                 userNameDisplay.textContent = userInfo.name || userInfo.username || 'User';
+             }
+              if(userInfo && (userInfo.name || userInfo.username) && userAvatar){
+                 const nameString = userInfo.name || userInfo.username;
+                 const firstLetter = nameString.charAt(0).toUpperCase();
+                 userAvatar.src = `https://placehold.co/40x40/E2E8F0/4A5568?text=${firstLetter}`;
+                 userAvatar.alt = `Avatar for ${nameString}`;
+             }
+
+
+
     if (!tabButtons || tabButtons.length === 0) {
         console.warn("Rooms.js: Thiếu nút tab.");
         return;
