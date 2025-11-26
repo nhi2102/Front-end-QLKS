@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin & Đặt phòng - Khách sạn Thanh Trà</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../khachhang/css/style.css">
+    <link rel="stylesheet" href="../khachhang/css/header.css">
+    <link rel="stylesheet" href="../khachhang/css/footer.css">
+    <link rel="stylesheet" href="../khachhang/css/cus_info.css"> </head>
+
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <main class="booking-page-main">
+        <div class="page-header-container">
+            <div class="booking-container page-header-content">
+                <a href="../khachhang/rooms.html" class="btn-back-link">
+                    <i class="fas fa-chevron-left"></i> Quay lại
+                </a>
+                <h1 class="page-header">THÔNG TIN ĐẶT PHÒNG</h1>
+            </div>
+        </div>
+
+        <div class="booking-container">
+
+            <div class="booking-form-wrapper">
+
+                <section class="booking-section customer-info-section">
+                    <h2 class="section-title">Thông tin người đặt phòng</h2>
+                    <form id="customer-booking-form">
+                        <div class="form-row">
+                            <div class="input-group half">
+                                <label for="last-name">Họ <span class="required-star">*</span></label>
+                                <input type="text" id="last-name" required readonly>
+                            </div>
+                            <div class="input-group half">
+                                <label for="first-name">Tên <span class="required-star">*</span></label>
+                                <input type="text" id="first-name" required readonly>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group half">
+                                <label for="email">Email <span class="required-star">*</span></label>
+                                <input type="email" id="email" required readonly>
+                            </div>
+                            <div class="input-group half">
+                                <label for="cccd">CCCD <span class="required-star">*</span></label>
+                                <input type="text" id="cccd" required readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="input-group half">
+                                <label for="phone">Số điện thoại <span class="required-star">*</span></label>
+                                <div class="phone-input-group">
+                                    <select class="country-code">
+                                        <option value="+84">vn +84</option>
+                                        <option value="+1">us +1</option>
+                                        <option value="+44">uk +44</option>
+                                        <option value="+61">au +61</option>
+                                        <option value="+86">cn +86</option>
+                                        <option value="+49">de +49</option>
+                                        <option value="+33">fr +33</option>
+                                        <option value="+81">jp +81</option>
+                                        <option value="+82">kr +82</option>
+                                        <option value="+39">it +39</option>
+                                    </select>
+                                    <input type="tel" id="phone" value="987 654 321" required readonly>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </section>
+
+
+                <section class="booking-section payment-section">
+                    <h2 class="section-title">Phương thức thanh toán</h2>
+                    <div class="payment-group">
+                        <img id="payment-logo" src="../assets/img/vnpay.jpg" alt="Phương thức thanh toán" class="payment-logo">
+
+                        <select id="payment-method-select" class="payment-method">
+                            <!-- <option value="momo" data-logo-src="assets/img/momo.png">Ví điện tử Momo</option> -->
+                            <option value="vnpay" data-logo-src="../assets/img/vnpay.jpg">Ví điện tử VnPay</option>
+                        </select>
+                    </div>
+                    <div class="agreement">
+                        <input type="checkbox" id="agree" required>
+                        <label for="agree">Vui lòng đọc và đồng ý với điều khoản đặt phòng bằng cách đánh dấu vào ô bên cạnh.</label>
+                    </div>
+                    <button type="submit" form="customer-booking-form" class="submit-btn main-action-btn">
+                        THỰC HIỆN ĐẶT PHÒNG
+                    </button>
+                </section>
+
+            </div>
+
+            <div class="booking-summary-wrapper">
+                <div class="summary-box">
+                    <h2 class="summary-title right-title">Yêu cầu đặt phòng của bạn</h2>
+
+                    <div class="hotel-info">
+                        <h3>Thanh Trà Hotel</h3>
+                        <p><strong>Nhận phòng:</strong> Thứ 7, 11/10/2025 từ 15:00</p>
+                        <p><strong>Trả phòng:</strong> Thứ 2, 17/11/2025 cho đến 12:00 (38 ngày 37 đêm)</p>
+                    </div>
+
+                    <div class="room-details">
+                        <h4 class="detail-title">
+                            Thông tin phòng
+                            <span class="edit-link">Mở rộng</span>
+                        </h4>
+                        <!-- Container để JavaScript render danh sách phòng vào đây -->
+                        <div class="rooms-container"></div>
+                    </div>
+
+                    <div class="price-breakdown">
+                        <div class="price-row total-room-price">
+                            <span>Tổng giá phòng</span>
+                            <span class="price-value">0 VNĐ</span>
+                        </div>
+
+                        <!-- Hiển thị điểm tích lũy -->
+                        <div class="loyalty-points-display">
+                            <div class="points-header">
+                                <div class="points-label">
+                                    <i class="fas fa-star"></i>
+                                    <span>Điểm thành viên:</span>
+                                </div>
+                                <span id="customer-loyalty-points" class="points-value">0</span>
+                            </div>
+                            <div class="points-info">
+                                <span id="loyalty-points-info">Nhận điểm sau khi check-out</span>
+                            </div>
+                            <div class="points-use">
+                                <div class="points-use-header">
+                                    <label for="use-points-input">
+                                        <i class="fas fa-coins"></i>
+                                        Sử dụng điểm tích lũy
+                                    </label>
+                                </div>
+                                <div class="points-input-group">
+                                    <input type="number" id="use-points-input" min="1000" max="0" value="0" placeholder="Tối thiểu 1000 điểm" step="1000">
+                                    <span class="points-unit">điểm</span>
+                                    <button id="apply-points-btn" class="btn-apply-points">
+                                        <i class="fas fa-check"></i>
+                                        Áp dụng
+                                    </button>
+                                </div>
+                                <div class="points-conversion">
+                                    <small class="conversion-note">1000 điểm = 1,000 VNĐ</small>
+                                    <button type="button" id="use-all-points-btn" class="use-all-btn">Dùng tất cả</button>
+                                </div>
+                            </div>
+
+                            <div class="points-discount" id="points-discount" style="display:none;">
+                                <div class="discount-content">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Giảm từ điểm tích lũy:</span>
+                                    <strong id="points-discount-value">0 VNĐ</strong>
+                                </div>
+                                <button type="button" id="remove-points-btn" class="remove-points-btn">
+                                    <i class="fas fa-times"></i>
+                                    Hủy sử dụng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="price-total">
+                        <div class="price-row total-row">
+                            <p><strong>Tổng giá:</strong></p>
+                            <p class="final-price"></p>
+                        </div>
+                        <p class="tax-note">Bao gồm tất cả các loại thuế và phí dịch vụ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+    <a href="#header" id="backToTopBtn" class="back-to-top-btn">
+        <i class="fa-solid fa-arrow-up"></i>
+    </a>
+
+    <!-- Modal đặt phòng đoàn -->
+    <div id="groupBookingModal" class="group-booking-modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <i class="fas fa-party-horn"></i>
+                <h2>ĐẶT THEO ĐOÀN THÀNH CÔNG!</h2>
+            </div>
+            <div class="modal-body">
+                <div class="modal-icon-success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="booking-details">
+                    <div class="detail-item">
+                        <i class="fas fa-bed"></i>
+                        <span class="detail-label">Số phòng:</span>
+                        <span class="detail-value" id="modalRoomCount"></span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-percent"></i>
+                        <span class="detail-label">Giảm giá:</span>
+                        <span class="detail-value" id="modalDiscount"></span>
+                    </div>
+                    <div class="detail-item highlight">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span class="detail-label">Tổng tiền sau giảm:</span>
+                        <span class="detail-value" id="modalTotal"></span>
+                    </div>
+                </div>
+                <p class="modal-thank-you"> Cảm ơn quý khách đã tin tưởng đặt phòng theo đoàn!</p>
+            </div>
+            <div class="modal-footer">
+                <button id="continuePayment" class="btn btn-primary">Tiếp tục thanh toán</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Import API Booking trước -->
+    <script src="../khachhang/api/booking.api.js"></script>
+    <script src="../khachhang/js/script.js"></script>
+    <script src="../khachhang/js/booking.ui.js"></script>
+
+</body>
+
+</html>
