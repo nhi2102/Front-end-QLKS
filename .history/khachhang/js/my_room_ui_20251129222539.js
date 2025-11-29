@@ -374,31 +374,45 @@ document.addEventListener('DOMContentLoaded', async function() {
             console.log(' Tính lại - Tiền phòng:', tongTienPhongAll, 'Tiền dịch vụ:', tongTienDichVuAll);
         }
 
-        // **ƯU TIÊN TỔNG TIỀN TỪ HÓA ĐƠN (ĐÃ BAO GỒM GIẢM GIÁ ĐIỂM)**
+        // **ƯU TIÊN TỔNG TIỀN TỪ HÓA ĐƠN**
         let tongTienCuoiCung;
         
         if (tongTienHoaDon > 0) {
-            // Lấy trực tiếp từ hóa đơn - đây là tổng tiền cuối cùng sau khi đã trừ điểm
+            // Lấy trực tiếp từ hóa đơn nếu có
             tongTienCuoiCung = tongTienHoaDon;
-            console.log(`✅ Sử dụng tổng tiền từ HÓA ĐƠN: ${tongTienHoaDon} (đã bao gồm giảm giá điểm nếu có)`);
+            console.log(` Sử dụng tổng tiền từ hóa đơn: ${tongTienHoaDon}`);
         } else {
-            // Fallback 1: Tính từ breakdown (tiền phòng + tiền dịch vụ - giảm giá điểm)
-            let tongTinhToan = tongTienPhongAll + tongTienDichVuAll;
+            // Fallback: tính toán hoặc từ DATPHONG
+            const tongTinhToan = tongTienPhongAll + tongTienDichVuAll;
             
-            // Trừ đi tiền giảm từ điểm nếu có
-            const tienGiamDiem = booking.tienGiamTuDiem || 0;
-            if (tienGiamDiem > 0) {
-                tongTinhToan -= tienGiamDiem;
-                console.log(`🔧 Trừ giảm giá điểm: ${tongTinhToan + tienGiamDiem} - ${tienGiamDiem} = ${tongTinhToan}`);
-            }
-            
-            // Fallback 2: Từ DATPHONG.TONGTIEN
             if (tongTinhToan > 0 && (tongTien === 0 || Math.abs(tongTinhToan - tongTien) > 1000)) {
-                console.log(`⚠️ Fallback 1 - Sử dụng tính toán: ${tongTien} → ${tongTinhToan}`);
+                console.log(` Fallback - Sửa tongTien: ${tongTien} → ${tongTinhToan}`);
                 tongTienCuoiCung = tongTinhToan;
             } else {
-                console.log(`⚠️ Fallback 2 - Sử dụng DATPHONG.TONGTIEN: ${tongTien}`);
                 tongTienCuoiCung = tongTien;
+            }
+        }
+        
+        // Kiểm tra tính nhất quán nếu không dùng hóa đơn
+        if (tongTienHoaDon === 0) {
+            const tongTinhToan = tongTienPhongAll + tongTienDichVuAll;
+            if (Math.abs(tongTinhToan - tongTienCuoiCung) > 1000 && tongTienCuoiCung > 0) {
+                console.log(` Không khớp: Tính toán=${tongTinhToan} vs API=${tongTienCuoiCung}, sẽ điều chỉnh breakdown...`);
+                
+                // Nếu có tổng tiền nhưng breakdown không khớp, chia tỷ lệ
+                if (tongTinhToan > 0) {
+                    const tylePhong = tongTienPhongAll / tongTinhToan;
+                    const tyleDichVu = tongTienDichVuAll / tongTinhToan;
+                    
+                    tongTienPhongAll = Math.round(tongTienCuoiCung * tylePhong);
+                    tongTienDichVuAll = Math.round(tongTienCuoiCung * tyleDichVu);
+                } else {
+                    // Nếu không có breakdown, coi như tất cả là tiền phòng
+                    tongTienPhongAll = tongTienCuoiCung;
+                    tongTienDichVuAll = 0;
+                }
+                
+                console.log(` Điều chỉnh - Tiền phòng: ${tongTienPhongAll}, Tiền dịch vụ: ${tongTienDichVuAll}`);
             }
         }
         

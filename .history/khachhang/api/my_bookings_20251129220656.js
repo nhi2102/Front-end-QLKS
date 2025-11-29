@@ -103,12 +103,11 @@ async function getMyBookings() {
             const chiTiet = await getBookingDetails(madatphong);
             dp.chiTiet = chiTiet;
 
-            // Lấy tiền phòng, tiền dịch vụ và điểm đã sử dụng từ Chitiethoadons
+            // Lấy tiền phòng và tiền dịch vụ từ Chitiethoadons
             const chiTietHoaDon = await getChiTietHoaDon(madatphong);
             dp.tienPhong = chiTietHoaDon.tienPhong || 0;
             dp.tienDichVu = chiTietHoaDon.tienDichVu || 0;
-            dp.diemDaSuDung = chiTietHoaDon.diemDaSuDung || 0;
-            dp.tienGiamTuDiem = chiTietHoaDon.tienGiamTuDiem || 0;
+            dp.diemDaSuDung = chiTietHoaDon.diemDaSuDung || 0; // Thêm điểm đã dùng
 
             // Kiểm tra xem đã đánh giá chưa (cho các đơn đã hoàn tất)
             const trangthai = (dp.trangthai || dp.Trangthai || '').toLowerCase();
@@ -231,7 +230,7 @@ async function getServicesByBooking(madatphong) {
 }
 
 /**
- * Lấy tiền phòng, tiền dịch vụ và điểm đã sử dụng từ Chi tiết hóa đơn
+ * Lấy tiền phòng và tiền dịch vụ từ Chi tiết hóa đơn
  */
 async function getChiTietHoaDon(madatphong) {
     try {
@@ -254,32 +253,29 @@ async function getChiTietHoaDon(madatphong) {
 
         let tienPhong = 0;
         let tienDichVu = 0;
-        let diemDaSuDung = 0;
-        let tienGiamTuDiem = 0;
+        let diemDaSuDung = 0; // Thêm biến để lưu điểm đã dùng
 
         chiTietHD.forEach(ct => {
             const loaiphi = (ct.loaiphi || ct.Loaiphi || '').toLowerCase();
             const dongia = ct.dongia || ct.Dongia || 0;
-            const soluong = ct.soluong || ct.Soluong || 1;
 
             if (loaiphi.includes('phòng')) {
                 tienPhong += dongia;
             } else if (loaiphi.includes('dịch vụ')) {
                 tienDichVu += dongia;
-            } else if (loaiphi.includes('giảm giá') && loaiphi.includes('điểm')) {
-                // Loại phí: "Giảm giá bằng điểm thành viên"
-                diemDaSuDung = soluong; // Số lượng là số điểm đã sử dụng
-                tienGiamTuDiem = Math.abs(dongia); // Số tiền giảm (có thể là số âm)
+            } else if (loaiphi.includes('giảm giá') || loaiphi.includes('điểm')) {
+                // Lưu số tiền giảm từ điểm (giá trị âm)
+                diemDaSuDung += Math.abs(dongia); // Lấy giá trị tuyệt đối
             }
         });
 
-        console.log(`Tiền phòng: ${tienPhong}, Tiền dịch vụ: ${tienDichVu}, Điểm sử dụng: ${diemDaSuDung}, Giảm từ điểm: ${tienGiamTuDiem}`);
+        console.log(`Tiền phòng: ${tienPhong}, Tiền dịch vụ: ${tienDichVu}, Điểm đã dùng: ${diemDaSuDung}`);
 
-        return { tienPhong, tienDichVu, diemDaSuDung, tienGiamTuDiem };
+        return { tienPhong, tienDichVu, diemDaSuDung };
 
     } catch (error) {
         console.error(' Lỗi khi lấy chi tiết hóa đơn:', error);
-        return { tienPhong: 0, tienDichVu: 0, diemDaSuDung: 0, tienGiamTuDiem: 0 };
+        return { tienPhong: 0, tienDichVu: 0 };
     }
 }
 
