@@ -450,7 +450,7 @@ async function submitBooking(e) {
         });
 
 
-        // 4️ Xây dựng payload gửi API
+        // 3️ Xây dựng payload gửi API
         const payload = {
             TenKhachHang: name,
             Makh: customer.makh,
@@ -460,10 +460,7 @@ async function submitBooking(e) {
             Chitietdatphongs: details
         };
 
-        console.log('📤 Payload đặt phòng:', payload);
-        console.log(`📊 Số đêm: ${nights}, Tổng tiền: ${formatCurrency(details.reduce((s, d) => s + d.Tongcong, 0))}`);
-
-        // 5️ Gửi yêu cầu tạo đặt phòng
+        // 4 Gửi yêu cầu tạo đặt phòng
         const booking = await API.createBookingAPI(payload);
 
 
