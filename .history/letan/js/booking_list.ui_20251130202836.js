@@ -660,7 +660,7 @@ function changePage(page) {
 function refreshBookings() { loadBookings(); }
 
 //in phiếu
-async function printBooking() {
+function printBooking() {
     if (!selectedBooking) {
         alert("Vui lòng chọn đặt phòng để in.");
         return;
@@ -686,41 +686,6 @@ async function printBooking() {
     document.getElementById('p_tienDichVu').textContent = formatCurrency(selectedBooking.tienDichVu || 0);
     document.getElementById('p_tongTien').textContent = formatCurrency(selectedBooking.totalAmount || 0);
 
-    // Lấy thông tin giảm giá bằng điểm
-    const discountRow = document.getElementById('p_discountRow');
-    const discountSpan = document.getElementById('p_giamGiaDiem');
-    discountRow.style.display = 'none';
-    
-    try {
-        const billResponse = await fetch(`https://localhost:7076/api/Hoadons`);
-        if (billResponse.ok) {
-            const allBills = await billResponse.json();
-            const bill = allBills.find(b => b.madatphong == selectedBooking.id);
-            
-            if (bill) {
-                const detailResponse = await fetch(`https://localhost:7076/api/Chitiethoadons`);
-                if (detailResponse.ok) {
-                    const allDetails = await detailResponse.json();
-                    const billDetails = allDetails.filter(d => d.mahoadon === bill.mahoadon);
-                    
-                    let totalDiscount = 0;
-                    for (const detail of billDetails) {
-                        if (detail.loaiphi && detail.loaiphi.toLowerCase().includes('điểm')) {
-                            totalDiscount += Math.abs(detail.dongia || 0);
-                        }
-                    }
-                    
-                    if (totalDiscount > 0) {
-                        discountRow.style.display = 'table-row';
-                        discountSpan.textContent = '- ' + formatCurrency(totalDiscount);
-                    }
-                }
-            }
-        }
-    } catch (error) {
-        console.error('Lỗi khi lấy thông tin giảm giá:', error);
-    }
-
     document.getElementById('p_ghiChu').textContent = selectedBooking.notes || "Không có ghi chú";
     document.getElementById('p_ngayIn').textContent = formatDateTime(new Date());
 
@@ -728,9 +693,6 @@ async function printBooking() {
     document.getElementById('p_tenKhachHangKy').textContent = selectedBooking.customerName;
     const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
     document.getElementById('p_tenLeTanKy').textContent = currentUser.name || currentUser.username || "______________________";
-
-    // Đợi một chút để đảm bảo dữ liệu đã được cập nhật
-    await new Promise(resolve => setTimeout(resolve, 100));
 
     //  In trực tiếp
     const printContent = document.getElementById('printBookingTemplate').innerHTML;

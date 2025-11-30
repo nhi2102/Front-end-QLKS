@@ -612,16 +612,6 @@ async function printCheckoutInvoice(booking) {
         const services = await CheckoutAPI.getServiceHistory(booking.maDatPhong);
         const pendingServices = services.chuaThanhToan || [];
 
-        // Lấy thông tin thanh toán và giảm giá
-        const grandTotalEl = document.getElementById('grandTotal');
-        const paidAmountEl = document.getElementById('paidAmount');
-        const discountPointEl = document.getElementById('discountPoint');
-
-        const grandTotal = grandTotalEl ? parseCurrency(grandTotalEl.textContent) : 0;
-        const paidAmount = paidAmountEl ? parseCurrency(paidAmountEl.textContent) : 0;
-        const discountPoint = discountPointEl && discountPointEl.textContent !== '-' ?
-            parseCurrency(discountPointEl.textContent) : 0;
-
         const invoiceData = {
             bookingId: booking.maDatPhong,
             customerName: booking.tenKhachHang,
@@ -633,10 +623,7 @@ async function printCheckoutInvoice(booking) {
             serviceCharge: serviceCharge,
             services: pendingServices, // Chi tiết dịch vụ
             extraCharge: equipmentCompensation, // Tiền đền bù thiết bị
-            discountPoint: discountPoint, // Giảm giá bằng điểm
-            grandTotal: grandTotal, // Tổng tiền hóa đơn
-            paidAmount: paidAmount, // Đã thanh toán
-            remainingAmount: totalAmount, // Còn lại cần thanh toán
+            discount: 0,
             totalToPay: totalAmount,
             paymentMethod: 'Tiền mặt',
             receptionistName: receptionistName // Thêm tên lễ tân

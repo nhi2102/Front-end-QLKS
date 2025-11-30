@@ -197,10 +197,10 @@ async function openCheckOutModal(booking) {
         pendingServices.length ?
         pendingServices.map(s => `<div>${s.tenDichVu} - ${formatCurrency(s.thanhTien)}</div>`).join('') :
         '<div>Không có dịch vụ chưa thanh toán</div>';
-
+    
     // Lấy thông tin giảm giá bằng điểm
     await loadDiscountPointInfo(booking.maDatPhong);
-
+    
     calculateTotal(booking.maDatPhong);
 
 
@@ -420,88 +420,55 @@ async function calculateTotal(maDatPhong) {
                 remainingAmount = remainingRes || 0;
             }
         }
-
+        
         // --- 2️ Lấy thông tin hóa đơn để tính tổng và đã thanh toán ---
         let grandTotal = 0;
         let paidAmount = 0;
-
+        
         try {
             const billResponse = await fetch(`https://localhost:7076/api/Hoadons`);
             if (billResponse.ok) {
                 const allBills = await billResponse.json();
                 const bill = allBills.find(b => b.madatphong == maDatPhong);
-
+                
                 if (bill) {
-                    console.log('Hóa đơn tìm thấy:', bill);
-
-                    // Tổng tiền - thử nhiều tên trường
-                    grandTotal = bill.tongtien || bill.tongTien || bill.TongTien || 0;
-
-                    console.log('Tổng tiền hóa đơn:', grandTotal);
-
-                    // Lấy tiền đã thanh toán từ API payment
-                    try {
-                        const paymentResponse = await fetch(`https://localhost:7076/api/Payment`);
-                        if (paymentResponse.ok) {
-                            const allPayments = await paymentResponse.json();
-                            // Lọc các thanh toán của hóa đơn này
-                            const billPayments = allPayments.filter(p =>
-                                (p.mahoadon || p.maHoaDon || p.MaHoaDon) === bill.mahoadon
-                            );
-
-                            // Tính tổng số tiền đã thanh toán
-                            paidAmount = billPayments.reduce((sum, p) =>
-                                sum + (p.sotien || p.soTien || p.SoTien || 0), 0
-                            );
-
-                            console.log('Các khoản thanh toán:', billPayments);
-                            console.log('Tổng đã thanh toán:', paidAmount);
-                        }
-                    } catch (paymentError) {
-                        console.error('Lỗi khi lấy thông tin thanh toán:', paymentError);
-                    }
-                } else {
-                    console.warn('Không tìm thấy hóa đơn cho booking:', maDatPhong);
+                    grandTotal = bill.tongtien || bill.tongTien || 0;
+                    paidAmount = bill.tiendathanhtoan || bill.tienDaThanhToan || 0;
                 }
             }
         } catch (error) {
             console.error('Lỗi khi lấy thông tin hóa đơn:', error);
         }
-
+        
         // --- 3️ Lấy các khoản phụ thu ---
         const equipmentEl = document.getElementById('equipmentCompensation');
         const equipmentCompensation = equipmentEl ? parseFloat(equipmentEl.dataset.value || 0) : 0;
 
-        // --- 4️ Tính toán tổng tiền ---
-        // Tổng hóa đơn bao gồm cả phụ thu thiết bị mới
-        const totalWithEquipment = grandTotal + equipmentCompensation;
-
-        // Tổng tiền cần thanh toán = còn lại + phụ thu mới
+        // --- 4️ Tổng tiền cần thanh toán (còn lại + phụ thu mới) ---
         const totalUnpaid = remainingAmount + equipmentCompensation;
 
         // --- 5️ Hiển thị kết quả ---
         const grandTotalEl = document.getElementById('grandTotal');
         const paidAmountEl = document.getElementById('paidAmount');
         const totalAmountEl = document.getElementById('totalAmount');
-
+        
         if (grandTotalEl) {
-            grandTotalEl.textContent = formatCurrency(totalWithEquipment);
+            grandTotalEl.textContent = formatCurrency(grandTotal);
         }
-
+        
         if (paidAmountEl) {
             paidAmountEl.textContent = formatCurrency(paidAmount);
         }
-
+        
         if (totalAmountEl) {
             totalAmountEl.textContent = formatCurrency(totalUnpaid);
         }
 
         console.log(' Tổng cộng:', {
             grandTotal,
-            equipmentCompensation,
-            totalWithEquipment,
             paidAmount,
             remainingAmount,
+            equipmentCompensation,
             totalUnpaid
         });
     } catch (error) {
@@ -612,16 +579,6 @@ async function printCheckoutInvoice(booking) {
         const services = await CheckoutAPI.getServiceHistory(booking.maDatPhong);
         const pendingServices = services.chuaThanhToan || [];
 
-        // Lấy thông tin thanh toán và giảm giá
-        const grandTotalEl = document.getElementById('grandTotal');
-        const paidAmountEl = document.getElementById('paidAmount');
-        const discountPointEl = document.getElementById('discountPoint');
-
-        const grandTotal = grandTotalEl ? parseCurrency(grandTotalEl.textContent) : 0;
-        const paidAmount = paidAmountEl ? parseCurrency(paidAmountEl.textContent) : 0;
-        const discountPoint = discountPointEl && discountPointEl.textContent !== '-' ?
-            parseCurrency(discountPointEl.textContent) : 0;
-
         const invoiceData = {
             bookingId: booking.maDatPhong,
             customerName: booking.tenKhachHang,
@@ -633,10 +590,7 @@ async function printCheckoutInvoice(booking) {
             serviceCharge: serviceCharge,
             services: pendingServices, // Chi tiết dịch vụ
             extraCharge: equipmentCompensation, // Tiền đền bù thiết bị
-            discountPoint: discountPoint, // Giảm giá bằng điểm
-            grandTotal: grandTotal, // Tổng tiền hóa đơn
-            paidAmount: paidAmount, // Đã thanh toán
-            remainingAmount: totalAmount, // Còn lại cần thanh toán
+            discount: 0,
             totalToPay: totalAmount,
             paymentMethod: 'Tiền mặt',
             receptionistName: receptionistName // Thêm tên lễ tân
@@ -807,22 +761,9 @@ function printInvoiceNow(invoice) {
                         <td><strong>Phụ thu / Đền bù thiết bị:</strong></td>
                         <td class="text-right">${formatCurrency(invoice.extraCharge)}</td>
                     </tr>` : ''}
-                    ${invoice.discountPoint > 0 ? `
-                    <tr style="color: #28a745;">
-                        <td><strong>Giảm giá bằng điểm:</strong></td>
-                        <td class="text-right">- ${formatCurrency(invoice.discountPoint)}</td>
-                    </tr>` : ''}
                     <tr class="bg-light bold">
-                        <td>TỔNG TIỀN HÓA ĐƠN</td>
-                        <td class="text-right">${formatCurrency(invoice.grandTotal || invoice.totalToPay || 0)}</td>
-                    </tr>
-                    <tr style="border-top: 2px dashed #000;">
-                        <td><strong>Đã thanh toán:</strong></td>
-                        <td class="text-right" style="color: #28a745; font-weight: bold;">${formatCurrency(invoice.paidAmount || 0)}</td>
-                    </tr>
-                    <tr class="bg-light bold" style="font-size: 16px;">
-                        <td>CÒN LẠI (CẦN THANH TOÁN)</td>
-                        <td class="text-right" style="color: #dc3545;">${formatCurrency(invoice.remainingAmount || 0)}</td>
+                        <td>TỔNG CỘNG</td>
+                        <td class="text-right">${formatCurrency(invoice.totalToPay || 0)}</td>
                     </tr>
                 </table>
 
@@ -885,53 +826,6 @@ function formatDate(d) {
 }
 
 function showError(msg) { alert(msg); }
-
-// Lấy thông tin giảm giá bằng điểm từ chi tiết hóa đơn
-async function loadDiscountPointInfo(bookingId) {
-    try {
-        // Ẩn dòng giảm giá mặc định
-        const discountRow = document.getElementById('discountPointRow');
-        const discountSpan = document.getElementById('discountPoint');
-        
-        if (!discountRow || !discountSpan) return;
-        
-        discountRow.style.display = 'none';
-        discountSpan.textContent = '-';
-
-        // Lấy hóa đơn của booking này
-        const billResponse = await fetch(`https://localhost:7076/api/Hoadons`);
-        if (!billResponse.ok) return;
-        
-        const allBills = await billResponse.json();
-        const bill = allBills.find(b => b.madatphong == bookingId);
-        
-        if (!bill) return;
-
-        // Lấy chi tiết hóa đơn
-        const detailResponse = await fetch(`https://localhost:7076/api/Chitiethoadons`);
-        if (!detailResponse.ok) return;
-        
-        const allDetails = await detailResponse.json();
-        const billDetails = allDetails.filter(d => d.mahoadon === bill.mahoadon);
-        
-        // Tìm dòng giảm giá bằng điểm
-        let totalDiscount = 0;
-        for (const detail of billDetails) {
-            if (detail.loaiphi && detail.loaiphi.toLowerCase().includes('điểm')) {
-                totalDiscount += Math.abs(detail.dongia || 0);
-            }
-        }
-        
-        // Hiển thị nếu có giảm giá
-        if (totalDiscount > 0) {
-            discountRow.style.display = 'flex';
-            discountSpan.textContent = '- ' + formatCurrency(totalDiscount);
-        }
-        
-    } catch (error) {
-        console.error('Lỗi khi lấy thông tin giảm giá:', error);
-    }
-}
 
 //  Modal close
 function closeCheckOutModal() {

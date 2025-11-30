@@ -424,6 +424,8 @@ async function calculateTotal(maDatPhong) {
         // --- 2️ Lấy thông tin hóa đơn để tính tổng và đã thanh toán ---
         let grandTotal = 0;
         let paidAmount = 0;
+        let paidRoomAmount = 0;
+        let paidServiceAmount = 0;
 
         try {
             const billResponse = await fetch(`https://localhost:7076/api/Hoadons`);
@@ -449,13 +451,27 @@ async function calculateTotal(maDatPhong) {
                                 (p.mahoadon || p.maHoaDon || p.MaHoaDon) === bill.mahoadon
                             );
 
-                            // Tính tổng số tiền đã thanh toán
-                            paidAmount = billPayments.reduce((sum, p) =>
-                                sum + (p.sotien || p.soTien || p.SoTien || 0), 0
-                            );
+                            // Tính tổng số tiền đã thanh toán và phân loại
+                            billPayments.forEach(p => {
+                                const amount = p.sotien || p.soTien || p.SoTien || 0;
+                                paidAmount += amount;
+                                
+                                // Phân loại theo loại thanh toán
+                                const loaiThanhToan = (p.loaithanhtoan || p.loaiThanhToan || '').toLowerCase();
+                                if (loaiThanhToan.includes('phòng') || loaiThanhToan.includes('room')) {
+                                    paidRoomAmount += amount;
+                                } else if (loaiThanhToan.includes('dịch vụ') || loaiThanhToan.includes('service')) {
+                                    paidServiceAmount += amount;
+                                } else {
+                                    // Nếu không có loại cụ thể, tính vào tiền phòng
+                                    paidRoomAmount += amount;
+                                }
+                            });
 
                             console.log('Các khoản thanh toán:', billPayments);
                             console.log('Tổng đã thanh toán:', paidAmount);
+                            console.log('Tiền phòng đã thanh toán:', paidRoomAmount);
+                            console.log('Tiền dịch vụ đã thanh toán:', paidServiceAmount);
                         }
                     } catch (paymentError) {
                         console.error('Lỗi khi lấy thông tin thanh toán:', paymentError);
@@ -612,16 +628,6 @@ async function printCheckoutInvoice(booking) {
         const services = await CheckoutAPI.getServiceHistory(booking.maDatPhong);
         const pendingServices = services.chuaThanhToan || [];
 
-        // Lấy thông tin thanh toán và giảm giá
-        const grandTotalEl = document.getElementById('grandTotal');
-        const paidAmountEl = document.getElementById('paidAmount');
-        const discountPointEl = document.getElementById('discountPoint');
-
-        const grandTotal = grandTotalEl ? parseCurrency(grandTotalEl.textContent) : 0;
-        const paidAmount = paidAmountEl ? parseCurrency(paidAmountEl.textContent) : 0;
-        const discountPoint = discountPointEl && discountPointEl.textContent !== '-' ?
-            parseCurrency(discountPointEl.textContent) : 0;
-
         const invoiceData = {
             bookingId: booking.maDatPhong,
             customerName: booking.tenKhachHang,
@@ -633,10 +639,7 @@ async function printCheckoutInvoice(booking) {
             serviceCharge: serviceCharge,
             services: pendingServices, // Chi tiết dịch vụ
             extraCharge: equipmentCompensation, // Tiền đền bù thiết bị
-            discountPoint: discountPoint, // Giảm giá bằng điểm
-            grandTotal: grandTotal, // Tổng tiền hóa đơn
-            paidAmount: paidAmount, // Đã thanh toán
-            remainingAmount: totalAmount, // Còn lại cần thanh toán
+            discount: 0,
             totalToPay: totalAmount,
             paymentMethod: 'Tiền mặt',
             receptionistName: receptionistName // Thêm tên lễ tân
@@ -807,22 +810,9 @@ function printInvoiceNow(invoice) {
                         <td><strong>Phụ thu / Đền bù thiết bị:</strong></td>
                         <td class="text-right">${formatCurrency(invoice.extraCharge)}</td>
                     </tr>` : ''}
-                    ${invoice.discountPoint > 0 ? `
-                    <tr style="color: #28a745;">
-                        <td><strong>Giảm giá bằng điểm:</strong></td>
-                        <td class="text-right">- ${formatCurrency(invoice.discountPoint)}</td>
-                    </tr>` : ''}
                     <tr class="bg-light bold">
-                        <td>TỔNG TIỀN HÓA ĐƠN</td>
-                        <td class="text-right">${formatCurrency(invoice.grandTotal || invoice.totalToPay || 0)}</td>
-                    </tr>
-                    <tr style="border-top: 2px dashed #000;">
-                        <td><strong>Đã thanh toán:</strong></td>
-                        <td class="text-right" style="color: #28a745; font-weight: bold;">${formatCurrency(invoice.paidAmount || 0)}</td>
-                    </tr>
-                    <tr class="bg-light bold" style="font-size: 16px;">
-                        <td>CÒN LẠI (CẦN THANH TOÁN)</td>
-                        <td class="text-right" style="color: #dc3545;">${formatCurrency(invoice.remainingAmount || 0)}</td>
+                        <td>TỔNG CỘNG</td>
+                        <td class="text-right">${formatCurrency(invoice.totalToPay || 0)}</td>
                     </tr>
                 </table>
 

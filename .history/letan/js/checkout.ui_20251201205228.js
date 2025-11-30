@@ -441,7 +441,7 @@ async function calculateTotal(maDatPhong) {
 
                     // Lấy tiền đã thanh toán từ API payment
                     try {
-                        const paymentResponse = await fetch(`https://localhost:7076/api/Payment`);
+                        const paymentResponse = await fetch(`https://localhost:7076/api/payment`);
                         if (paymentResponse.ok) {
                             const allPayments = await paymentResponse.json();
                             // Lọc các thanh toán của hóa đơn này
@@ -612,16 +612,6 @@ async function printCheckoutInvoice(booking) {
         const services = await CheckoutAPI.getServiceHistory(booking.maDatPhong);
         const pendingServices = services.chuaThanhToan || [];
 
-        // Lấy thông tin thanh toán và giảm giá
-        const grandTotalEl = document.getElementById('grandTotal');
-        const paidAmountEl = document.getElementById('paidAmount');
-        const discountPointEl = document.getElementById('discountPoint');
-
-        const grandTotal = grandTotalEl ? parseCurrency(grandTotalEl.textContent) : 0;
-        const paidAmount = paidAmountEl ? parseCurrency(paidAmountEl.textContent) : 0;
-        const discountPoint = discountPointEl && discountPointEl.textContent !== '-' ?
-            parseCurrency(discountPointEl.textContent) : 0;
-
         const invoiceData = {
             bookingId: booking.maDatPhong,
             customerName: booking.tenKhachHang,
@@ -633,10 +623,7 @@ async function printCheckoutInvoice(booking) {
             serviceCharge: serviceCharge,
             services: pendingServices, // Chi tiết dịch vụ
             extraCharge: equipmentCompensation, // Tiền đền bù thiết bị
-            discountPoint: discountPoint, // Giảm giá bằng điểm
-            grandTotal: grandTotal, // Tổng tiền hóa đơn
-            paidAmount: paidAmount, // Đã thanh toán
-            remainingAmount: totalAmount, // Còn lại cần thanh toán
+            discount: 0,
             totalToPay: totalAmount,
             paymentMethod: 'Tiền mặt',
             receptionistName: receptionistName // Thêm tên lễ tân
@@ -807,22 +794,9 @@ function printInvoiceNow(invoice) {
                         <td><strong>Phụ thu / Đền bù thiết bị:</strong></td>
                         <td class="text-right">${formatCurrency(invoice.extraCharge)}</td>
                     </tr>` : ''}
-                    ${invoice.discountPoint > 0 ? `
-                    <tr style="color: #28a745;">
-                        <td><strong>Giảm giá bằng điểm:</strong></td>
-                        <td class="text-right">- ${formatCurrency(invoice.discountPoint)}</td>
-                    </tr>` : ''}
                     <tr class="bg-light bold">
-                        <td>TỔNG TIỀN HÓA ĐƠN</td>
-                        <td class="text-right">${formatCurrency(invoice.grandTotal || invoice.totalToPay || 0)}</td>
-                    </tr>
-                    <tr style="border-top: 2px dashed #000;">
-                        <td><strong>Đã thanh toán:</strong></td>
-                        <td class="text-right" style="color: #28a745; font-weight: bold;">${formatCurrency(invoice.paidAmount || 0)}</td>
-                    </tr>
-                    <tr class="bg-light bold" style="font-size: 16px;">
-                        <td>CÒN LẠI (CẦN THANH TOÁN)</td>
-                        <td class="text-right" style="color: #dc3545;">${formatCurrency(invoice.remainingAmount || 0)}</td>
+                        <td>TỔNG CỘNG</td>
+                        <td class="text-right">${formatCurrency(invoice.totalToPay || 0)}</td>
                     </tr>
                 </table>
 

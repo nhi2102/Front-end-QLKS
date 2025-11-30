@@ -178,61 +178,61 @@ async function getCustomerUsedPoints(customerId) {
         // Lấy tất cả đặt phòng của khách hàng
         const bookingsResponse = await fetch(`${API_BASE_URL}/Datphongs`);
         if (!bookingsResponse.ok) return 0;
-
+        
         const allBookings = await bookingsResponse.json();
         const customerBookings = allBookings.filter(b => b.makh === customerId);
-
+        
         console.log(`Khách hàng ${customerId} có ${customerBookings.length} đặt phòng`);
-
+        
         if (customerBookings.length === 0) return 0;
 
         // Lấy tất cả hóa đơn của các đặt phòng này
         let totalUsedPoints = 0;
-
+        
         // Lấy tất cả hóa đơn một lần
         const billResponse = await fetch(`${API_BASE_URL}/Hoadons`);
         if (!billResponse.ok) {
             console.error('Không thể lấy danh sách hóa đơn');
             return 0;
         }
-
+        
         const allBills = await billResponse.json();
         console.log('Tổng số hóa đơn:', allBills.length);
-
+        
         // Lấy tất cả chi tiết hóa đơn một lần
         const detailResponse = await fetch(`${API_BASE_URL}/Chitiethoadons`);
         if (!detailResponse.ok) {
             console.error('Không thể lấy chi tiết hóa đơn');
             return 0;
         }
-
+        
         const allDetails = await detailResponse.json();
         console.log('Tổng số chi tiết hóa đơn:', allDetails.length);
-
+        
         for (const booking of customerBookings) {
             const bookingBill = allBills.find(bill => bill.madatphong === booking.madatphong);
-
+            
             if (!bookingBill) {
                 console.log(`Không tìm thấy hóa đơn cho đặt phòng ${booking.madatphong}`);
                 continue;
             }
-
+            
             console.log(`Tìm thấy hóa đơn ${bookingBill.mahoadon} cho đặt phòng ${booking.madatphong}`);
-
+            
             const billDetails = allDetails.filter(detail => detail.mahoadon === bookingBill.mahoadon);
             console.log(`Hóa đơn ${bookingBill.mahoadon} có ${billDetails.length} chi tiết`);
-
+            
             // Tính tổng điểm đã sử dụng (loại phí = "Giảm giá bằng điểm thành viên")
             for (const detail of billDetails) {
                 console.log(`Chi tiết: loại phí = "${detail.loaiphi}", đơn giá = ${detail.dongia}`);
-
+                
                 if (detail.loaiphi && detail.loaiphi.toLowerCase().includes('điểm')) {
                     console.log(`✓ Tìm thấy chi tiết sử dụng điểm: ${detail.dongia}`);
                     totalUsedPoints += Math.abs(detail.dongia || 0);
                 }
             }
         }
-
+        
         console.log(`Tổng điểm đã sử dụng cho khách hàng ${customerId}: ${totalUsedPoints}`);
         return totalUsedPoints;
     } catch (error) {
