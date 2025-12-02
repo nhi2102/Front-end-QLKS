@@ -121,11 +121,7 @@ function drawRoomStatusChart(data) {
 
 // === BIỂU ĐỒ CỘT: DOANH THU 7 NGÀY (MẪU) ===
 function drawRevenueChart(revenueData = []) {
-    const canvas = document.getElementById('revenueChart');
-    let ctx = null;
-    if (canvas) {
-        ctx = canvas.getContext('2d');
-    }
+    const ctx = document.getElementById('revenueChart') ? .getContext('2d');
     if (!ctx) return;
 
     if (window.revenueChartInstance) window.revenueChartInstance.destroy();

@@ -1,6 +1,6 @@
 import { apiGetDashboardData, apiGetDatPhongs, apiGetRevenueLast7Days } from '../api/dashboard.api.js';
 
-document.addEventListener('DOMContentLoaded', async() => {
+document.addEventListener('DOMContentLoaded', async () => {
     const roomStatusCanvas = document.getElementById('roomStatusChart');
     const revenueCanvas = document.getElementById('revenueChart');
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         const [dashboardData, datphongs, revenueData] = await Promise.all([
             apiGetDashboardData(),
             apiGetDatPhongs(),
-            apiGetRevenueLast7Days()
+            apiGetRevenueLast7Days() // ← MỚI THÊM
         ]);
 
         const { summary } = dashboardData;
@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', async() => {
     if (userInfo && userNameDisplay) {
         userNameDisplay.textContent = userInfo.name || userInfo.username || 'User';
     }
-    // Optionally update avatar based on first letter
-    if (userInfo && (userInfo.name || userInfo.username) && userAvatar) {
+             // Optionally update avatar based on first letter
+    if(userInfo && (userInfo.name || userInfo.username) && userAvatar){
         const nameString = userInfo.name || userInfo.username;
         const firstLetter = nameString.charAt(0).toUpperCase();
         userAvatar.src = `https://placehold.co/40x40/E2E8F0/4A5568?text=${firstLetter}`;
@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', async() => {
 function updateSummaryStats(data, datphongs = []) {
     const {
         tongSoPhong = 0,
-            phongTrong = 0,
-            phongDangO = 0,
-            checkInHomNay = 0,
-            checkOutHomNay = 0
+        phongTrong = 0,
+        phongDangO = 0,
+        checkInHomNay = 0,
+        checkOutHomNay = 0
     } = data;
 
     // 1. DỮ LIỆU LỄ TÂN
@@ -121,11 +121,7 @@ function drawRoomStatusChart(data) {
 
 // === BIỂU ĐỒ CỘT: DOANH THU 7 NGÀY (MẪU) ===
 function drawRevenueChart(revenueData = []) {
-    const canvas = document.getElementById('revenueChart');
-    let ctx = null;
-    if (canvas) {
-        ctx = canvas.getContext('2d');
-    }
+    const ctx = document.getElementById('revenueChart')?.getContext('2d');
     if (!ctx) return;
 
     if (window.revenueChartInstance) window.revenueChartInstance.destroy();
@@ -134,7 +130,7 @@ function drawRevenueChart(revenueData = []) {
     const data = [];
     const today = new Date();
     const map = {};
-    // DÒNG ĐÃ SỬA
+// DÒNG ĐÃ SỬA
     revenueData.forEach(d => map[d.date.split('T')[0]] = d.doanhThu);
 
     debugger;

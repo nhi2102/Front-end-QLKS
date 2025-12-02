@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +16,6 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
-
 <body>
 
     <div class="page-container">
@@ -47,32 +45,32 @@
                         </div>
                         <div class="card dashboard-card">
                             <h3>Check-out hôm nay</h3>
-                            <p id="daily-checkout" class="stat-number text-green">25</p>
+                             <p id="daily-checkout" class="stat-number text-green">25</p>
                         </div>
                         <div class="card dashboard-card">
                             <h3>Phòng đang sử dụng</h3>
                             <p id="daily-occupancy" class="stat-number text-yellow">48 / 60</p>
                         </div>
-                        <div class="card dashboard-card">
+                         <div class="card dashboard-card">
                             <h3>Đặt phòng mới hôm nay</h3>
                             <p id="daily-new-bookings" class="stat-number text-red">12</p>
                         </div>
                     </div>
 
-                    <!-- Chart Grid -->
-                    <div class="chart-grid">
-                        <div class="card">
-                            <h3 class="card-header">Thống kê trạng thái phòng</h3>
-                            <div class="chart-container">
-                                <canvas id="roomStatusChart"></canvas>
-                            </div>
-                        </div>
-                        <div class="card">
-                            <h3 class="card-header">Doanh thu 7 ngày gần nhất (VND)</h3>
-                            <div class="chart-container">
+                     <!-- Chart Grid -->
+                     <div class="chart-grid">
+                         <div class="card">
+                             <h3 class="card-header">Thống kê trạng thái phòng</h3>
+                             <div class="chart-container">
+                                 <canvas id="roomStatusChart"></canvas>
+                             </div>
+                         </div>
+                         <div class="card">
+                             <h3 class="card-header">Doanh thu 7 ngày gần nhất (VND)</h3>
+                              <div class="chart-container">
                                 <canvas id="revenueChart"></canvas>
-                            </div>
-                        </div>
+                             </div>
+                         </div>
                     </div>
                 </section>
             </div>
@@ -98,5 +96,4 @@
     <script src="js/dashboard.js" type="module" defer></script>
 
 </body>
-
 </html>

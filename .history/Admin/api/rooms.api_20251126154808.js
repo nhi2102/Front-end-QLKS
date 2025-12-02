@@ -4,7 +4,7 @@ const API_BOOKING_BASE = 'https://localhost:7076/api'; // Dùng để gọi API 
 async function apiRequest(url, options = {}) {
     options.headers = { 'Content-Type': 'application/json', ...options.headers };
 
-    // === THÊM LOGIC CHỐNG CACHE ===
+        // === THÊM LOGIC CHỐNG CACHE ===
     let fetchUrl = url;
     const method = options.method || 'GET';
     // Chỉ thêm vào lệnh GET
@@ -29,7 +29,7 @@ async function apiRequest(url, options = {}) {
         }
         if (response.status === 204) return null;
         const ct = response.headers.get("content-type");
-        const data = ct && ct.includes("application/json") ? await response.json() : await response.text();
+        const data = ct?.includes("application/json") ? await response.json() : await response.text();
         console.log(`<<< Data:`, data);
         return data;
     } catch (error) {
@@ -205,7 +205,7 @@ export async function createVoucher(payload) {
     return apiRequest(VOUCHER_ENDPOINT, {
         method: 'POST',
         body: JSON.stringify({
-            mavoucher: payload.mavoucher ? payload.mavoucher.trim() : null,
+            mavoucher: payload.mavoucher?.trim(),
             tenvoucher: payload.tenvoucher,
             mota: payload.mota || " ",
             giagiam: payload.giagiam,
