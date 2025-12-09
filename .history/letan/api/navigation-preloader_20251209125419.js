@@ -15,7 +15,7 @@
                 const user = JSON.parse(currentUser);
                 // Only clear if the stored user is a customer (has makh)
                 if (user.makh && user.role !== 'receptionist' && user.role !== 'manager' && user.role !== 'admin') {
-                    console.log(' Clearing customer data from localStorage');
+                    console.log('🗑️ Clearing customer data from localStorage');
                     localStorage.removeItem('currentUser');
                 }
             } catch (error) {

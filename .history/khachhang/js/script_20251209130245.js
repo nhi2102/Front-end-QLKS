@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const user = JSON.parse(currentUser);
                 // Only clear if the stored user is staff (has manv or is admin/receptionist/manager)
                 if ((user.manv || user.role === 'admin' || user.role === 'receptionist' || user.role === 'manager') && !user.makh) {
-                    console.log(' Clearing staff data from localStorage');
+                    console.log('🗑️ Clearing staff data from localStorage');
                     localStorage.removeItem('currentUser');
                 }
             } catch (error) {
